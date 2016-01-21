@@ -24,6 +24,107 @@ class GeneralTestController extends BaseController
         return $resultArray;
     }
     
+    public function generateXml(){
+        $file = 'english.xml';
+        $content = file_get_contents($file);
+        $resEN =  $this->__xmlToArray($content);
+        $file = 'hanhua.xml';
+        $content = file_get_contents($file);
+        $resCH =  $this->__xmlToArray($content);
+        
+        
+        $fp = fopen('result.xml', 'w');
+        fputs($fp, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentList>'.PHP_EOL);
+        
+        $fp1 = fopen('eng.xml', 'w');
+        fputs($fp1, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentList>'.PHP_EOL);
+        
+        
+        $fromEn = 0;
+        $fromCh = 0;
+        
+        foreach ($resEN as $k => $v){
+            if(isset($resCH[$k])){
+                $resEN[$k] = $resCH[$k];
+                $fromCh ++ ;
+            }else{
+                $resEN[$k] = htmlspecialchars($resEN[$k]);
+                $fromEn ++ ;
+                $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
+                fputs($fp1, $str);
+            }
+            $resEN[$k] = htmlspecialchars($resEN[$k]);
+            $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
+            fputs($fp, $str);
+        }
+        fputs($fp, '</contentList>');
+        fputs($fp1, '</contentList>');
+        fclose($fp);
+        fclose($fp1);
+        dump('From English:'.$fromEn);
+        dump('From Chinese:'.$fromCh);
+        exit;
+        edump($resEN);
+        
+    }
+    
+    public function generateData(){
+        
+        $file = 'english.xml';
+        $content = file_get_contents($file);
+        $resEN =  $this->__xmlToArray($content);
+        $file = 'hanhua.xml';
+        $content = file_get_contents($file);
+        $resCH =  $this->__xmlToArray($content);
+        
+        set_time_limit(0);
+        $fromEn = 0;
+        $fromCh = 0;
+        $length = 0;
+        
+        
+        $insertData = [];
+        
+        foreach ($resEN as $k => $v){
+            if(strlen($v) > $length ) $length = strlen($v);
+        
+            if(isset($resCH[$k])){
+                //                 $resEN[$k] = $resCH[$k];
+                $fromCh ++ ;
+                $record = [
+                    'uid' => $k,
+                    'eng' => $resEN[$k],
+                    'chi' => $resCH[$k],
+                    'status' => 1,
+                ];
+            }else{
+                $resEN[$k] = htmlspecialchars($resEN[$k]);
+                $fromEn ++ ;
+                $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
+                $record = [
+                    'uid' => $k,
+                    'eng' => $resEN[$k],
+                    'chi' => '',
+                    'status' => 0,
+                ];
+            }
+            $resEN[$k] = htmlspecialchars($resEN[$k]);
+            $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
+            $insertData [] = $record;
+            if(count($insertData) > 100 ){
+                \App\Models\Transfer::insert($insertData);
+                $insertData = [];
+            }
+        }
+        $insertData && \App\Models\Transfer::insert($insertData);
+        dump('From English:'.$fromEn);
+        dump('From Chinese:'.$fromCh);
+        dump($length);
+        exit;
+    }
+    
     
     public function test()
     {
@@ -67,107 +168,7 @@ class GeneralTestController extends BaseController
 
         exit;
         
-        exit;
-        $fbsdk = \App\Services\Merchants\FBSdkService::getInstance();
-        
-        $file = 'english.xml';
-        $content = file_get_contents($file);
-        $resEN =  $this->__xmlToArray($content);
-        $file = 'hanhua.xml';
-        $content = file_get_contents($file);
-        $resCH =  $this->__xmlToArray($content);
-        
-        
-//         $fp = fopen('result.xml', 'w');
-//         fputs($fp, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?\>
-// <contentList>'.PHP_EOL);
-        
-//         $fp1 = fopen('eng.xml', 'w');
-//         fputs($fp1, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?\>
-// <contentList>'.PHP_EOL);
-        $word = \Input::get('w');
-        
-        if(!$word){
-            echo 'Word Is Required!';
-            exit();
-        }
-        
-        set_time_limit(0);
-        $fromEn = 0;
-        $fromCh = 0;
-        $length = 0;
-        
-        
-        $insertData = [];
-        
-        foreach ($resEN as $k => $v){
-            if(strlen($v) > $length ) $length = strlen($v);
-            
-//             $reg = '/'.$word.'/i';
-//             if(preg_match($reg, $resEN[$k])){
-//                 $resEN[$k] = preg_replace($reg, '<font color="red">\\0</font>', $resEN[$k]);
-//                 echo ''.$resEN[$k] .'--'. ( isset($resCH[$k]) ? $resCH[$k] : '<textarea></textarea>' ) .'<br/>';
-//             }
-            
-            
-            if(isset($resCH[$k])){
-//                 $resEN[$k] = $resCH[$k];
-                $fromCh ++ ;
-                $record = [
-                    'uid' => $k,
-                    'eng' => $resEN[$k],
-                    'chi' => $resCH[$k],
-                    'status' => 1,
-                ];
-            }else{
-                $resEN[$k] = htmlspecialchars($resEN[$k]);
-                $fromEn ++ ;
-                $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
-//                 if(strlen($resEN[$k]) < 20)
-//                 echo htmlspecialchars($resEN[$k]).'<br/>';;
-                
-//                 fputs($fp1, $str);
-                $record = [
-                    'uid' => $k,
-                    'eng' => $resEN[$k],
-                    'chi' => '',
-                    'status' => 0,
-                ];
-            }
-            $resEN[$k] = htmlspecialchars($resEN[$k]);
-            $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
-//             fputs($fp, $str);
-            $insertData [] = $record;
-            
-            if(count($insertData) > 100 ){
-                \App\Models\Transfer::insert($insertData);
-                $insertData = [];
-            }
-            
-        }
-        
-        $insertData && \App\Models\Transfer::insert($insertData);
-        
-//         fputs($fp, '</contentList>');
-//         fputs($fp1, '</contentList>');
-//         fclose($fp);
-//         fclose($fp1);
-        dump('From English:'.$fromEn);
-        dump('From Chinese:'.$fromCh);
-        dump($length);
-        exit;
-        edump($resEN);
-        
-        
-//         http://fanyi.baidu.com/v2transapi
-        
-//         from:en
-//         to:zh
-//         query:Invariant
-//         transtype:realtime
-//         simple_means_flag:3
-        
-        
+      
         $res = curl_post('http://fanyi.baidu.com/v2transapi', [
             'from' => 'en',
             'to' => 'zh',
