@@ -8,3 +8,4 @@ $router->any('/',function(){
 
 
 
+    \Route::get('transfer','Transfer\TransferController@index');

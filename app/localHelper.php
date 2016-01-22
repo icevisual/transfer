@@ -1500,4 +1500,32 @@ if (! function_exists ( 'lastSql' )) {
 	}
 }
 
+function compute_distance($strA, $strB) {
+    $len_a = mb_strlen($strA);
+    $len_b = mb_strlen($strB);
+    $temp = [];
+    for($i = 1; $i <= $len_a; $i++) {
+        $temp[$i][0] = $i;
+    }
+
+    for($j = 1; $j <= $len_b; $j++) {
+        $temp[0][$j] = $j;
+    }
+
+    $temp[0][0] = 0;
+
+    for($i = 1; $i <= $len_a; $i++) {
+        for($j = 1; $j <= $len_b; $j++) {
+            if($strA[$i -1] == $strB[$j - 1]) {
+                $temp[$i][$j] = $temp[$i - 1][$j - 1];
+            } else {
+                $temp[$i][$j] = min($temp[$i - 1][$j], $temp[$i][$j - 1], $temp[$i - 1][$j - 1]) + 1;
+            }
+        }
+    }
+    return $temp[$len_a][$len_b];
+}
+
+
+
 
