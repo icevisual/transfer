@@ -24,40 +24,6 @@ class GeneralTestController extends BaseController
         return $resultArray;
     }
     
-    public function transfer(){
-        $query = \Input::get('w');
-        if(!$query){
-            echo 'Word Is Required'.PHP_EOL;
-            exit;
-        }
-        $res = curl_post('http://fanyi.baidu.com/v2transapi', [
-            'from' => 'en',
-            'to' => 'zh',
-            'query' => $query,
-            'transtype' => 'realtime',
-            'simple_means_flag' => '3',
-        ]);
-        $result = [];
-        $data = json_decode($res,1);
-        if(isset($data['dict_result']['simple_means']['symbols'][0])){
-            $symbols = $data['dict_result']['simple_means']['symbols'][0];
-            $result['[En]'] = '['.$symbols['ph_en'].' ]';
-            $result['[Am]'] = '['.$symbols['ph_am'].' ]';
-            //echo -e "\e[1;31m skyapp exist \e[0m"
-            echo  PHP_EOL." [\e[1;31m{$query}\e[0m ]".PHP_EOL;
-            if ($symbols['ph_en'])
-                echo ' '."【英】[{$symbols['ph_en']} ],【美】[{$symbols['ph_am']} ]".PHP_EOL;
-            foreach ($symbols['parts'] as $k => $v){
-                $result['means'] [$k] = $v['part'];
-                foreach ($v['means'] as $k1 => $v1){
-                    $result['means'] [$k].= ($k1 ? ",":'').$v1;
-                }
-                echo ' '.$result['means'] [$k].PHP_EOL;
-            }
-            echo  PHP_EOL;
-        }
-        exit;
-    }
     
     public function test()
     {

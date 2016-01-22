@@ -26,17 +26,14 @@ class BaseController extends Controller
         }
     }
 
-    public function __json($status = 200, $message = 'ok', array $data = [])
+    public function __json($status = 200, $message = 'ok', array $data = [],$options = 0)
     {
-        if ($data) {
-            $data = ServiceClient::format($data);
-        }
         $resp = [
             'status' => (int)$status,
             'message' => $message,
             'data' => $data
         ];
-        return \Response::json($resp);
+        return \Response::json($resp,200, array(), $options);
     }
 
     /**
