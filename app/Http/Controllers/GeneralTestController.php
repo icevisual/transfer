@@ -27,6 +27,17 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
+        
+        
+        
+        $url = 'http://www.xunshu.la/22_22665/7813282.html';
+        
+        
+        
+        
+        
+        
+        
         $word = \Input::get('w');
 //         if(!$word){
 //             echo 'Word Is Required!';

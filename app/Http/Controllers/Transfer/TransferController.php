@@ -48,7 +48,7 @@ class TransferController extends BaseController{
         if(!$query){
             echo 'Word Is Required'.PHP_EOL;
             exit;
-        }
+        }//www.xunshu.org/xunshu/22/22665/7844538.html
         $res = curl_post('http://fanyi.baidu.com/v2transapi', [
             'from' => 'en',
             'to' => 'zh',

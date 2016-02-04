@@ -907,7 +907,7 @@ if (! function_exists ( 'curl' )) {
 		curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
 		$User_Agen = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36';
 		curl_setopt ( $ch, CURLOPT_TIMEOUT, 5 ); // 设置超时
-	 // curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
+	 curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
 		curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, 1 ); // 跟踪301
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 ); // 返回结果
 		$result = curl_exec ( $ch );
