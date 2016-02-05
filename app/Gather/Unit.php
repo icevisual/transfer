@@ -1,7 +1,7 @@
 <?php
 namespace App\Gather;
 
-class UnitBase implements ArrayAccess{
+class UnitBase implements \ArrayAccess{
 
 	protected  $_attr ;
 

@@ -2,6 +2,18 @@
 
 
 
+
+
+if(!function_exists('detect_encoding')){
+
+    function detect_encoding($content){
+        $encode = mb_detect_encoding($content, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
+        return $encode;
+    }
+}
+
+
+
 if(!function_exists('qishu')){
 
     function qishu($curl = ''){

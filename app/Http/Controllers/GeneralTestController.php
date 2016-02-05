@@ -30,6 +30,17 @@ class GeneralTestController extends BaseController
         
         
         
+        \App\Gather\AESTool::main();
+        
+        exit;
+        
+        
+        
+        
+        
+        
+        
+        
         $url = 'http://www.xunshu.la/22_22665/7813282.html';
         
         
