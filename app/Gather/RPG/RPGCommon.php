@@ -1,113 +1,5 @@
 <?php
-namespace App\Gather;
-
-class UnitBase implements \ArrayAccess{
-
-	protected  $_attr ;
-
-	protected  $_name ;
-
-	public static $_attributes = [
-			'HP' => 100,
-			'attack' => 1,
-			'defence' => 1,//伤害减少 （装甲值 * 0.06）／（装甲值 * 0.06 ＋ 1）
-			'hit rate'	=> 10, //攻击命中率
-			'crit rate'	=> 1, //暴击率
-			'dodge rate' => 1, //闪避率
-			'attack speed' => 1, //attack 1 time  per second
-	];
-
-	public function init(){
-		$this->_attr = static::$_attributes;
-	}
-
-	public function __construct($name ,array $initData = []){
-		$this->_name = $name;
-		if(empty($initData)){
-			$this->init();
-		}else {
-			$initData = $initData + self::$_attributes;
-			if(count($initData) > count(self::$_attributes) ){
-				throw new \Exception('Attr Number Error');
-			}
-			$this->_attr = $initData;
-		}
-	}
-
-	public function injured($damage){
-		echo $this->_name.' is hurted at '.
-				$damage.' Point , decrease '.
-				($damage > $this['HP'] ? $this['HP'] :$damage).' HP,';
-		$this['HP'] -= floatval($damage);
-		echo 'Rest HP '.$this['HP'].PHP_EOL;
-		if($this['HP'] <= 0 ){
-			$this->died();
-		}
-	}
-
-	public function alive(){
-		return $this['HP'] > 0 ;
-	}
-
-	public function died(){
-		echo $this->_name.' Died'.PHP_EOL;
-	}
-
-	public function getName(){
-		return $this->_name;
-	}
-
-	public function __get($key){
-		if(isset($this->_attr[$key])){
-			return $this->_attr[$key];
-		}
-		return false;
-	}
-
-
-	public function getAttack(){
-		$waveRange = mt_rand(1,100) > 50 ? -1 : 1;
-		return $this->_attr['attack'] + $waveRange * mt_rand(1,10);
-	}
-
-	/**
-	 * @param offset
-	 */
-	public function offsetExists ($offset) {
-		return isset($this->_attr[$offset]);
-	}
-
-	/**
-	 * @param offset
-	 */
-	public function offsetGet ($offset) {
-		$method = 'get'.ucfirst($offset);
-		if(method_exists($this, 'get'.ucfirst($offset))){
-			return call_user_func(array($this,$method));
-		}
-		return isset($this->_attr[$offset]) ? $this->_attr[$offset] : null;
-	}
-
-	/**
-	 * @param offset
-	 * @param value
-	 */
-	public function offsetSet ($offset, $value) {
-		$this->_attr[$offset]  = $value;
-	}
-
-	/**
-	 * @param offset
-	 */
-	public function offsetUnset ($offset) {
-		unset($this->_attr[$offset]);
-	}
-
-}
-
-class RPGPersonUnit extends \UnitBase{
-
-}
+namespace App\Gather\RPG;
 
 class RPGCommon {
 
@@ -130,11 +22,11 @@ class RPGCommon {
 		return $small;
 	}
 
-	public static function battle2(\UnitBase $ua,\UnitBase $ub){
+	public static function battle2(UnitBase $ua,UnitBase $ub){
 		$aSpeed = intval($ua['attack speed'] * 100) ;
 		$bSpeed = intval($ub['attack speed'] * 100) ;
 
-		$step = \RPGCommon::getGCD($aSpeed, $bSpeed);
+		$step = RPGCommon::getGCD($aSpeed, $bSpeed);
 
 		$timeLine = 0;
 
@@ -249,11 +141,11 @@ class RPGCommon {
 
 	/**
 	 * Calculate attack damage
-	 * @param \UnitBase $attacker
-	 * @param \UnitBase $defender
+	 * @param UnitBase $attacker
+	 * @param UnitBase $defender
 	 * @return number
 	 */
-	public static function attack(\UnitBase $attacker ,\UnitBase $defender){
+	public static function attack(UnitBase $attacker ,UnitBase $defender){
 		$def 	 = $defender['defence'];
 		$atk 	 = $attacker['attack'];
 		$miss 	 = 100 - $attacker['hit rate'];

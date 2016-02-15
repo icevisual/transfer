@@ -28,7 +28,30 @@ class GeneralTestController extends BaseController
     public function test()
     {
         
+        $unit = new  \App\Gather\RPG\UnitBase('Unit001');
         
+        $unit->showDiedMessage();
+        
+        exit;
+        $str = 'showInjuredMessage';
+        
+        dump(preg_replace('/[A-Z]/', '#\\0', $str));
+        
+        edump(preg_split('/[A-Z]/', $str));
+         
+        
+        
+        exit;
+        
+        if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
+            list($current, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
+        } else {
+            list($current, $caller) = debug_backtrace(false,2);
+        }
+//         edump($backtrace);
+//         list($current, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        dump($current);
+        edump($caller);
         
         \App\Gather\AESTool::main();
         
