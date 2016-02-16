@@ -193,6 +193,7 @@ class Command extends SymfonyCommand
         if (is_null($key)) {
             return $this->input->getArguments();
         }
+
         return $this->input->getArgument($key);
     }
 
@@ -289,7 +290,7 @@ class Command extends SymfonyCommand
      * @param  string  $default
      * @param  mixed   $attempts
      * @param  bool    $multiple
-     * @return bool
+     * @return string
      */
     public function choice($question, array $choices, $default = null, $attempts = null, $multiple = null)
     {
@@ -304,7 +305,7 @@ class Command extends SymfonyCommand
      * Format input to textual table.
      *
      * @param  array   $headers
-     * @param  array|\Illuminate\Contracts\Support\Arrayable  $rows
+     * @param  \Illuminate\Contracts\Support\Arrayable|array  $rows
      * @param  string  $style
      * @return void
      */
@@ -382,9 +383,11 @@ class Command extends SymfonyCommand
      */
     public function warn($string)
     {
-        $style = new OutputFormatterStyle('yellow');
+        if (! $this->output->getFormatter()->hasStyle('warning')) {
+            $style = new OutputFormatterStyle('yellow');
 
-        $this->output->getFormatter()->setStyle('warning', $style);
+            $this->output->getFormatter()->setStyle('warning', $style);
+        }
 
         $this->output->writeln("<warning>$string</warning>");
     }

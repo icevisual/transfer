@@ -159,6 +159,7 @@ class InputDefinition
     public function hasArgument($name)
     {
         $arguments = is_int($name) ? array_values($this->arguments) : $this->arguments;
+
         return isset($arguments[$name]);
     }
 

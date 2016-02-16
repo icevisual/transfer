@@ -6,7 +6,11 @@ use App\Http\Controllers\BaseController;
 class TransferController extends BaseController{
     
     
-    
+    public function put(){
+        
+        return $this->__json(200,'put ok');
+        
+    }
     
     
     /**

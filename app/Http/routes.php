@@ -28,5 +28,9 @@ $router->any('/', function () {
 ], function () {
     \Route::get('translate', 'Transfer\TransferController@translate');
     \Route::get('search', 'Transfer\TransferController@search');
+    
+//     \Route::put('put', 'Transfer\TransferController@put');
+    
+    
 });
     
