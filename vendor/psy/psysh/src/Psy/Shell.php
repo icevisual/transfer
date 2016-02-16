@@ -833,7 +833,7 @@ class Shell extends Application
      */
     public function getVersion()
     {
-        return sprintf('Psy Shell %s (PHP %s — %s)', self::VERSION, phpversion(), php_sapi_name());
+        return sprintf('Psy Shell %s (PHP %s - %s)', self::VERSION, phpversion(), php_sapi_name());
     }
 
     /**
