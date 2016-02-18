@@ -1,6 +1,17 @@
 <?php
-$router->any('/', function () {
-    return qishu();
+\Route::any('/', function () {
+    return call_user_func('qishu');
+});
+
+\Route::group([
+    'namespace' => 'App\Http\Controllers'
+], function () {
+    // Route::post('redirect' , 'GeneralTestController@redirect');
+    \Route::get('localtest', 'LocalTestController@index');
+    \Route::get('document', 'LocalTestController@generate_api_doc');
+    \Route::get('test', 'GeneralTestController@test');
+    // Route::get('generate' , 'GeneralTestController@generate');
+    // \Route::post( 'get_create_code' , 'GeneralTestController@getCode' ); // 注册--获取验证码
 });
 
 \Route::group([], function () {
@@ -29,8 +40,6 @@ $router->any('/', function () {
     \Route::get('translate', 'Transfer\TransferController@translate');
     \Route::get('search', 'Transfer\TransferController@search');
     
-//     \Route::put('put', 'Transfer\TransferController@put');
-    
-    
+    // \Route::put('put', 'Transfer\TransferController@put');
 });
     

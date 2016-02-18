@@ -28,6 +28,11 @@ class GeneralTestController extends BaseController
     public function test()
     {
         
+        dump(scandir(__DIR__));
+        
+        dump(__FUNCTION__);
+        
+        exit;
         $unit = new  \App\Gather\RPG\UnitBase('Unit001');
         
         $unit->showDiedMessage();
