@@ -1,19 +1,4 @@
 <?php
-function getSqls(){
-
-    $sql = \DB::getQueryLog ();
-    $_SQL = [];
-    foreach ($sql as $k=>$v){
-        if(!isset($_SQL [$v['query']])){
-            $_SQL [$v['query']] = 1;
-        }else{
-            $_SQL [$v['query']] ++;
-        }
-    }
-
-    edump($_SQL);
-
-}
 
 
 

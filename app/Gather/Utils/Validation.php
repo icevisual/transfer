@@ -149,11 +149,6 @@ if (! function_exists('form_value')) {
         return $value == $v ? 'checked':'' ;
     }
 
-    function pgprsr($data,$key,$rule){
-        // $a|default='--'$|date='Y-m-d',###
-
-    }
-
 }
 
 if (! function_exists ( 'old' )) {
