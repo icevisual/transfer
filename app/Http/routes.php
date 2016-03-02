@@ -4,7 +4,6 @@
 });
 
 \Route::group([
-    'namespace' => 'App\Http\Controllers'
 ], function () {
     // Route::post('redirect' , 'GeneralTestController@redirect');
     \Route::get('localtest', 'LocalTestController@index');

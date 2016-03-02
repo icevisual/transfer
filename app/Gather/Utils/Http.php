@@ -1,6 +1,27 @@
 <?php
 if (! function_exists('curl_get')) {
 
+    
+    
+    function call_curl_reconnect($url, array $data = [], $json = true){
+        
+        $t_count = 10;
+        $count = $t_count;
+        while ($count){
+            $result = curl_get($url,$data,$json);
+            if($result ){
+                return $result;
+            }
+            $slpSecd = intval(sqrt($t_count - $count) * 1000000);
+            dump($slpSecd);
+            usleep($slpSecd);
+//             sleep($seconds);
+            $count --;
+        }
+    }
+    
+    
+    
     function curl_get($url, array $data = [], $json = true)
     {
         // $api = 'http://v.showji.com/Locating/showji.com20150416273007.aspx?output=json&m='.$phone;
@@ -13,7 +34,7 @@ if (! function_exists('curl_get')) {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $User_Agen = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36';
         curl_setopt($ch, CURLOPT_TIMEOUT, 5); // 设置超时
-                                                 // curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
+                                              // curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 跟踪301
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果
         $info = curl_exec($ch);
@@ -25,6 +46,8 @@ if (! function_exists('curl_get')) {
 
     function curl_post($url, array $data, $json = true)
     {
+//         $cookie_file = 'cookie.txt';
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url); // url
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -34,6 +57,7 @@ if (! function_exists('curl_get')) {
         curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+//         curl_setopt($ch, CURLOPT_COOKIEJAR,  $cookie_file); //存储cookies
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data)); // 数据
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $info = curl_exec($ch);
@@ -71,6 +95,15 @@ if (! function_exists('curl_get')) {
 
 if (! function_exists('__fsocket')) {
 
+    /**
+     * Request without response using curl
+     *
+     * @param unknown $url            
+     * @param array $data            
+     * @param string $host            
+     * @param string $method            
+     * @return boolean
+     */
     function __async_curl($url, array $data = [], $host = '', $method = 'GET')
     {
         $host = $host ? $host : $_SERVER['HTTP_HOST'];
@@ -97,6 +130,14 @@ if (! function_exists('__fsocket')) {
         return __fsocket($url, $param, $host, 'POST');
     }
 
+    /**
+     * Request without response using socket
+     *
+     * @param unknown $url            
+     * @param array $param            
+     * @param string $host            
+     * @param string $method            
+     */
     function __fsocket($url, array $param = [], $host = '', $method = 'POST')
     {
         $host = $host ? $host : $_SERVER['HTTP_HOST'];
@@ -127,6 +168,7 @@ if (! function_exists('__fsocket')) {
         usleep(1000);
         fclose($fp);
     }
+
 }
 
 if (! function_exists('qishu')) {
@@ -136,9 +178,13 @@ if (! function_exists('qishu')) {
         $url = "http://www.xuanshu.com";
         $curl = $url . $curl;
         
-        $html = curl_get($curl,[],false); //
-                                 // $html = file_get_contents($curl);
-                                 // $html = iconv("gb2312", "utf-8//IGNORE",$html);
+        $html = call_curl_reconnect($curl, [], false); //
+        
+//         $html = http_fsocket($curl,[],'GET'); //
+        
+        
+                                            // $html = file_get_contents($curl);
+                                            // $html = iconv("gb2312", "utf-8//IGNORE",$html);
         $html = preg_replace('/target="_blank"/i', '', $html);
         $html = preg_replace('/<script.*<\/script>/i', '', $html);
         // <a href="/32848.html" style="color:default" class="name">《传奇控卫》全集</a>
@@ -153,3 +199,15 @@ if (! function_exists('qishu')) {
         return $html;
     }
 }
+
+
+
+
+
+
+
+
+
+
+    
+    

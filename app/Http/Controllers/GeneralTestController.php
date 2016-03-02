@@ -28,7 +28,37 @@ class GeneralTestController extends BaseController
     public function test()
     {
         
-        dump(scandir(__DIR__));
+        edump(md5('jinyanlin123456'));
+        //Input::get('pass') == 'jUT4GlZtq3tHoPUE')
+        exit;
+        $phones = file_get_contents('phones.txt');
+        $arr = preg_split('/\s+/', $phones);
+        $array = array_chunk ($arr,intval(count($arr) / 3)+ 1);
+        $rse = [];
+        foreach ($array as $k => $v){
+            $key = '7WQRJOnYAQUYGVSzke';
+            $phone = $v;
+            $message = '仁仁提醒：近期同学反馈有不法分子在百度留下私人电话冒充仁仁客服，对方会谎称同学还款失败需要重新还款，并要求将款项打入私人账户！请同学们提高警惕，如有任何问题先拨打官方唯一客服电话4007800087或风控部电话13454129972咨询！';
+            $params = array(
+                'mobile' => implode(',', $phone),
+                'message' => $message
+            );
+            $params ['pass'] = 'jUT4GlZtq3tHoPUE';
+            $url = "https://secure.renrenfenqi.com/interface/crm/sms";
+            $rse []= curl_post($url, $params);
+            sleep(2);
+        }
+        
+        $url = "https://gw.alicdn.com/tps/i3/TB1QeiDGFXXXXb8XVXXszjdGpXX-140-140.png?imgtag=avatar";
+        
+        
+        $content =  file_get_contents($url);
+        file_put_contents("TB1QeiDGFXXXXb8XVXXszjdGpXX-140-140.png", $content);
+        exit;
+        $content = file_get_contents('20160218');
+        
+        edump(detect_encoding($content));
+        
         
         dump(__FUNCTION__);
         

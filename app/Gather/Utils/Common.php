@@ -412,6 +412,58 @@ if(! function_exists('chineseWord')){
 }
 
 
+
+if (! function_exists ( 'computeTab' )) {
+
+    /**
+     *
+     * @param unknown $value
+     *        	要处理的值
+     * @param int $max
+     *        	值最大度
+     * @param int $left
+     *        	左侧已填充长度
+     */
+    function computeTab($value, $max, $left) {
+        $max_len = $max + $left;
+        $max_len = $max_len % 4 ? (( int ) ($max_len / 4) + 1) * 4 : $max_len;
+
+        $len = strlen ( $value ) + $left;
+        $num = $max_len - $len;
+        $num = $num % 4 ? (( int ) ($num / 4) + 1) : $num / 4;
+        while ( $num )
+            $num -- && $value .= "\t";
+        return $value;
+    }
+    function mkIDEHelper($obj) {
+        
+        $objs = [ ];
+        foreach ( $obj as $k => $v ) {
+            if (is_object ( $v )) {
+                $objs [$k] = object_name ( $v );
+            }
+        }
+        $max_len = max ( array_map ( 'strlen', array_keys ( $objs ) ) );
+        // 1+ 4n
+        foreach ( array_keys ( $objs ) as $v ) {
+            $v = computeTab ( $v, $max_len, strlen ( 'public $' ) + 4 );
+            echo "\tpublic \$$v= '';" . PHP_EOL;
+        }
+        echo "\tpublic function registerIDEHelper(){" . PHP_EOL;
+        foreach ( $objs as $k => $v ) {
+            echo "\t\tunset( \$this->$k );" . PHP_EOL;
+        }
+        echo "\t\treturn ;" . PHP_EOL;
+        foreach ( $objs as $k => $v ) {
+            $k = computeTab ( $k, $max_len, strlen ( '$this->' ) + 8 );
+            echo "\t\t\$this->$k= new $v();" . PHP_EOL;
+        }
+        echo "\t}";
+        edump ( $objs );
+    }
+}
+
+
 // /**
 //  * 设置msg回调
 //  * @param string $callback
