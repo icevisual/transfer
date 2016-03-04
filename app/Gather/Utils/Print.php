@@ -1,4 +1,79 @@
 <?php
+if (! function_exists('tableViewToArray')) {
+
+    /**
+     * 输出 接口字段 => 字段说明
+     * 
+     * @param unknown $str            
+     * @param string $kv            
+     */
+    function printTableView($str, $kv = true)
+    {
+        $result = tableViewArray($str, $kv);
+        preArrayKV($result);
+    }
+
+    /**
+     * 将招行-接口的字段说明作为注释和key输出
+     * 
+     * @param unknown $str            
+     */
+    function tableViewToArrayAnn($str)
+    {
+        $array = tableViewArray($str, 1, 0);
+        
+        echo '<pre>';
+        array_walk($array, function ($v, $k) {
+            echo sprintf("'%s' => '' ,// %s\n", $k, $v);
+        });
+        echo '</pre>';
+    }
+
+    /**
+     * 将招行-接口文档中的字段说明表格，转成数组，key为字段名，value为字段说明
+     * 
+     * @param unknown $str            
+     * @param string $kv
+     *            $k => $v or $v => $k
+     * @param string $ks
+     *            ksort
+     * @return boolean|multitype:string
+     */
+    function tableViewArray($str, $kv = true, $ks = true)
+    {
+        $res = explode("\r", $str);
+        // edump($res);
+        $res = array_filter($res, function ($v) {
+            return trim($v) != '';
+        });
+        $result = [];
+        foreach ($res as $k => $v) {
+            $v = trim($v);
+            $vv = preg_split("/\s/", $v, 2);
+            // edump($vv);
+            $kv && $result[trim($vv[0])] = trim($vv[1]);
+            $kv === false && $result[trim($vv[1])] = trim($vv[0]);
+        }
+        $ks && ksort($result);
+        return $result;
+    }
+
+    /**
+     * 通过接口输出和接口字段说明，生成接口返回样例和 字段说明作为注释
+     * 
+     * @param unknown $resultExample            
+     * @param unknown $ann            
+     */
+    function resultExampleAnn($resultExample, $ann)
+    {
+        echo '<pre>';
+        foreach ($resultExample as $k => $v) {
+            echo " '$k' => '$v',//" . (isset($ann[$k]) ? $ann[$k] : 'UNKNOWN') . " " . PHP_EOL;
+        }
+        echo '</pre>';
+    }
+}
+
 if (! function_exists('echoArray')) {
 
     function echoArray(array $arr)
