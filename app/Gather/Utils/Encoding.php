@@ -63,3 +63,39 @@ if (! function_exists('unicode_decode')) {
         return iconv('UCS-2', $encoding, $unistr);
     }
 }
+
+
+
+
+
+function generatePunctuationRegex(){
+    $specialChars = '，。！？,.!?';
+    $tsr = iconv('UTF-8', 'UCS-2', $specialChars);
+    $arrstr = str_split($tsr,2);
+    $res = [];
+    foreach ($arrstr as $value){
+        $res [] = bin2hex($value{0}).bin2hex($value{1});
+    }
+    return $regex = '/[\d\x{'.implode('}\x{', $res).'}]/u';
+}
+
+function nameContainNumberAndSpecialChar($str){
+    //         1. GBK (GB2312/GB18030)
+    //         x00-xff GBK双字节编码范围
+    //         x20-x7f ASCII
+    //         xa1-xff 中文 gb2312
+    //         x80-xff 中文 gbk
+    //         2. UTF-8 (Unicode)
+    //         u4e00-u9fa5 (中文)
+    //         x3130-x318F (韩文
+    //             xAC00-xD7A3 (韩文)
+    //             u0800-u4e00 (日文)
+    $regex = '/[\d\x{ff0c}\x{3002}\x{ff01}\x{ff1f}\x{002c}\x{002e}\x{0021}\x{003f}]/u';
+    if(preg_match_all($regex, $str,$matchs) ){
+        return true;
+    }
+    return false;
+}
+
+
+

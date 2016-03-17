@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Gather\AESTool;
 class GeneralTestController extends BaseController
 {
     public function __xmlToArray($xmlStr){
@@ -28,6 +29,7 @@ class GeneralTestController extends BaseController
     public function test()
     {
         
+        exit;
         edump(md5('jinyanlin123456'));
         //Input::get('pass') == 'jUT4GlZtq3tHoPUE')
         exit;

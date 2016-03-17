@@ -1,4 +1,54 @@
 <?php
+
+
+
+if (! function_exists('array_get_process')) {
+
+
+
+    /**
+     * Get Array Item And Process Callbacks
+     * @param array $arr
+     * @param unknown $key
+     * @param unknown $def
+     * @param unknown $processor
+     * @return Ambigous <mixed, unknown>
+     */
+    function array_get_process(array $arr,$key,$def,$processor = []){
+        $value = isset($arr[$key]) ? $arr[$key] : $def;
+        foreach ($processor as $k => $callback){
+            $param_arr = [];
+            if(is_numeric($k)){
+                $param_arr [] = $value;
+            }else{
+                foreach ($callback as $k1 => $v1){
+                    $param_arr [] = ($v1 == '#' ? $value : $v1);
+                }
+                $callback = $k;
+            }
+            is_callable($callback) && $value = call_user_func_array($callback, $param_arr);
+        }
+        return $value;
+    }
+
+    /**
+     * Trim unvisiable chars inside
+     * @param unknown $str
+     * @return unknown|string
+     */
+    function trimInside($str){
+        if(preg_match('/^[\w\s]*$/', $str)){
+            return $str;
+        }
+        $strArray = preg_split('/\s/', $str);
+        return implode('', $strArray);
+    }
+
+
+}
+
+
+
 if (! function_exists('array_map_recursive')) {
 
     function array_map_recursive($callback, array $array1)
