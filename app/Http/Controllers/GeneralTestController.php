@@ -34,7 +34,7 @@ class GeneralTestController extends BaseController
         \Excel::load('test.xls', function($reader) {
         
             // Getting all results
-           edump( $results = $reader->get() );
+           dd( $results = $reader->get() );
         
             // ->all() is a wrapper for ->get() and will work the same
             $results = $reader->all();
@@ -237,7 +237,7 @@ class GeneralTestController extends BaseController
     }
     
     
-    public function test()
+    public function test22()
     {
         $word = \Input::get('w');
 //         if(!$word){

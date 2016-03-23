@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Flat UI</title>
+<title>Fomatter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="flatUI/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -20,6 +20,7 @@
         margin-top:30px;
     }
     [result]{
+        font-size:20px;
         font-weight:25px;
     }
     </style>
@@ -27,7 +28,9 @@
 <body>
 	<div class="container">
 		<form action="" method="post" id="form-01">
-		       <input type="submit" value="SUBMIT" class="btn  btn-primary">
+		       <input type="submit" value="GZ-SUBMIT" class="btn  btn-primary">
+		       <a onclick="$('#result-field').format({method: 'xml'});" class="btn  btn-primary">XML-FORMAT</a>
+		       <a onclick="$('#result-field').format({method: 'json'});" class="btn  btn-primary">JSON-FORMAT</a>
 				<textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>
 	</div>

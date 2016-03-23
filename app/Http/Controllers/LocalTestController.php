@@ -224,7 +224,11 @@ class LocalTestController extends  BaseController
 	    $content = \Input::get('content');
 	    $res = '';
 	    if($content){
-	        $res = gzinflate(base64_decode($content));
+	        try {
+	            $res = gzinflate(base64_decode($content));
+	        }catch(\Exception $e){
+	            
+	        }
 	    }
 	    return View::make('localtest.gzdecode')->with([
 	        'result' => $res
