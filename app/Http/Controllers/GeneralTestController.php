@@ -164,15 +164,24 @@ class GeneralTestController extends BaseController
                 $str = preg_replace($reg, '<font color="red">\\0</font>', $v['eng']);
                 echo '[EN]:'.$str .'<br/>';
                 echo '[CH]:'. ($v['status'] == 1 ? $v['chi'] : '<textarea></textarea>' ) .'<br/>';
+
             }
+            $resEN[$k] = htmlspecialchars($resEN[$k]);
+            $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
+            fputs($fp, $str);
         }
-
-//         dump($transferData);
-
+        fputs($fp, '</contentList>');
+        fputs($fp1, '</contentList>');
+        fclose($fp);
+        fclose($fp1);
+        dump('From English:'.$fromEn);
+        dump('From Chinese:'.$fromCh);
         exit;
+        edump($resEN);
         
-        exit;
-        $fbsdk = \App\Services\Merchants\FBSdkService::getInstance();
+    }
+    
+    public function generateData(){
         
         $file = 'english.xml';
         $content = file_get_contents($file);
@@ -180,21 +189,6 @@ class GeneralTestController extends BaseController
         $file = 'hanhua.xml';
         $content = file_get_contents($file);
         $resCH =  $this->__xmlToArray($content);
-        
-        
-//         $fp = fopen('result.xml', 'w');
-//         fputs($fp, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?\>
-// <contentList>'.PHP_EOL);
-        
-//         $fp1 = fopen('eng.xml', 'w');
-//         fputs($fp1, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?\>
-// <contentList>'.PHP_EOL);
-        $word = \Input::get('w');
-        
-        if(!$word){
-            echo 'Word Is Required!';
-            exit();
-        }
         
         set_time_limit(0);
         $fromEn = 0;
@@ -206,16 +200,9 @@ class GeneralTestController extends BaseController
         
         foreach ($resEN as $k => $v){
             if(strlen($v) > $length ) $length = strlen($v);
-            
-//             $reg = '/'.$word.'/i';
-//             if(preg_match($reg, $resEN[$k])){
-//                 $resEN[$k] = preg_replace($reg, '<font color="red">\\0</font>', $resEN[$k]);
-//                 echo ''.$resEN[$k] .'--'. ( isset($resCH[$k]) ? $resCH[$k] : '<textarea></textarea>' ) .'<br/>';
-//             }
-            
-            
+        
             if(isset($resCH[$k])){
-//                 $resEN[$k] = $resCH[$k];
+                //                 $resEN[$k] = $resCH[$k];
                 $fromCh ++ ;
                 $record = [
                     'uid' => $k,
@@ -227,10 +214,6 @@ class GeneralTestController extends BaseController
                 $resEN[$k] = htmlspecialchars($resEN[$k]);
                 $fromEn ++ ;
                 $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
-//                 if(strlen($resEN[$k]) < 20)
-//                 echo htmlspecialchars($resEN[$k]).'<br/>';;
-                
-//                 fputs($fp1, $str);
                 $record = [
                     'uid' => $k,
                     'eng' => $resEN[$k],
@@ -240,38 +223,63 @@ class GeneralTestController extends BaseController
             }
             $resEN[$k] = htmlspecialchars($resEN[$k]);
             $str = "\t<content contentuid=\"{$k}\">{$resEN[$k]}</content>".PHP_EOL;
-//             fputs($fp, $str);
             $insertData [] = $record;
-            
             if(count($insertData) > 100 ){
                 \App\Models\Transfer::insert($insertData);
                 $insertData = [];
             }
-            
         }
-        
         $insertData && \App\Models\Transfer::insert($insertData);
-        
-//         fputs($fp, '</contentList>');
-//         fputs($fp1, '</contentList>');
-//         fclose($fp);
-//         fclose($fp1);
         dump('From English:'.$fromEn);
         dump('From Chinese:'.$fromCh);
         dump($length);
         exit;
-        edump($resEN);
+    }
+    
+    
+    public function test()
+    {
+        $word = \Input::get('w');
+//         if(!$word){
+//             echo 'Word Is Required!';
+//             exit();
+//         }
+        $sourceData =  \App\Models\Transfer::all()->toArray();
+        $transferData = [];
         
+        $file = 'yun.xml';
+        $content = file_get_contents($file);
+        $resEN =  $this->__xmlToArray($content);
         
-//         http://fanyi.baidu.com/v2transapi
+        $n = 0;
         
-//         from:en
-//         to:zh
-//         query:Invariant
-//         transtype:realtime
-//         simple_means_flag:3
+        foreach ($sourceData as $v){
+            if($v['status'] ==  0 && $v['eng'] != $resEN[$v['uid']]){
+                echo $n.'[En]'.$v['eng'].'<br/>';
+                echo $n.'[Ch]'.$resEN[$v['uid']].'<br/>';
+                $n ++;
+            }
+        }
         
+        exit;
         
+        foreach ($sourceData as $v){
+
+            $transferData[$v['contentuid']] = $v;
+
+            $reg = '/'.$word.'/i';
+            if($word && preg_match($reg, $v['eng'])){
+                $str = preg_replace($reg, '<font color="red">\\0</font>', $v['eng']);
+                echo '[EN]:'.$str .'<br/>';
+                echo '[CH]:'. ($v['status'] == 1 ? $v['chi'] : '<textarea></textarea>' ) .'<br/>';
+            }
+        }
+
+//         dump($transferData);
+
+        exit;
+        
+      
         $res = curl_post('http://fanyi.baidu.com/v2transapi', [
             'from' => 'en',
             'to' => 'zh',
