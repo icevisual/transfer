@@ -220,6 +220,18 @@ class LocalTestController extends  BaseController
 	}
 	
 	
+	public function gzdecode(){
+	    $content = \Input::get('content');
+	    $res = '';
+	    if($content){
+	        $res = gzinflate(base64_decode($content));
+	    }
+	    return View::make('localtest.gzdecode')->with([
+	        'result' => $res
+	    ]);
+	}
+	
+	
     public function index(){
     	//获取接口调用频度
         

@@ -28,6 +28,20 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
+        // 'Maatwebsite\Excel\ExcelServiceProvider',
+        //Maatwebsite\Excel\Facades\Excel
+        
+        \Excel::load('test.xls', function($reader) {
+        
+            // Getting all results
+           edump( $results = $reader->get() );
+        
+            // ->all() is a wrapper for ->get() and will work the same
+            $results = $reader->all();
+        
+        });
+        
+        
         
         exit;
         edump(md5('jinyanlin123456'));
