@@ -31,11 +31,12 @@ class GeneralTestController extends BaseController
         // 'Maatwebsite\Excel\ExcelServiceProvider',
         //Maatwebsite\Excel\Facades\Excel
         
+        exit;
+        
         \Excel::load('test.xls', function($reader) {
         
             // Getting all results
-           dd( $results = $reader->get() );
-        
+            dd( $results = $reader->get() );
             // ->all() is a wrapper for ->get() and will work the same
             $results = $reader->all();
         

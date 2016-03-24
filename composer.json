@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "predis/predis": "^1.0",
 	"maatwebsite/excel": "~2.1.0",
-        "guzzlehttp/guzzle": "^6.1"
+        "guzzlehttp/guzzle": "^6.1",
+        "zf-commons/zfc-rbac": "~2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
