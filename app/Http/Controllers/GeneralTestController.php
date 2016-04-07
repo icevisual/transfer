@@ -25,9 +25,64 @@ class GeneralTestController extends BaseController
         return $resultArray;
     }
     
+    public function mcurl(array $urls,array $data){
+        $mh = curl_multi_init();
+        $curl_array = array();
+        foreach($urls as $i => $url)
+        {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+            //             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            //             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            //             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            //             curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data[$i])); // 数据
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+            $curl_array[$i] = $ch;
+            curl_multi_add_handle($mh, $curl_array[$i]);
+        }
+        function full_curl_multi_exec($mh, &$still_running) {
+            do {
+                $rv = curl_multi_exec($mh, $still_running);
+            } while ($rv == CURLM_CALL_MULTI_PERFORM);
+            return $rv;
+        }
+        $res = [];
+        $still_running = null;
+        full_curl_multi_exec($mh, $still_running); // start requests
+        do { // "wait for completion"-loop
+            curl_multi_select($mh); // non-busy (!) wait for state change
+            full_curl_multi_exec($mh, $still_running); // get new state
+            while ($info = curl_multi_info_read($mh)) {
+                $curlInfo = curl_getinfo($info['handle']);
+                dump($curlInfo);
+                $res[$curlInfo['url']] = curl_multi_getcontent($info['handle']);
+                curl_multi_remove_handle($mh,$info['handle']);
+                // process completed request (e.g. curl_multi_getcontent($info['handle']))
+            }
+        } while ($still_running);
+        curl_multi_close($mh);
+        return  $res;
+    }
+    
     
     public function test()
     {
+        
+        echo \Input::get('a',-1);
+        exit;
+        
+        $urls = [
+            'http://api.xb.com/test?tag=1',
+            'http://api.xb.com/test?tag=2',
+        ];
+        
+        $res = $this->mcurl($urls, [
+            ['a'=>1],['a'=>2]
+        ]); 
+        dump($res);
+        
         // 'Maatwebsite\Excel\ExcelServiceProvider',
         //Maatwebsite\Excel\Facades\Excel
         

@@ -8,7 +8,7 @@
     // Route::post('redirect' , 'GeneralTestController@redirect');
     \Route::get('localtest', 'LocalTestController@index');
     \Route::get('document', 'LocalTestController@generate_api_doc');
-    \Route::get('test', 'GeneralTestController@test');
+    \Route::any('test', 'GeneralTestController@test');
     // Route::get('generate' , 'GeneralTestController@generate');
     // \Route::post( 'get_create_code' , 'GeneralTestController@getCode' ); // 注册--获取验证码
 });
