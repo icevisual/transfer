@@ -145,6 +145,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         'Maatwebsite\Excel\ExcelServiceProvider',
+        Xtwoend\Workbench\WorkbenchServiceProvider::class,
     ],
 
     /*
