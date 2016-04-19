@@ -1,6 +1,179 @@
 <?php
 
 
+if (! function_exists('createMigrationCode')) {
+
+    function createMigrationCode($table)
+    {
+        $prefix = \DB::getTablePrefix();
+
+        $res = \DB::select("SHOW CREATE TABLE `{$prefix}{$table}`");
+        $res = (array) $res[0];
+
+        function equalIgnoreCase($str1, $str2)
+        {
+            return strtolower($str1) == strtolower($str2);
+        }
+        $segments = preg_split('/\n/', $res['Create Table']);
+        array_shift($segments);
+        $column = [];
+        $constraint = [
+            'PRIMARY' => '',
+            'KEY' => []
+        ];
+        $tableComment = '';
+        foreach ($segments as $key => $value) {
+            // column name | type [type length ,precision] | NULL able | default | comment | Index
+            $value = trim($value);
+            if ($value{0} == '`') {
+                $words = preg_split('/\s/', $value);
+                $colName = trim($words[0], '`');
+                if (preg_match('/^(\w+)\((.*)\)$/', $words[1], $matches)) {
+                    array_shift($matches);
+                    $colType = $matches;
+                } else {
+                    $colType = [
+                        $words[1]
+                    ];
+                }
+                $column[$colName] = [
+                    'COLUMN' => $colName,
+                    'TYPE' => $colType,
+                    'UNSIGNED' => null,
+                    'NULL' => true,
+                    'DEFAULT' => null,
+                    'COMMENT' => null
+                ];
+                unset($words[0]);
+                unset($words[1]);
+                $flags = [
+                    'NULL' => 0
+                ];
+                foreach ($words as $i => $v) {
+                    $v = trim($v, ',');
+                    if (equalIgnoreCase($v, 'UNSIGNED')) {
+                        $column[$colName]['UNSIGNED'] = true;
+                    }
+                    if (equalIgnoreCase($v, 'NULL') && $flags['NULL'] == 0) {
+                        if (isset($words[$i - 1]) && equalIgnoreCase($words[$i - 1], 'NOT')) {
+                            $column[$colName]['NULL'] = true;
+                        } else {
+                            $column[$colName]['NULL'] = false;
+                        }
+                        $flags['NULL'] = 1;
+                    }
+                    if (equalIgnoreCase($v, 'AUTO_INCREMENT')) {
+                        $column[$colName]['AUTO_INCREMENT'] = true;
+                    }
+                    if (equalIgnoreCase($v, 'DEFAULT')) {
+                        $default = trim($words[$i + 1], '\'');
+                        ! equalIgnoreCase($default, 'NULL') && $column[$colName]['DEFAULT'] = trim($words[$i + 1], '\'');
+                    }
+                    if (equalIgnoreCase($v, 'COMMENT')) {
+                        $column[$colName]['COMMENT'] = trim($words[$i + 1], "',");
+                    }
+                }
+                // dump($words);
+            } else {
+                // PRIMARY KEY (`id`),"
+                // $value = 'KEY `order_id` (`order_id`,`order_id`,`order_id`) USING BTREE,';
+                $value = str_replace('`', '\'', $value);
+                if (preg_match('/^PRIMARY KEY \((.*)\)/', $value, $matches)) {
+                    $constraint['PRIMARY'] = $matches[1];
+                } else
+                    if (preg_match('/^KEY \'(.*)\' \((.*)\)/', $value, $matches)) {
+                        $constraint['KEY'][$matches[1]] = $matches[2];
+                    } else {
+                        if (preg_match('/COMMENT=\'(.*)\'/', $value, $matches)) {
+                            $tableComment = $matches[1];
+                        }
+                    }
+            }
+        }
+
+        return [
+            'columns' => $column,
+            'constraints' => $constraint,
+            'comment' => $tableComment
+        ];
+    }
+
+    function generateCode($data)
+    {
+        extract($data);
+
+        $funcArray = [
+            'int' => 'integer',
+            'decimal' => 'decimal',
+            'varchar' => 'string',
+            'text' => 'longText',
+            'tinyint' => 'tinyInteger',
+            'date' => 'date',
+            'dateTime' => 'dateTime',
+            'timestamp' => 'timestamp',
+            'smallint' => 'smallInteger',
+            'bigint' => 'bigInteger',
+            'char' => 'char',
+
+            'NULL' => 'nullable',
+            'DEFAULT' => 'default',
+            'COMMENT' => 'comment',
+            'AUTO_INCREMENT' => 'increments'
+        ];
+        $resultArray = [];
+        $columns = array_values($columns);
+        foreach ($columns as $k => $v) {
+            $type = $v['TYPE'];
+            if (isset($funcArray[$type[0]])) {
+                $resultArray[$k] = "\$table->{$funcArray[$type[0]]}";
+                if (isset($type[1])) {
+                    $resultArray[$k] .= "('{$v['COLUMN']}',{$type[1]})";
+                } else {
+                    $resultArray[$k] .= "('{$v['COLUMN']}')";
+                }
+            } else {
+                edump($type[0]);
+            }
+            if (isset($v['AUTO_INCREMENT'])) {
+                $resultArray[$k] = "\$table->{$funcArray['AUTO_INCREMENT']}('{$v['COLUMN']}');";
+                continue;
+            }
+            // dump($v);
+            if ($v['NULL']) {
+                if (! isset($resultArray[$k])) {
+                    dump($v);
+                    dump($resultArray);
+                    dump($k);
+                    exit();
+                }
+                $resultArray[$k] .= "->{$funcArray['NULL']}()";
+            }
+            if ($v['DEFAULT']) {
+                $resultArray[$k] .= "->{$funcArray['DEFAULT']}({$v['DEFAULT']})";
+            }
+            if ($v['COMMENT']) {
+                // $resultArray[$k] .= "->{$funcArray['COMMENT']}('{$v['COMMENT']}')";
+            }
+            $resultArray[$k] .= ";";
+        }
+        // PRIMARY
+        $resultArray[] = "\$table->primary([{$constraints['PRIMARY']}]);";
+        foreach ($constraints['KEY'] as $k => $v) {
+            $resultArray[] = "\$table->index([$v],'{$k}');";
+        }
+        return $resultArray;
+    }
+
+    function printResult($result)
+    {
+        echo '<pre>';
+        foreach ($result as $k => $v) {
+            echo $v . '<br/>';
+        }
+        echo '</pre>';
+    }
+}
+
 
 if (! function_exists('array_get_process')) {
 
