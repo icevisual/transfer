@@ -69,8 +69,7 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
-        
-        echo \Input::get('a',-1);
+        phpinfo();
         exit;
         
         $urls = [
