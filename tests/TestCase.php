@@ -22,4 +22,16 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+    
+    
+    protected static function stdout($message){
+        fwrite(STDOUT, $message. "\r\n" );
+    }
+    
+    protected static function _print($var){
+        fwrite(STDOUT, "\r\n" );
+        dump($var);
+        fwrite(STDOUT, "\r\n" );
+    }
+    
 }
