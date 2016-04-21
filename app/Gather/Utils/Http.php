@@ -1,7 +1,114 @@
 <?php
 if (! function_exists('curl_get')) {
 
+
+
+    function httpDownloadSha1($url, $filePath = "Download", $timeout = 60)
+    {
+        $pathinfo = pathinfo($url);
+        $originFilename = $pathinfo['filename'];
+        $originExtension = array_get($pathinfo, 'extension','jpg');
+        $extension = '';
+        $acceptExtensions = [
+            'png','jpg','gif','jpeg'
+        ];
+        $acceptExtensions = array_flip($acceptExtensions);
+        if(!isset($acceptExtensions[$extension = $originExtension])){
+            if(!isset($acceptExtensions[$extension = substr($originExtension, 0,3)])){
+                if(!isset($acceptExtensions[$extension = substr($originExtension, 0,4)])){
+                    throw new \Exception('不支持扩展名');
+                    return false;
+                }
+            }
+        }
     
+        ! is_dir($filePath) && @mkdir($filePath, 0755, true);
+        $url = str_replace(" ", "%20", $url);
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        $User_Agen = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36';
+        curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 跟踪301
+        $temp = curl_exec($ch);
+        if(! curl_error($ch)){
+            if($temp{0} == '<'){
+                return false;
+                throw new \Exception('返回HTML');
+            }
+            curl_close($ch);
+            $sha1 = sha1(base64_encode($temp));
+            $fileName = $filePath.'/'.$sha1.'.'.$extension;
+            if (!is_file($fileName) ) {
+                
+                try {
+                    file_put_contents($fileName, $temp);
+                }catch(\Exception $e){
+                    throw $e;
+                    return false;
+                }
+                return $fileName;
+            } else {
+                return true;
+            }
+        }else{
+            edump(curl_errno($ch));
+            curl_close($ch);
+            return false;
+        }
+    }
+    
+    
+    
+    
+    function httpcopy($url, $file = "", $timeout = 60)
+    {
+        $file = empty($file) ? pathinfo($url, PATHINFO_BASENAME) : $file;
+        $dir = pathinfo($file, PATHINFO_DIRNAME);
+        ! is_dir($dir) && @mkdir($dir, 0755, true);
+        $url = str_replace(" ", "%20", $url);
+    
+        if (function_exists('curl_init')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+            $User_Agen = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36';
+            curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 跟踪301
+            $temp = curl_exec($ch);
+    
+            if(! curl_error($ch)){
+                if($temp{0} == '<'){
+                    return false;
+                }
+                if (@file_put_contents($file, $temp)) {
+                    return $file;
+                } else {
+                    return false;
+                }
+            }
+    
+    
+        } else {
+            $opts = array(
+                "http" => array(
+                    "method" => "GET",
+                    "header" => "",
+                    "timeout" => $timeout
+                )
+            );
+            $context = stream_context_create($opts);
+            if (@copy($url, $file, $context)) {
+                // $http_response_header
+                return $file;
+            } else {
+                return false;
+            }
+        }
+    }
     
     function call_curl_reconnect($url, array $data = [], $json = true){
         

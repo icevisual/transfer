@@ -1,5 +1,6 @@
 <?php
 
+use function Symfony\Component\Debug\header;
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -23,9 +24,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
     
+    public static function setUpBeforeClass(){
+    }
     
     protected static function stdout($message){
-        fwrite(STDOUT, $message. "\r\n" );
+//         fwrite(STDOUT, $message. "\r\n" );
     }
     
     protected static function _print($var){

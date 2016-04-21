@@ -69,8 +69,44 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
-        phpinfo();
+        set_time_limit(100);
+        $url = 'http://image.baidu.com/search/avatarjson';
+        $data = [
+            'tn' => 'resultjsonavatarnew',
+            'ie' => 'utf-8',
+            'word' => '幻想乡头像',
+            'cg' => 'wallpaper',
+            'pn' => '0',
+            'rn' => '60',
+            'itg' => '0',
+            'z' => '0',
+            'fr' => '',
+            'width' => '',
+            'height' => '',
+            'lm' => '-1',
+            'ic' => '0',
+            's' => '0',
+            'st' => '-1',
+            'gsm' => '1e',
+        ];
+        
+        $res =  curl_get($url,$data);
+        $fp = fopen('ig-result.txt', 'w');
+        $error_fp = fopen('ig-error.txt', 'w');
+        if(isset($res['imgs'])){
+            foreach ($res['imgs'] as $key => $v){
+                fwrite($fp, $v['objURL']."\r\n");
+                $url = $v['objURL'];
+//                 $pathinfoh = pathinfo($url);
+//                 $nname = 'Download'.DS.randStr(20,'-ALL').'.'.$pathinfoh['extension'];
+                httpDownloadSha1($url,'Sha1');
+            }
+        }
+        fclose($error_fp);
+        fclose($fp);
         exit;
+        
+        
         
         $urls = [
             'http://api.xb.com/test?tag=1',
