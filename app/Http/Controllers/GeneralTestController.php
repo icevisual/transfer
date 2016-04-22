@@ -69,12 +69,17 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
+        $HttpUtils = new \App\Gather\Utils\HttpUtils();
+//         $url = 'http://nyato.com/data/upload/avatar/ac/d8/d5/original_200_200.jpg';
+//         $res = $HttpUtils->httpDownloadSha1($url);
+//         dump($res);
+//         exit;
         set_time_limit(100);
         $url = 'http://image.baidu.com/search/avatarjson';
         $data = [
             'tn' => 'resultjsonavatarnew',
             'ie' => 'utf-8',
-            'word' => '幻想乡头像',
+            'word' => '美女头像',
             'cg' => 'wallpaper',
             'pn' => '0',
             'rn' => '60',
@@ -97,16 +102,12 @@ class GeneralTestController extends BaseController
             foreach ($res['imgs'] as $key => $v){
                 fwrite($fp, $v['objURL']."\r\n");
                 $url = $v['objURL'];
-//                 $pathinfoh = pathinfo($url);
-//                 $nname = 'Download'.DS.randStr(20,'-ALL').'.'.$pathinfoh['extension'];
-                httpDownloadSha1($url,'Sha1');
+                $HttpUtils->httpDownloadSha1($url,'Sha1');
             }
         }
         fclose($error_fp);
         fclose($fp);
         exit;
-        
-        
         
         $urls = [
             'http://api.xb.com/test?tag=1',
