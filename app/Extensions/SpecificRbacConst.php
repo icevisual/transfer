@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Middleware;
+namespace App\Http\Extensions;
 
 class SpecificRbacConst
 {
