@@ -287,6 +287,9 @@ if (! function_exists('qishu')) {
         
         $html = call_curl_reconnect($curl, [], false); //
         
+        $html = iconv(detect_encoding($html), 'UTF-8', $html);
+        
+        
 //         $html = http_fsocket($curl,[],'GET'); //
         
         

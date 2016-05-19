@@ -69,6 +69,11 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
+        
+        //http://down.zhuoku.com/deskzhuoku/2014/01/星际空间.exe
+        
+        edump(exec('dir'));
+        exit;
         $HttpUtils = new \App\Gather\Utils\HttpUtils();
 //         $url = 'http://nyato.com/data/upload/avatar/ac/d8/d5/original_200_200.jpg';
 //         $res = $HttpUtils->httpDownloadSha1($url);
@@ -79,7 +84,7 @@ class GeneralTestController extends BaseController
         $data = [
             'tn' => 'resultjsonavatarnew',
             'ie' => 'utf-8',
-            'word' => '美女头像',
+            'word' => '动漫少女头像',
             'cg' => 'wallpaper',
             'pn' => '0',
             'rn' => '60',
