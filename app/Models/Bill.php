@@ -25,6 +25,21 @@ class Bill extends \Eloquent
     protected $primaryKey = 'id';
 
     protected $guarded = [];
+    
+    public static function getTableCreateStatment(){
+        return $str = "
+CREATE TABLE `x_bill` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(60) NOT NULL COMMENT '姓名',
+  `type` tinyint(4) NOT NULL COMMENT '金额类别，1需付，1已付',
+  `desc` varchar(160) NOT NULL COMMENT '描述',
+  `amount` decimal(11,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '时间',
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=603 DEFAULT CHARSET=utf8 COMMENT='用户账单表'
+            ";
+    }
 
     public static function run(){
         $data = [
@@ -47,6 +62,12 @@ class Bill extends \Eloquent
                 'amount' => 1540 * 2
             ],
             [
+                'name' => '',
+                'type' => Bill::TYPE_SHOULD_PAY_ALL,
+                'desc' => '物业费',
+                'amount' => 79 * 2
+            ],
+            [
                 'name' => '金燕林',
                 'type' => Bill::TYPE_PAYED,
                 'desc' => '2016年3月水费',
@@ -62,7 +83,7 @@ class Bill extends \Eloquent
                 'name' => '金燕林',
                 'type' => Bill::TYPE_PAYED,
                 'desc' => '厕所喷头、节能灯费用',
-                'amount' => 32 + 24 - 0.1
+                'amount' => 32 + 24 
             ],
             [
                 'name' => '金燕林',
@@ -145,13 +166,11 @@ class Bill extends \Eloquent
             echo " + {$shp['amount']} ({$shp['desc']}) $nrl";
             if($k == $shouldPayCount - 1){
                 echo ') / '.$num;
-            }else{
             }
         }
         $shouldPayDiv = $allShouldPay / $num;
         echo ' = '.$shouldPayDiv.' '.$nrl.$nrl;
         foreach ($bill as $name =>  $v){
-            
             echo "$name $nrl";
             echo " + {$v['should']} (房租) $nrl + $shouldPayDiv ";
             echo $nrl;
