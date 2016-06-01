@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class ServiceException extends Exception
+class JsonpException extends Exception
 {
 
     public function __construct($message, $code = 600)

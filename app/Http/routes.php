@@ -5,12 +5,23 @@
 
 \Route::group([
 ], function () {
-    // Route::post('redirect' , 'GeneralTestController@redirect');
+    
     \Route::get('localtest', 'LocalTestController@index');
     \Route::get('document', 'LocalTestController@generate_api_doc');
     \Route::any('test', 'GeneralTestController@test');
+    
+    \Route::get('testpay', 'GeneralTestController@testpay');
+    
+    \Route::get('testquery', 'GeneralTestController@testquery');
+    
+    \Route::any('gz', 'LocalTestController@gzdecode');
+    
+    \Route::controller('/testapi', 'MerchantsPayTestController');
+    
     // Route::get('generate' , 'GeneralTestController@generate');
-    // \Route::post( 'get_create_code' , 'GeneralTestController@getCode' ); // 注册--获取验证码
+    \Route::post('get_create_code', 'GeneralTestController@getCode'); // 注册--获取验证码
+    
+    
 });
 
 \Route::group([], function () {

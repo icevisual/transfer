@@ -335,16 +335,6 @@
 		    str=str.replace(/\\u/g,"%u");
 		    return unescape(str);
 		}
-
-// 		$.ajax({
-// 			 url: '/api/put',
-// 			 type: 'put',
-// 			 type: 'delete',
-// 			 dataType:'json',
-// 			 success: function(result) {
-// 				   console.log(result);
-// 			 }
-// 		});
 		
 	})
 	</script>
