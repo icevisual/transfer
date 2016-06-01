@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Transfer;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Common\Transfer;
 
 class TransferController extends BaseController{
     
@@ -35,7 +36,7 @@ class TransferController extends BaseController{
             'pageSize' => 'required|numeric',
             'status' => 'sometimes|numeric',
         ]);
-        $result = \App\Models\Transfer::getList($inputData,$page,$pageSize);
+        $result = Transfer::getList($inputData,$page,$pageSize);
         $result['_status'] = [
             '0 ' => '未翻译',
             '1 ' => '已翻译',
@@ -85,9 +86,6 @@ class TransferController extends BaseController{
     
     
     public function index(){
-        
-        
-        
         
         return \View::make('Transfer.index');
     }

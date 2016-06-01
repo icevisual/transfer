@@ -45,6 +45,10 @@ class LocalTestController extends  BaseController
 			if($r){
 				$params[$matchs[1]] = true;
 			}
+			$r = preg_match('/Input::get\s*\(\s*[\'\"]([\w\d_]*)[\'\"]\s*(:?,[:.\s\S\w\W]*)*\)/', $v,$matchs);
+			if($r){
+			    $params[$matchs[1]] = true;
+			}
 			$r = preg_match('/\$_(?:POST|GET)\s*\[[\'\"]([\w\d_]*)[\'\"]\]/', $v,$matchs);
 			if($r){
 				$params[$matchs[1]] = true;
@@ -217,6 +221,34 @@ class LocalTestController extends  BaseController
 		return View::make('localtest.doc')->with('list',$showData);
 		
 		edump($showData);
+	}
+	
+	
+	public function tableColumn(){
+	    $str =<<<EOL
+  `order_id` bigint(26) NOT NULL COMMENT '订单流水号',
+  `service_num` int(10) DEFAULT '0' COMMENT '服务人数',
+  `service_fee` decimal(10,2) DEFAULT '0.00' COMMENT '服务费收费标准（元 / 人 / 次）',
+  `tax_invoice_proportion` decimal(5,2) DEFAULT '0.00' COMMENT '开票税金比例 ',
+  `has_insurance` tinyint(1) DEFAULT '2' COMMENT '是否有商保，1有，2无',
+  `insurance_num` int(10) DEFAULT '0' COMMENT '商保代缴人数',
+  `insurance_fee` decimal(10,2) DEFAULT '0.00' COMMENT '商保收费标准（元 ／月）',
+  `insurance_invoice_proportion` decimal(5,2) DEFAULT '0.00' COMMENT '商保开票税金比',
+  `has_disabled_gold` tinyint(1) DEFAULT '2' COMMENT '是否代缴残疾金，1是，2否',
+  `disabled_num` int(10) DEFAULT '0' COMMENT '残疾金代缴人数',
+  `disabled_fee` decimal(10,2) DEFAULT '0.00' COMMENT '残疾金收费标准（元 ／月）',
+  `disabled_invoice_proportion` decimal(5,2) DEFAULT '0.00' COMMENT '残疾金开票税金比例 ',
+  `total_fee` decimal(11,2) NOT NULL DEFAULT '0.00' COMMENT '结算总费用',
+  `receive_unit` varchar(100) DEFAULT NULL COMMENT '收款方单位名',
+  `receive_card_no` varchar(30) DEFAULT NULL COMMENT '收款方银行卡号',
+  `receive_bankname` varchar(50) DEFAULT NULL COMMENT '收款方开户行',
+  `receive_contact` varchar(20) DEFAULT NULL COMMENT '收款方联系方式',
+EOL;
+	    preg_match_all('/`([\w]+)`/', $str,$matchs);
+	    foreach ($matchs[1] as $k => $v){
+	        echo "'$v' => '',<br/>";
+	    }
+	    exit;
 	}
 	
 	

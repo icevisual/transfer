@@ -44,6 +44,11 @@
     });
 });
 
+
+
+/**
+ * 接口路由
+ */
 \Route::group([
     'prefix' => '/api/'
 ], function () {
@@ -52,4 +57,20 @@
     
     // \Route::put('put', 'Transfer\TransferController@put');
 });
+
+/**
+ * 页面输出路由
+ */
+\Route::group([
+    'prefix' => '/output/'
+], function () {
+    \Route::get('bill', 'Common\CommonController@bill');
+    
+});
+
+
+
+
+
+
     

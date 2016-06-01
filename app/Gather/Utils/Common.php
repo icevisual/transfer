@@ -1,6 +1,34 @@
 <?php
 
 
+
+if (! function_exists('getChangedProperties')) {
+
+
+
+    /**
+     * 获取已变更数据
+     * @param unknown $newData
+     * @param unknown $oldData
+     * @param unknown $properties
+     * @return multitype:multitype:unknown Ambigous <>
+     */
+    function getChangedProperties($newData,$oldData,$properties){
+        $diffValues = [];
+        foreach ($properties as $k => $v){
+            if(isset($newData[$v]) && isset($oldData[$v])
+                && $newData[$v] != $oldData[$v] ){
+                $diffValues [$v] = [$oldData[$v],$newData[$v]];
+            }
+        }
+        return $diffValues;
+    }
+
+}
+
+
+
+
 if (! function_exists('createMigrationCode')) {
 
     function createMigrationCode($table)

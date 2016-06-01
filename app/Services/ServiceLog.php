@@ -89,7 +89,7 @@ class ServiceLog
             'memory_usage' => isset($data['mt']['m']) ? $data['mt']['m'] : 0,
             'created_at' => date('Y-m-d H:i:s'),
         ];
-        \DB::insert(createInsertSql('xb_request_log', $requestLogData));
+        \DB::insert(createInsertSql(\DB::getTablePrefix().'request_log', $requestLogData));
         self::record('request', 'RQS', $data, 'request');
     }
 
