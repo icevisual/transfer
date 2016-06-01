@@ -28,6 +28,10 @@ class BaseController extends Controller
 
     public function __json($status = 200, $message = 'ok', array $data = [],$options = 0)
     {
+        header("Content-type: application/json");
+        if (is_array($status)) {
+            return \Response::json($status);
+        }
         $resp = [
             'status' => (int)$status,
             'message' => $message,
