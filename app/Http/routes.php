@@ -1,31 +1,31 @@
 <?php
-\Route::any('/', function () {
-    return call_user_func('qishu');
-});
+// \Route::any('/', function () {
+//     return call_user_func('qishu');
+// });
+
+\Route::any('/', 'MerchantsPay\MerchantsController@index');
 
 \Route::group([
 ], function () {
-    
     \Route::get('localtest', 'LocalTestController@index');
     \Route::get('document', 'LocalTestController@generate_api_doc');
     \Route::any('test', 'GeneralTestController@test');
-    
-    \Route::get('testpay', 'GeneralTestController@testpay');
-    
-    \Route::get('testquery', 'GeneralTestController@testquery');
-    
     \Route::any('gz', 'LocalTestController@gzdecode');
-    
     \Route::controller('/testapi', 'MerchantsPayTestController');
-    
-    // Route::get('generate' , 'GeneralTestController@generate');
-    \Route::post('get_create_code', 'GeneralTestController@getCode'); // 注册--获取验证码
-    
-    
 });
 
+
+
+
+
+Route::match(['get','post'],'kindEditor/upload_json.aspx', 'Common\KindEditor@upload_json');
+Route::match(['get','post'],'kindEditor/file_manager_json','Common\KindEditor@file_manager_json' );
+
+
+
+
+
 \Route::group([], function () {
-    \Route::get('transfer', 'Transfer\TransferController@index');
     
     Route::get('/soft/sort{id}/index_{page}.html', function ($id, $page) {
         return qishu("/soft/sort{$id}/index_{$page}.html");
@@ -42,9 +42,9 @@
     Route::get('/{id}.html', function ($id) {
         return qishu('/' . $id . '.html');
     });
+    
+    
 });
-
-
 
 /**
  * 接口路由

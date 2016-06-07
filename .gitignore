@@ -8,3 +8,4 @@ Homestead.json
 .buildpath
 .project
 .settings
+storage/sqlLog/

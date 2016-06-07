@@ -1,0 +1,13 @@
+array (
+  'INFO' => 
+  array (
+    'FUNNAM' => 'GetAccInfo',
+    'DATTYP' => '2',
+    'LGNNAM' => '阿萨德',
+  ),
+  'SDKACINFX' => 
+  array (
+    'BBKNBR' => '57',
+    'ACCNBR' => '571908939010802',
+  ),
+)

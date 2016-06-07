@@ -282,7 +282,7 @@ if (! function_exists('qishu')) {
 
     function qishu($curl = '')
     {
-        $url = "http://www.xuanshu.com";
+        $url = "http://www.qisuu.com";
         $curl = $url . $curl;
         
         $html = call_curl_reconnect($curl, [], false); //
