@@ -1,7 +1,102 @@
 <?php
 
+if (! function_exists('setRequiredIfMissedEmpty')) {
 
 
+    function setRequiredIfMissedEmpty($data,$rule){
+        foreach ($rule as $k => $v){
+            if(is_string($v)){
+                $r = explode('|',$v);
+            }else{
+                $r = $v;
+            }
+            foreach ($r as $rr){
+                if(strpos($rr, 'required_if') === 0){
+                    $ruleProperties = preg_split('/[,:]/', $rr);
+                    if($data[$ruleProperties[1]] != $ruleProperties[2]){
+
+                        $data[$k] = null;
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+}
+
+if (! function_exists('runCustomValidator')) {
+
+    /**
+     * Run Constom Validator
+     * @param array $input
+     *            <pre>
+     *            [
+     *            'data',      //数据
+     *            'rules',     //条件
+     *            'messages',  //错误信息
+     *            'attributes',//属性名映射
+     *            'valueNames',//属性值映射
+     *            'config' =>
+     *            <div style="margin:20px;">[
+     *                  <span style="margin:10px;">'ReturnOrException' => 0, // Return (0) Or Exception(1)</span>
+     *                  <span style="margin:10px;">'FirstOrAll' => 0 // First(0) Or All(1)</span>
+     *              ],</div>
+     *            ]
+     *            </pre>
+     * @throws \App\Exceptions\ServiceException
+     * @return multitype:|boolean
+     */
+    function runCustomValidator(array $input)
+    {
+        $input = array_only($input, [
+            'data',
+            'rules',
+            'messages',
+            'attributes',
+            'valueNames',
+            'config'
+        ]);
+
+        $config = isset($input['config']) ? $input['config'] : [];
+        // Return (0) Or Exception(1)
+        // First(0) Or All(1)
+        $defaultConfig = [
+            'ReturnOrException' => 1,
+            'FirstOrAll' => 0
+        ];
+
+        $config += $defaultConfig;
+        $validate = \Validator::make($input['data'], $input['rules'], $input['messages'], $input['attributes']);
+
+        if (isset($input['valueNames']) && ! empty($input['valueNames'])) {
+            $validate->setValueNames($input['valueNames']);
+        }
+
+        if ($validate->fails()) {
+            $message = $validate->getMessageBag();
+            $message->setFormat([
+                'key' => ':key',
+                'message' => ':message'
+            ]);
+            $errorMsg = $config['FirstOrAll'] ? $message->all() : $message->first();
+
+            if ($config['ReturnOrException']) {
+                if ($config['FirstOrAll']) {
+                    $errors = [];
+                    foreach ($errorMsg as $v) {
+                        $errors[$v['key']] = $v['message'];
+                    }
+                    throw new \App\Exceptions\ServiceException('error', 600, $errors);
+                } else {
+                    throw new \App\Exceptions\ServiceException($errorMsg['message'], 202);
+                }
+            } else {
+                return $errorMsg;
+            }
+        }
+        return true;
+    }
+}
 
 
 

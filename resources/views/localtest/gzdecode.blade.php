@@ -31,7 +31,8 @@
 		       <input type="submit" value="GZ-SUBMIT" class="btn  btn-primary">
 		       <a onclick="$('#result-field').format({method: 'xml'});" class="btn  btn-primary">XML-FORMAT</a>
 		       <a onclick="$('#result-field').format({method: 'json'});" class="btn  btn-primary">JSON-FORMAT</a>
-				<textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
+		       <a onclick="StrFormat('FBSDK')" class="btn  btn-primary">STR-FORMAT-FBSDK</a>
+			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>
 	</div>
 	<!-- /.container -->
@@ -49,7 +50,17 @@
 	<script src="flatUI/js/jquery.format.js"></script>
 	
 	<script>
+    var StrFormat = function(type){
 
+        var content = $('#result-field').val();
+        $.post('/format',{
+            'content' : content,
+            'type' : type,
+            '_token' :'{{ csrf_token() }}'
+        },function(d){
+        	$('#result-field').val(d);
+        },'text');
+    }
 	
     $(function(){
         

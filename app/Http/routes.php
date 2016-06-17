@@ -1,9 +1,9 @@
 <?php
-// \Route::any('/', function () {
-//     return call_user_func('qishu');
-// });
+\Route::any('/', function () {
+    return call_user_func('qishu');
+});
 
-\Route::any('/', 'MerchantsPay\MerchantsController@index');
+// \Route::any('/', 'MerchantsPay\MerchantsController@index');
 
 \Route::group([
 ], function () {
@@ -11,6 +11,10 @@
     \Route::get('document', 'LocalTestController@generate_api_doc');
     \Route::any('test', 'GeneralTestController@test');
     \Route::any('gz', 'LocalTestController@gzdecode');
+    \Route::any('format', 'LocalTestController@format');
+    
+    
+    
     \Route::controller('/testapi', 'MerchantsPayTestController');
 });
 

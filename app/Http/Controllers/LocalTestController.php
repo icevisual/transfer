@@ -138,6 +138,42 @@ class LocalTestController extends  BaseController
 	}
 	
 	
+	protected function tableViewArray($str, $kv = true, $ks = true)
+	{
+	    $res = explode("\n", $str);
+	    // edump($res);
+	    $res = array_filter($res, function ($v) {
+	        return trim($v) != '';
+	    });
+	    $result = [];
+	    foreach ($res as $k => $v) {
+	        $v = trim($v);
+	        $vv = preg_split("/\s/", $v, 2);
+	        // edump($vv);
+	        $kv && $result[trim($vv[0])] = trim($vv[1]);
+	        $kv === false && $result[trim($vv[1])] = trim($vv[0]);
+	    }
+	    $ks && ksort($result);
+	    return $result;
+	}
+	
+	protected function tableViewToArrayAnn($str)
+    {
+        $array = $this->tableViewArray($str, 1, 0);
+        
+        array_walk($array, function ($v, $k) {
+            echo sprintf("'%s' => '' ,// %s\n", $k, $v);
+        });
+    }
+	
+	
+	public function format(){
+	    $str = \Input::get('content');
+	    $array = $this->tableViewToArrayAnn($str);
+	}
+	
+	
+	
 	
 	public function generate_api_doc(){
 

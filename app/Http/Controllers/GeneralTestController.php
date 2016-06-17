@@ -73,8 +73,6 @@ class GeneralTestController extends BaseController
 
     public function test()
     {
-        
-        
         Bill::run();
         // 房租、多人支出、由谁付
         
