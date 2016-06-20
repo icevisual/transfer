@@ -24,20 +24,24 @@ class Demo implements VerifyCaptchaContract{
         $data = [
             'need_captcha' => 0,
         ];
-        if($this->needCaptcha()){
+    
+        $verify = new \App\Extensions\Verify\VerifyCaptcha();
+    
+        if($verify->needCaptcha()){
             $data['need_captcha'] = 1;
         }
     
+    
         if (isset($username) && isset($password)) {
     
-            if($this->fobiddenLogin()){
-                $data['login_errors'] = '登录过于频繁';
+            if($verify->isFobidden($username)){
+                $data['login_errors'] = '错误次数过多禁止登录'.$verify->getForbiddenTime().'分钟！';
                 return Redirect::to('/login')->with($data);
             }
     
-            if($this->needCaptcha()){
+            if($verify->needCaptcha()){
                 $captcha = Input::get('captcha');
-                if(!$this->captchaCheck($captcha)){
+                if(!$verify->checkCaptcha($captcha)){
                     $data['login_errors'] = '验证码不正确！';
                     return Redirect::to('/login')->with($data);
                 }
@@ -47,21 +51,25 @@ class Demo implements VerifyCaptchaContract{
                 'username' => $username,
                 'password' => $password
             ), false)) {
-                $this->clearLoginErrorTime();
+                $verify->clear($username);
                 $userInfo = \Auth::getUser();
                 Fun::add_member_option("login", "", '管理员登录');
                 return Redirect::to('/');
             } else {
     
-                $this->increaseLoginErrorTime();
+                $last = $verify->increase($username);
                 // 输错三次密码，出现验证码
                 // 输错五次今日不可登录 对于session ip
-                $data['login_errors'] = '用户名或密码不正确！';
+                $data['login_errors'] = '用户名或密码不正确！(剩余'.$last.'次)';
+    
+                $last == 0 && $data['login_errors'] = '错误次数过多禁止登录'.$verify->getForbiddenTime().'分钟！';
     
                 return Redirect::to('/login')->with($data);
             }
         } else
             return view('login')->with($data);
     }
+    
+    
     
 }
