@@ -25,7 +25,7 @@ class Demo implements VerifyCaptchaContract{
             'need_captcha' => 0,
         ];
     
-        $verify = new \App\Extensions\Verify\VerifyCaptcha();
+        $verify = new \App\Extensions\Verify\VerifyCaptcha('admin');
     
         if($verify->needCaptcha()){
             $data['need_captcha'] = 1;

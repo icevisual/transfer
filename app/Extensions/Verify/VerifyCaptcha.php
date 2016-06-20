@@ -48,6 +48,12 @@ class VerifyCaptcha
     
     
     /**
+     * 
+     * @var unknown
+     */
+    protected $name = null;
+    
+    /**
      * 存储信息Driver
      * 
      * @var VerifyStoreInterface
@@ -89,7 +95,8 @@ class VerifyCaptcha
      * 初始化
      * @param unknown $config
      */
-    public function __construct($config = []){
+    public function __construct($name , $config = []){
+        $this->name = $name;
         if(!empty($config)){
             $this->setConfig($config);
         }
@@ -147,7 +154,18 @@ class VerifyCaptcha
     public function getUserIdentifier()
     {
         $ip = \Request::ip() . date('Y-m-d');
-        return 'XB-Login-error-' . sha1($ip);
+        return 'XB-'.$this->name.'-Login-error-' . sha1($ip);
+    }
+    
+    /**
+     * 混合KEY
+     * @param unknown $key
+     * @param unknown $key1
+     * @return string
+     */
+    public function mix($key, $key1)
+    {
+        return 'XB-'.$this->name.'-error-' . sha1($key . $key1);
     }
     
     /**
@@ -184,16 +202,6 @@ class VerifyCaptcha
         }
     }
 
-    /**
-     * 混合KEY
-     * @param unknown $key
-     * @param unknown $key1
-     * @return string
-     */
-    public function mix($key, $key1)
-    {
-        return 'XB-Login-error-' . sha1($key . $key1);
-    }
 
     /**
      * 获取存储数据
