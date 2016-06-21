@@ -1,9 +1,9 @@
 <?php
-\Route::any('/', function () {
-    return call_user_func('qishu');
-});
+// \Route::any('/', function () {
+//     return call_user_func('qishu');
+// });
 
-// \Route::any('/', 'MerchantsPay\MerchantsController@index');
+\Route::any('/', 'MerchantsPay\MerchantsController@index');
 
 \Route::group([
 ], function () {

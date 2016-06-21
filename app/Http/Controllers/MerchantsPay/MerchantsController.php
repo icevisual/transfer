@@ -3,6 +3,7 @@ namespace App\Http\Controllers\MerchantsPay;
 
 use App\Http\Controllers\BaseController;
 use App\Services\Merchants\FBSdkService;
+use function Symfony\Component\Debug\header;
 
 class MerchantsController extends BaseController{
     
@@ -12,13 +13,53 @@ class MerchantsController extends BaseController{
     public function index(){
         $data = \Input::getContent();
         
-        $this->FBSdk = FBSdkService::getInstance();
+        if($data){
+            $this->FBSdk = FBSdkService::getInstance();
+            
+            $xmlArray = $this->FBSdk->__xmlToArray($data);
+            
+            $reqFunc = $xmlArray['INFO']['FUNNAM'];
+            
+            return call_user_func([$this,$reqFunc],$xmlArray);
+        }else{
+            return $this->emptyContext();
+        }
+    }
+    
+    protected function outputXml($str){
+        $xml = simplexml_load_string($str);
+        \header("Content-type: text/xml");
+        exit($xml->saveXML());
+    }
+    
+    protected function emptyContext(){
+        $str = '<?xml version="1.0" encoding="GBK"?>
+<CMBSDKPGK>
+    <INFO>
+        <ERRMSG>SDKM037 XML报文为空!</ERRMSG>
+        <RETCOD>-1</RETCOD>
+    </INFO>
+</CMBSDKPGK>';
+        return $this->outputXml($str);
+    }
+    
+    protected function ListMode($xmlArray){
         
-        $xmlArray = $this->FBSdk->__xmlToArray($data);
-        
-        $reqFunc = $xmlArray['INFO']['FUNNAM'];
-//         return $this->NTIBCOPR();
-        file_put_contents('output.txt',  var_export($xmlArray,true));
+        $str = '<?xml version="1.0" encoding="GBK"?>
+<CMBSDKPGK>
+    <INFO>
+        <DATTYP>2</DATTYP>
+        <ERRMSG></ERRMSG>
+        <FUNNAM>ListMode</FUNNAM>
+        <LGNNAM>王勇W</LGNNAM>
+        <RETCOD>0</RETCOD>
+    </INFO>
+    <NTQMDLSTZ>
+        <BUSMOD>00002</BUSMOD>
+        <MODALS>2</MODALS>
+    </NTQMDLSTZ>
+</CMBSDKPGK>';
+        return $this->outputXml($str);
     }
     
     // 2  网银贷记-请求
@@ -29,6 +70,14 @@ class MerchantsController extends BaseController{
         if(!isset($data[0])){
             $data = [$data];
         }
+
+        //         <SQRNBR>000000000</SQRNBR>
+        //         <ACCNBR>571907650010808</ACCNBR>
+        //         <YURREF>I16041910210011960000000</YURREF>
+        //         <TRSAMT>29953.92</TRSAMT>
+        //         <CDTNAM>武长芳</CDTNAM>
+        //         <CDTEAC>6222810300480168</CDTEAC>
+        
         
         foreach ($data as $v){
             
