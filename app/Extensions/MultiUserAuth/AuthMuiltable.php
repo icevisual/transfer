@@ -8,15 +8,7 @@ trait AuthMuiltable
 {
     public function userAuthorityCheck($action){
         if(isset($action['group'])){
-            // 企业账户无权限字段、且有所有权限
-            $companyInfo = $this->getLoginCompany();
-            $authority = isset($this->{'authority'}) ? $this->{'authority'} : '';
-            $authority == '' && $authority = '1111111111111111111111';
-            $authority = bindec($authority);
-            // 设置为不返税的无福豆管理
-            if ($companyInfo->has_tax_return == \App\Models\Enterprise\Company::TAX_RETURN_NO) {
-                $authority = ($authority | SpecificRbacConst::GROUP_FUDOU_MANAGE) ^ SpecificRbacConst::GROUP_FUDOU_MANAGE;
-            }
+            $authority = $this->getUserAuthority();
             if(! ( $authority & $action['group']) ){
                 return false;
             }
@@ -30,7 +22,8 @@ trait AuthMuiltable
         
         // 无账户企业 独立账户系统的区别 111111
         $authority = isset($this->{'authority'}) ? bindec($this->{'authority'}) : false;
-        if ($companyInfo->type == Company::TYPE_STAND_ALONE) {
+        if ($companyInfo->type == Company::TYPE_STAND_ALONE
+            || $companyInfo->business_type == Company::BUSINESS_TYPE_NO_FUDOU) {
             // 无账户企业只有薪资发放和薪资报表
             $standAloneAuth = [
                 SpecificRbacConst::GROUP_SYSTEM_MANAGE,
