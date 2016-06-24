@@ -71,9 +71,351 @@ class GeneralTestController extends BaseController
         return $res;
     }
 
+    
+    public function loadXml1($xmlStr){
+
+        $xml = simplexml_load_string($xmlStr);
+        echo '<style>body{background-color:#18171B;}</style>';
+        
+        $stack = [ $xml->getName() => $xml];
+        function visitNode($node,$prefix,&$data){
+            if($node->count()){
+                dump($prefix);
+            }else{
+                dump($prefix.'=>'.$node->getName().':'.$node->__toString());
+                array_set($data, $prefix, $node->__toString());
+            }
+        }
+        
+        $data = [];
+        $prefix = $xml->getName() ;
+        // 先序
+        while (!empty($stack)){
+            $prefix = array_keys($stack);
+            $prefix = end($prefix);
+            $node = array_pop($stack);
+            visitNode($node,$prefix,$data);
+            if($childrens = $node->children()){
+                $unshift = [];
+                foreach ($childrens as $k => $v){
+                    $unshift [$prefix.'.'.$k] = $v;
+                }
+                $unshift = array_reverse($unshift);
+                foreach ($unshift as $k => $v){
+                    $stack[$k] = $v;
+                }
+            }
+        }
+        dump($data);
+    }    
+    
     public function test()
     {
+        echo '<style>body{background-color:#18171B;}</style>';
         
+        
+        $xmlStr ='<?xml version="1.0" encoding="GBK"?>
+<CMBSDKPGK>
+    <INFO>
+        <DATTYP>2</DATTYP>
+        <ERRMSG></ERRMSG>
+        <FUNNAM>GetTransInfo</FUNNAM>
+        <LGNNAM>银企直连专用普通1</LGNNAM>
+        <RETCOD>0</RETCOD>
+    </INFO>
+    <NTQTSINFZ>
+        <AMTCDR>C</AMTCDR>
+        <APDFLG>Y</APDFLG>
+        <ATHFLG>N</ATHFLG>
+        <BBKNBR>59</BBKNBR>
+        <BUSNAM>企业银行代发</BUSNAM>
+        <C_ATHFLG>无</C_ATHFLG>
+        <C_BBKNBR>福州</C_BBKNBR>
+        <C_ETYDAT>2014年11月03日</C_ETYDAT>
+        <C_GSBBBK></C_GSBBBK>
+        <C_RPYBBK></C_RPYBBK>
+        <C_TRSAMT>1,329.10</C_TRSAMT>
+        <C_TRSAMTC>1,329.10</C_TRSAMTC>
+        <C_TRSBLV>2,973,575.11</C_TRSBLV>
+        <C_VLTDAT>2014年11月03日</C_VLTDAT>
+        <ETYDAT>20141103</ETYDAT>
+        <ETYTIM>163751</ETYTIM>
+        <GSBBBK></GSBBBK>
+        <NAREXT>N000000786</NAREXT>
+        <NARYUR>代发余额退款</NARYUR>
+        <REFNBR>K2212200000007C</REFNBR>
+        <REFSUB></REFSUB>
+        <REQNBR>0028589877</REQNBR>
+        <RPYBBK></RPYBBK>
+        <RSV30Z>**</RSV30Z>
+        <RSV31Z>10</RSV31Z>
+        <RSV50Z></RSV50Z>
+        <TRSAMT>1329.10</TRSAMT>
+        <TRSAMTC>1329.10</TRSAMTC>
+        <TRSANL>AIGATR</TRSANL>
+        <TRSBLV>2973575.11</TRSBLV>
+        <TRSCOD>AGRD</TRSCOD>
+        <VLTDAT>20141103</VLTDAT>
+        <YURREF>qfq10114334071365262315</YURREF>
+    </NTQTSINFZ>
+    <NTQTSINFZ>
+        <AMTCDR>C</AMTCDR>
+        <APDFLG>Y</APDFLG>
+        <ATHFLG>N</ATHFLG>
+        <BBKNBR>59</BBKNBR>
+        <BUSNAM>企业银行代发</BUSNAM>
+        <C_ATHFLG>无</C_ATHFLG>
+        <C_BBKNBR>福州</C_BBKNBR>
+        <C_ETYDAT>2014年11月03日</C_ETYDAT>
+        <C_GSBBBK></C_GSBBBK>
+        <C_RPYBBK></C_RPYBBK>
+        <C_TRSAMT>145.20</C_TRSAMT>
+        <C_TRSAMTC>145.20</C_TRSAMTC>
+        <C_TRSBLV>2,973,720.31</C_TRSBLV>
+        <C_VLTDAT>2014年11月03日</C_VLTDAT>
+        <ETYDAT>20141103</ETYDAT>
+        <ETYTIM>163751</ETYTIM>
+        <GSBBBK></GSBBBK>
+        <NAREXT>N000000785</NAREXT>
+        <NARYUR>代发余额退款</NARYUR>
+        <REFNBR>K2211900000005C</REFNBR>
+        <REFSUB></REFSUB>
+        <REQNBR>0028589876</REQNBR>
+        <RPYBBK></RPYBBK>
+        <RSV30Z>**</RSV30Z>
+        <RSV31Z>10</RSV31Z>
+        <RSV50Z></RSV50Z>
+        <TRSAMT>145.20</TRSAMT>
+        <TRSAMTC>145.20</TRSAMTC>
+        <TRSANL>AIGATR</TRSANL>
+        <TRSBLV>2973720.31</TRSBLV>
+        <TRSCOD>AGRD</TRSCOD>
+        <VLTDAT>20141103</VLTDAT>
+        <YURREF>qfq10114334071352266040</YURREF>
+    </NTQTSINFZ>
+</CMBSDKPGK>';
+//         edump(loadXml($xmlStr));
+        
+        $xmlStr = '<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <request>
+            <version>1.0.0</version>
+        <head>
+            <version>1.0.0</version>
+            <appId>CCB001</appId>
+            <function>mybk.loan.payment.apply</function>
+            <reqTime>20150729164630</reqTime>
+            <reqTimeZone>Asia/Shanghai</reqTimeZone>
+            <reqMsgId>52be7386-8f30-41de-bbc0-f27feb45d25f</reqMsgId>
+        </head>
+        <body>
+            <!-- OrgResultInfo，可选字段，用于通知类报文。与Response的ResultInfo是同一套数据，
+    	   但因为是Response对应的Notify，所以全部添加Org前缀，如果非通知类报文，那么是不含该域的 -->
+            <orgResultInfo>
+                <orgResultStatus>S</orgResultStatus>
+                <orgResultCode>0000</orgResultCode>
+                <orgResultMsg>Accepted</orgResultMsg>
+            </orgResultInfo>
+            <bizNo>20150729164629000011931600</bizNo>
+            <txAmt>100</txAmt>
+            <txCcy>392</txCcy>
+            <txTime>20150715120100</txTime>
+            <transferTime>20150715120102</transferTime>
+        </body>
+            <ds-SignedInfo>123</ds-SignedInfo>
+        <ds:Signature
+            xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod
+	Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+                <ds:Reference URI="">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+                    <ds:DigestValue>2pj3xjZlfy04SC33A3fw2hYozUk=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>
+		vl6+56s2TM5V+0VYiwvLIORfspSIL3Rzx45jWKCmx/ieYoXckPua8uJVOvA016UFd6X7qjKiNv9V
+		84JkVW6X//1XvDiek8ILOn8m10zJTalBazsfkpovBcljMwZn1PXnvNF3lORqQ0YRKnsMw1O1G7W4
+		Ju/Ow9mKRbHckr1zFZg=
+	</ds:SignatureValue>
+        </ds:Signature>
+    </request>
+</document>';
+        edump(loadXml2($xmlStr));
+        edump(loadXml($xmlStr));
+        
+        $doc = new \DOMDocument();
+        $doc->loadXML($xmlStr);
+        echo '<style>body{background-color:#18171B;}</style>';
+
+        $stack = [ $doc->nodeName => $doc];
+        function visitNode($node,$prefix,&$data){
+            if($node->nodeName != '#comment'){
+                
+                if(ends_with($prefix,'DigestMethod')){
+//                     edump($node);
+                }
+                
+                if($node->childNodes->length == 0){
+                    dump($prefix.' ===> ');
+                    array_set($data, $prefix, '');
+                }else if($node->childNodes->length == 1
+                    && $node->childNodes[0]->nodeType == XML_TEXT_NODE){
+                    dump($prefix.' ===> '.$node->nodeName.':'.trim($node->childNodes[0]->wholeText));
+                    array_set($data, $prefix, trim($node->childNodes[0]->wholeText));
+                }else{
+                    dump($prefix);
+                }
+            }
+        }
+        
+        $data = [];
+        // 先序
+        while (!empty($stack)){
+            $prefix = array_keys($stack);
+            $prefix = end($prefix);
+            $node = array_pop($stack);
+            visitNode($node,$prefix,$data);
+            if($childrens = $node->childNodes){
+                if($childrens->length > 1 
+                    || ($childrens->length == 1 && $childrens[0]->nodeType != XML_TEXT_NODE)){
+                    $unshift = [];
+                    foreach ($childrens as $k => $v){
+                        $v->nodeType != XML_TEXT_NODE && $unshift [$prefix.'.'.$v->nodeName] = $v;
+                    }
+                    $unshift = array_reverse($unshift);
+                    foreach ($unshift as $k => $v){
+                        $stack[$k] = $v;
+                    }
+                }
+            }
+        }
+        dump($data);
+        exit;
+        
+        
+        
+        
+        
+        $doc = new \DOMDocument('1.0','UTF-8');
+        $doc->loadXML($xmlStr);
+        dump( $doc->hasChildNodes());
+        foreach ($doc->childNodes as $k => $v){
+//             dump($v);
+            foreach ($v->childNodes as $k1 => $v1){
+//                 dump($v1);
+// XML_ELEMENT_NODE
+                if($v1->nodeType != XML_TEXT_NODE){
+                    dump($v1);
+                    foreach ($v1->childNodes as $k2 => $v2){
+                        dump($v2);
+                    }
+                }
+                
+            }
+        }
+        edump($doc);
+        
+        
+        exit;
+        
+        
+        
+        
+        $xml = simplexml_load_string($xmlStr,'\SimpleXMLElement',0,'',true);
+        echo '<style>body{background-color:#18171B;}</style>';
+        
+        $stack = [ $xml->getName() => $xml];
+        function visitNode($node,$prefix,&$data){
+            if($node->count()){
+                dump($prefix);
+            }else{
+                dump($prefix.'=>'.$node->getName().':'.$node->__toString());
+                array_set($data, $prefix, $node->__toString());
+            }
+        }
+        
+        $data = [];
+        $prefix = $xml->getName() ;
+        // 先序
+        while (!empty($stack)){
+            $prefix = array_keys($stack);
+            $prefix = end($prefix);
+            $node = array_pop($stack);
+            visitNode($node,$prefix,$data);
+            if($childrens = $node->children()){
+                $unshift = [];
+                foreach ($childrens as $k => $v){
+                    $unshift [$prefix.'.'.$k] = $v;
+                }
+                $unshift = array_reverse($unshift);
+                foreach ($unshift as $k => $v){
+                    $stack[$k] = $v;
+                }
+            }
+        }
+        dump($data);
+        exit;
+        
+        
+        
+        
+        
+        
+        $stack = [ $xml->getName() => $xml];
+        function visitNode($node){
+            if($node->count()){
+                dump($node->getName());
+            }else{
+                dump($node->getName().':'.$node->__toString());
+            }
+        }
+        
+        
+        // 先序
+        while (!empty($stack)){
+            $prefix = array_keys($stack)[0];
+            $node = array_shift($stack);
+            visitNode($node);
+            if($childrens = $node->children()){
+                $unshift = [];
+                foreach ($childrens as $k => $v){
+                    $unshift [$k] = $v;
+                }
+                $unshift = array_reverse($unshift);
+                array_unshift($unshift, 0);
+                $unshift[0] = &$stack;
+                call_user_func_array('array_unshift', $unshift);
+            }
+        }
+        exit;
+        $resultArray = [];
+        foreach ($xml->children() as $k => $v) {
+            if ($v instanceof \SimpleXMLElement) {
+                if (isset($resultArray[$k])) {
+                    if (array_key_exists(0, $resultArray[$k])) {
+                        $resultArray[$k][] = (array) $v;
+                    } else {
+                        $resultArray[$k] = [
+                            $resultArray[$k]
+                        ];
+                        $resultArray[$k][] = (array) $v;
+                    }
+                } else {
+                    $resultArray[$k] = (array) $v;
+                }
+            }
+        }
+        
+        dump($resultArray);
+        edump($xml);
+        
+        
+        exit;
         
         
         
