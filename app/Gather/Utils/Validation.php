@@ -66,6 +66,12 @@ if (! function_exists('runCustomValidator')) {
         ];
 
         $config += $defaultConfig;
+        $input = $input + [
+            'messages' => [],
+            'attributes' => [],
+            'valueNames' => [],
+            'config' => [],
+        ] ;
         $validate = \Validator::make($input['data'], $input['rules'], $input['messages'], $input['attributes']);
 
         if (isset($input['valueNames']) && ! empty($input['valueNames'])) {
@@ -232,6 +238,40 @@ if (! function_exists('form_value')) {
         return $old ? $old :( array_get($data,$key) ? array_get($data,$key): $default) ;
     }
 
+    
+    /**
+     *
+     * @param array $selectData
+     *  select 内容
+     * @param mix $name
+     *  string : name属性
+     * @param string $selected
+     *  选中值
+     * @param string $append
+     *  select 标签追加属性
+     * @return string
+     */
+    function form_select(array $selectData,$name,$selectValue = '',$append = '')
+    {
+         
+        $str = '<select ';
+        if(is_array($name)){
+            foreach ($name as $k => $v){
+                $str .= "$k = '$v' ";
+            }
+        }
+        $str .= " {$append} >";
+        foreach ($selectData as $k => $v){
+            $selected = '';
+            if($k == $selectValue){
+                $selected = 'selected';
+            }
+            $str .= "<option {$selected} value='{$k}'>{$v}</option>";
+        }
+        $str .= '</select>';
+        return $str;
+    }
+    
     function option_selected($data, $key,$value,$default = '')
     {
         $v = form_value($data, $key,$default);
