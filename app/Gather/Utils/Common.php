@@ -267,8 +267,6 @@ if (! function_exists('createMigrationCode')) {
 
 if (! function_exists('array_get_process')) {
 
-
-
     /**
      * Get Array Item And Process Callbacks
      * @param array $arr
