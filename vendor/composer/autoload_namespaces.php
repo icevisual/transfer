@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'ZfcRbac\\' => array($vendorDir . '/zf-commons/zfc-rbac/src'),
     'Rbac\\' => array($vendorDir . '/zfr/rbac/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
@@ -18,9 +17,9 @@ return array(
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
     'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),
     'Ixudra\\Curl\\' => array($vendorDir . '/ixudra/curl/src'),
-    'Dotenv' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'DCN\\RBAC' => array($vendorDir . '/dcn/rbac/src'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
+    'Barryvdh' => array($vendorDir . '/barryvdh/reflection-docblock/src'),
 );

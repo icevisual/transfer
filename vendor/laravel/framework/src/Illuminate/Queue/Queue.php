@@ -4,7 +4,6 @@ namespace Illuminate\Queue;
 
 use Closure;
 use DateTime;
-use RuntimeException;
 use Illuminate\Support\Arr;
 use SuperClosure\Serializer;
 use Illuminate\Container\Container;
@@ -48,18 +47,6 @@ abstract class Queue
     }
 
     /**
-     * Marshal a push queue request and fire the job.
-     *
-     * @throws \RuntimeException
-     *
-     * @deprecated since version 5.1.
-     */
-    public function marshal()
-    {
-        throw new RuntimeException('Push queues only supported by Iron.');
-    }
-
-    /**
      * Push an array of jobs onto the queue.
      *
      * @param  array   $jobs
@@ -89,7 +76,7 @@ abstract class Queue
         } elseif (is_object($job)) {
             return json_encode([
                 'job' => 'Illuminate\Queue\CallQueuedHandler@call',
-                'data' => ['command' => serialize(clone $job)],
+                'data' => ['commandName' => get_class($job), 'command' => serialize(clone $job)],
             ]);
         }
 
@@ -153,7 +140,7 @@ abstract class Queue
      *
      * @param  \Closure  $job
      * @param  mixed     $data
-     * @return string
+     * @return array
      */
     protected function createClosurePayload($job, $data)
     {

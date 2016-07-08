@@ -1,4 +1,13 @@
 {
+	"repositories": [
+		{
+			"packagist": false
+		},
+		{
+			"type": "composer",
+			"url": "http://packagist.cn"
+		}
+	],
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
@@ -6,23 +15,22 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "laravel/framework": "5.2.38",
         "predis/predis": "^1.0",
-	"maatwebsite/excel": "~2.1.0",
+	    "maatwebsite/excel": "~2.1.0",
         "guzzlehttp/guzzle": "^6.1",
         "zf-commons/zfc-rbac": "~2.4",
         "barryvdh/laravel-ide-helper": "^2.1",
         "dcn/rbac": "~1.1.0",
-	"ixudra/curl": "5.*"
+	    "ixudra/curl": "5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
-	"xtwoend/workbench":"dev-master",
         "phpspec/phpspec": "~2.1",
-	"symfony/dom-crawler":"~3.0",
-	"symfony/css-selector":"~3.0"
+	    "symfony/dom-crawler":"~3.0",
+	    "symfony/css-selector":"~3.0"
     },
     "autoload": {
         "classmap": [

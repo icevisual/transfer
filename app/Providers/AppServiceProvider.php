@@ -26,9 +26,10 @@ class AppServiceProvider extends ServiceProvider
             
         \DB::enableQueryLog();
         
-        \DB::listen(function ($sql, $bindings, $time) {
-            \App::environment('local') && \App\Services\ServiceLog::sqlLog($sql, $bindings, $time);
+        \DB::listen(function ($event) {
+            \App::environment('local') && \App\Services\ServiceLog::sqlLog($event->sql, $event->bindings, $time);
         });
+        
     }
 
     /**

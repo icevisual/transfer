@@ -2,6 +2,31 @@
 
 
 
+if (! function_exists('arithmetic_LUHN')) {
+    /**
+     * LUHN算法，主要用来计算信用卡等证件号码的合法性。
+     * @param string $card_no
+     * @return boolean
+     */
+    function algorithm_LUHN($card_no){
+        $len = strlen($card_no);
+        $sum = 0;
+        for($i = $len - 1, $j = 0 ; $i >= 0 ; $i --,$j ++){
+            $n = $card_no{$i} + 0;
+            if($j % 2){
+                $n *= 2;
+                $n > 9 ? ($n = $n %10 + (int)($n /10) ):$n;
+            }
+            $sum += $n;
+        }
+        $r =  (int)($sum / 10);
+        return $sum == $r * 10;
+    }
+}
+
+
+
+
 if (! function_exists('calculateTax')) {
     function calculateTax($value){
         $taxation_point = 3500;
