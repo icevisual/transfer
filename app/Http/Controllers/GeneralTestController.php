@@ -109,8 +109,50 @@ class GeneralTestController extends BaseController
         dump($data);
     }    
     
+    
+    
     public function test()
     {
+        
+        $str = "
+          /**
+ * 订单打款状态，未打款
+ *
+ * @var unknown
+ */
+define('ORDER_PAY_STATUS_UNPAY', 1);
+/**
+ * 订单打款状态，打款中
+ *
+ * @var unknown
+ */
+define('ORDER_PAY_STATUS_PAYING', 2);
+/**
+ * 订单打款状态，完成打款，结果查询中
+ *
+ * @var unknown
+ */
+define('ORDER_PAY_STATUS_QUERY', 3);
+/**
+ * 订单打款状态，完成结果查询
+ *
+ * @var unknown
+ */
+define('ORDER_PAY_STATUS_RESULT', 4);";
+        
+
+        echo(preg_replace("!define\('([^\']*)', (\d)\)!", "\tconst \\1 = \\2", $str));
+        exit;
+        dump(4007.00 -2003.01 +2004.00 -2004.00 );
+        dump(2003.99);
+        
+        $a = 4007.00 -2003.01 +2004.00 -2004.00;
+        $b = 2003.99 ;
+        $a = $a.'';
+        $b = $b.'';
+        dump($a - $b);
+        dump($a  == $b);
+        exit;
         echo '<style>body{background-color:#18171B;}</style>';
         
         
