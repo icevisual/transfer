@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <request id="request">
+        <head>
+            <version>1.0.0</version>
+            <appid>TAOBAO21</appid>
+            <function>ant.credit.amount.budget</function>
+            <reqTime>20151104201845</reqTime>
+            <reqTimeZone>Asia/Shanghai</reqTimeZone>
+            <reqMsgId>201511251222845312412129</reqMsgId>
+            <reserve></reserve>
+            <signType>RSA</signType>
+            <inputCharset>UTF-8</inputCharset>
+        </head>
+        <body>
+            <partner>202210000000000001023</partner>
+            <productType>ORDER</productType>
+            <siteUserId>siteUserId_0001</siteUserId>
+            <site>site_0001</site>
+            <channel>channel_0001</channel>
+            <desc>中文测试</desc>
+            <desc2>中文测试2</desc2>
+        </body>
+    </request>
+    <ds:Signature
+        xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+            <ds:Reference URI="">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+                <ds:DigestValue>2fAWBtj6HmgFxVIOz0XvC0arwiM=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>
+			zihtFsnjndobFL2xTJcLp/K5RLbg0cAfBtx8OZGNyJ5jwhLg4lX0Cp8ZPo4LTyRtm8CziofKDELl
+			T4GOg6KHy/m8QXoOrQBqDmajQOmNI6/YllBn1D8ZA9xnsXUJoLloBwA8B77QskIGWl/2gJ3j4ILV
+			0+fBGTL+DakSf3yPTDg=
+		</ds:SignatureValue>
+    </ds:Signature>
+</document>

@@ -1,6 +1,57 @@
 <?php
 
 
+if (! function_exists('excelDate2Date')) {
+
+    /**
+     * Excel中读取的数字转成日期
+     * @param unknown $n
+     * @return string
+     */
+    function excelDate2Date($n,$format = 'Y-m-d')
+    {
+        $node = 42736;
+        $nodeDate = '2017-01-01';
+        if ($node > $n) {
+            return date($format, strtotime('-' . ($node - $n) . ' days', strtotime($nodeDate)));
+        }
+        return date($format, strtotime('+' . ($n - $node) . ' days', strtotime($nodeDate)));
+    }
+
+    function excelDateTransferIfNess($data)
+    {
+        \Log::info('excelDateTransferIfNess',[$data,intval($data),intval($data).'' == $data]);
+        if(intval($data).'' == $data){
+            return  excelDate2Date($data,'Y/n/j');
+        }
+        return $data;
+    }
+
+}
+
+if (! function_exists('getRequestUrl')) {
+
+    /**
+     * 获取请求的URL，带HTTP（S）,带参数
+     *
+     * @param string $path
+     *            指定路由
+     * @return string
+     */
+    function getRequestUrl($path = '')
+    {
+        $protocol = \Request::isSecure() ? 'https://' : 'http://';
+        $host = \Request::getHttpHost();
+        if ($path) {
+            $RequestUri = $path;
+        } else {
+            $RequestUri = \Request::getRequestUri();
+        }
+        $redirect_url = $protocol . rtrim($host, "/") . '/' . ltrim($RequestUri, "/");
+        return $redirect_url;
+    }
+}
+
 
 if (! function_exists('arithmetic_LUHN')) {
     /**

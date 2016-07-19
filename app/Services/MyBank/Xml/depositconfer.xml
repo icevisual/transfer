@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <request id="request">
+        <head>
+            <version>1.0.0</version>
+            <appid>2016011800000001</appid>
+            <function>ant.ebank.fund.profitquery</function>
+            <reqTime>20151013095722</reqTime>
+            <reqTimeZone>Asia/Shanghai</reqTimeZone>
+            <reqMsgId>b211112222633465</reqMsgId>
+            <reserve></reserve>
+            <signType>RSA</signType>
+            <inputCharset>UTF-8</inputCharset>
+        </head>
+        <body>
+            <partner>202210000000000001025</partner>
+            <fundChannel>MYBANK</fundChannel>
+            <cardNo>8888888291529251</cardNo>
+            <sign>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</sign>
+        </body>
+    </request>
+</document>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<request id="request">
+		<head>
+			<version>1.0.0</version>
+			<appid>TAOBAO21</appid>
+			<function>ant.credit.amount.budget</function>
+			<reqTime>20151104201845</reqTime>
+			<reqTimeZone>Asia/Shanghai</reqTimeZone>
+			<reqMsgId>201511251222845312412129</reqMsgId>
+			<reserve></reserve>
+			<signType>RSA</signType>
+			<inputCharset>UTF-8</inputCharset>
+		</head>
+		<body>
+			<partner>202210000000000001023</partner>
+			<productType>ORDER</productType>
+			<siteUserId>siteUserId_0001</siteUserId>
+			<site>site_0001</site>
+			<channel>channel_0001</channel>
+			<desc>中文测试</desc>
+			<desc2>中文测试2</desc2>
+		</body>
+	</request>
+</document>

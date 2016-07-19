@@ -126,8 +126,230 @@ class GeneralTestController extends BaseController
     }
     
     
+    public function balanceQuery(){
+//         //账户余额查询
+//         String function = "ant.ebank.acount.balance.query";
+        
+//         XmlUtil xmlUtil = new XmlUtil();
+//         Map<String, String> form = new HashMap<String, String>();
+//         form.put("function", function);
+//         form.put("reqTime", new Timestamp(System.currentTimeMillis()).toString());
+//         //reqMsgId每次报文必须都不一样
+//         form.put("reqMsgId", UUID.randomUUID().toString());
+        
+//         form.put("cardNo",HttpsMain.cardNo);
+//         form.put("currencyCode",HttpsMain.currencyCode);
+//         form.put("cashExCode","CSH");//CSH钞
+
+        $function = 'ant.ebank.acount.balance.query';
+        
+        $form = [
+            'function' => $function,
+            'reqTime' => '2016-07-09 11:03:10.125',
+        ];
+        
+        
+        
+    }
+    
+    public function __xmlToArray1($xmlString){
+        $simplexml = simplexml_load_string($xmlString);
+        $dataArray = [];
+        foreach ($simplexml->children() as $k => $v){
+            if($v instanceof \SimpleXMLElement && $v->count()){
+                $dataArray[$k] = [];
+                foreach ($v->children() as $k1 => $v1){
+                    $dataArray[$k][$k1] = $v1;
+                }
+            }else{
+                $dataArray[$k] = trim($v->__toString());
+            }
+        }
+        return $dataArray;
+    }
+    
+    public function __arrayToXml1($dataArray){
+        
+        $doc = new \DOMDocument('1.0','UTF-8');
+        
+        $xml = $doc->createElement('xml');
+
+        $doc->appendChild($xml);
+        foreach ($dataArray as $k => $v){
+            if(is_array($v)){
+                $node = $doc->createElement($k);
+                foreach ($v as $k1 => $v1){
+                    if(!is_array($v1)){
+                        if(!preg_match('/^\d+(\.\d+)?$/', $v1)){
+                            $node1 = $doc->createElement($k1);
+                            $node1->appendChild($doc->createCDATASection($v1));
+                            $node->appendChild($node1);
+                        }else{
+                            $node->appendChild($doc->createElement($k1,$v1));
+                        }
+                    }
+                }
+            }else{
+                if(!preg_match('/^\d+(\.\d+)?$/', $v)){
+                    $node = $doc->createElement($k);
+                    $node->appendChild($doc->createCDATASection($v));
+                    $xml->appendChild($node);
+                }else{
+                    $xml->appendChild($doc->createElement($k,$v));
+                }
+            }
+        }
+//         $str = $doc->saveXML();
+        
+//         ( new \DOMDocument('1.0','UTF-8'))->saveXML();
+        
+        return $doc->saveXML($xml);
+    }
+    
+
+    function httpPost($url, $data = [])
+    {
+        // TODO error
+        $ch = curl_init();
+    
+        if (! empty($data)) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        }
+    
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    
+        $res = curl_exec($ch);
+    
+        if(false === $res){
+            curl_errno($ch);
+            curl_error($ch);
+        }
+        curl_close($ch);
+    
+        return $res;
+    }
+    
     public function test()
     {
+        dump(\Request::getRequestUri());
+        
+        dump(\Route::getCurrentRoute()->getPath());
+        
+        exit;
+        
+        $a = [
+            'a' => [
+                'a' => 0
+            ]
+        ];
+        dump(array_get($a,'a.a'));
+        edump(array_get($a,'a.a') === 0);
+//         $pattern = '/[\u4E00-\u9FA5]{2,5}(?:·[\u4E00-\u9FA5]{2,5})*';
+        $pattern = '/^[\x{4E00}-\x{9FA5}]{2,5}(?:·[\x{4E00}-\x{9FA5}]{2,5})*$/u';
+        
+        /// ，例如：阿沛·阿旺晋美、卡尔·马克思
+        
+        edump(preg_match($pattern, '阿沛·阿旺晋美'));
+        
+        phpinfo();
+        exit;
+        $asd = cookie('asd');
+        cookie('asd','123',12);
+       
+        dump($asd);
+        exit;
+        $data = session('ads');
+        
+//         \Session::put('ads','ssssssss');
+        
+        session(['ads'=>'ssssssss']);
+        dump_object_name(app('session'));
+//         dump_object_name(app('session.store'));
+        dump($data);
+        return '';
+        
+        $url = 'http://api.xb.com/v1/employee/payrollAuthority';
+        $res = $this->httpPost($url,['uid' => 27]);
+        edump($res);
+        
+        edump(\Config::get('session.driver'));
+//         session(['ads' => time()]);
+//         $data = \Session::get('ads');
+        $data = session('ads');
+        dump(time());
+        edump($data);
+        \Session::put('ads',time());
+        
+        
+        
+        exit;
+        
+        
+        $a = null;
+        edump(isset($a));
+        
+        $str = '333838393967388619435193';
+        
+//         preg_split('//', $str)
+        
+       edump( array_sum( preg_split('//', $str)));
+        
+        exit;
+        
+        $xml = '<xml>
+    <ToUserName>
+        <![CDATA[gh_6dc799215ddc]]>
+    </ToUserName>\n
+    <FromUserName>
+        <![CDATA[opE6QwUk4aYmfKdL3dOzjeZ0-4BE]]>
+    </FromUserName>\n
+    <CreateTime>1468212370</CreateTime>\n
+    <MsgType>
+        <![CDATA[text]]>
+    </MsgType>\n
+    <Content>
+        <![CDATA[公关部]]>
+    </Content>\n
+    <MsgId>6305924113223005219</MsgId>\n
+</xml>';
+        
+        $array = $this->__xmlToArray1($xml);
+        
+        dump($this->__arrayToXml1($array));
+        
+        edump($array);
+        
+//         edump($res);
+        
+        
+        
+        
+        exit;
+        edump( openssl_get_md_methods() );
+        \App\Services\MyBank\BalanceQuery::main();
+        exit;
+//         1468034664090
+//         1468034687
+edump(uuid());
+        edump(microtime());
+        
+        exit;
+        
+        $doc = new \DOMDocument('1.0','UTF-8');
+        $doc->loadXML('<document><request id="request"><head></head><body></body></request></document>');
+//         $nod = new \DOMNode();
+        
+        
+        
+        exit;
+        
+        exit;
 //         debug_backtrace()
         
         $str ='6222801464011032243
