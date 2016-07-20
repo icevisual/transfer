@@ -71,247 +71,281 @@ class GeneralTestController extends BaseController
         return $res;
     }
 
-    
-    public function loadXml1($xmlStr){
-
+    public function loadXml1($xmlStr)
+    {
         $xml = simplexml_load_string($xmlStr);
         echo '<style>body{background-color:#18171B;}</style>';
         
-        $stack = [ $xml->getName() => $xml];
-        function visitNode($node,$prefix,&$data){
-            if($node->count()){
+        $stack = [
+            $xml->getName() => $xml
+        ];
+
+        function visitNode($node, $prefix, &$data)
+        {
+            if ($node->count()) {
                 dump($prefix);
-            }else{
-                dump($prefix.'=>'.$node->getName().':'.$node->__toString());
+            } else {
+                dump($prefix . '=>' . $node->getName() . ':' . $node->__toString());
                 array_set($data, $prefix, $node->__toString());
             }
         }
         
         $data = [];
-        $prefix = $xml->getName() ;
+        $prefix = $xml->getName();
         // 先序
-        while (!empty($stack)){
+        while (! empty($stack)) {
             $prefix = array_keys($stack);
             $prefix = end($prefix);
             $node = array_pop($stack);
-            visitNode($node,$prefix,$data);
-            if($childrens = $node->children()){
+            visitNode($node, $prefix, $data);
+            if ($childrens = $node->children()) {
                 $unshift = [];
-                foreach ($childrens as $k => $v){
-                    $unshift [$prefix.'.'.$k] = $v;
+                foreach ($childrens as $k => $v) {
+                    $unshift[$prefix . '.' . $k] = $v;
                 }
                 $unshift = array_reverse($unshift);
-                foreach ($unshift as $k => $v){
+                foreach ($unshift as $k => $v) {
                     $stack[$k] = $v;
                 }
             }
         }
         dump($data);
-    }    
-    
-    
-    public function LUHN($card_no){
+    }
+
+    public function LUHN($card_no)
+    {
         $len = strlen($card_no);
         $sum = 0;
-        for($i = $len - 1, $j = 0 ; $i >= 0 ; $i --,$j ++){
+        for ($i = $len - 1, $j = 0; $i >= 0; $i --, $j ++) {
             $n = $card_no{$i} + 0;
-            if($j % 2){
+            if ($j % 2) {
                 $n *= 2;
-                $n > 9 ? ($n = $n %10 + (int)($n /10) ):$n;
+                $n > 9 ? ($n = $n % 10 + (int) ($n / 10)) : $n;
             }
             $sum += $n;
         }
-        $r =  (int)($sum / 10);
+        $r = (int) ($sum / 10);
         return $sum == $r * 10;
     }
-    
-    
-    public function balanceQuery(){
-//         //账户余额查询
-//         String function = "ant.ebank.acount.balance.query";
-        
-//         XmlUtil xmlUtil = new XmlUtil();
-//         Map<String, String> form = new HashMap<String, String>();
-//         form.put("function", function);
-//         form.put("reqTime", new Timestamp(System.currentTimeMillis()).toString());
-//         //reqMsgId每次报文必须都不一样
-//         form.put("reqMsgId", UUID.randomUUID().toString());
-        
-//         form.put("cardNo",HttpsMain.cardNo);
-//         form.put("currencyCode",HttpsMain.currencyCode);
-//         form.put("cashExCode","CSH");//CSH钞
 
+    public function balanceQuery()
+    {
+        // //账户余额查询
+        // String function = "ant.ebank.acount.balance.query";
+        
+        // XmlUtil xmlUtil = new XmlUtil();
+        // Map<String, String> form = new HashMap<String, String>();
+        // form.put("function", function);
+        // form.put("reqTime", new Timestamp(System.currentTimeMillis()).toString());
+        // //reqMsgId每次报文必须都不一样
+        // form.put("reqMsgId", UUID.randomUUID().toString());
+        
+        // form.put("cardNo",HttpsMain.cardNo);
+        // form.put("currencyCode",HttpsMain.currencyCode);
+        // form.put("cashExCode","CSH");//CSH钞
         $function = 'ant.ebank.acount.balance.query';
         
         $form = [
             'function' => $function,
-            'reqTime' => '2016-07-09 11:03:10.125',
+            'reqTime' => '2016-07-09 11:03:10.125'
         ];
-        
-        
-        
     }
-    
-    public function __xmlToArray1($xmlString){
+
+    public function __xmlToArray1($xmlString)
+    {
         $simplexml = simplexml_load_string($xmlString);
         $dataArray = [];
-        foreach ($simplexml->children() as $k => $v){
-            if($v instanceof \SimpleXMLElement && $v->count()){
+        foreach ($simplexml->children() as $k => $v) {
+            if ($v instanceof \SimpleXMLElement && $v->count()) {
                 $dataArray[$k] = [];
-                foreach ($v->children() as $k1 => $v1){
+                foreach ($v->children() as $k1 => $v1) {
                     $dataArray[$k][$k1] = $v1;
                 }
-            }else{
+            } else {
                 $dataArray[$k] = trim($v->__toString());
             }
         }
         return $dataArray;
     }
-    
-    public function __arrayToXml1($dataArray){
-        
-        $doc = new \DOMDocument('1.0','UTF-8');
+
+    public function __arrayToXml1($dataArray)
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
         
         $xml = $doc->createElement('xml');
-
+        
         $doc->appendChild($xml);
-        foreach ($dataArray as $k => $v){
-            if(is_array($v)){
+        foreach ($dataArray as $k => $v) {
+            if (is_array($v)) {
                 $node = $doc->createElement($k);
-                foreach ($v as $k1 => $v1){
-                    if(!is_array($v1)){
-                        if(!preg_match('/^\d+(\.\d+)?$/', $v1)){
+                foreach ($v as $k1 => $v1) {
+                    if (! is_array($v1)) {
+                        if (! preg_match('/^\d+(\.\d+)?$/', $v1)) {
                             $node1 = $doc->createElement($k1);
                             $node1->appendChild($doc->createCDATASection($v1));
                             $node->appendChild($node1);
-                        }else{
-                            $node->appendChild($doc->createElement($k1,$v1));
+                        } else {
+                            $node->appendChild($doc->createElement($k1, $v1));
                         }
                     }
                 }
-            }else{
-                if(!preg_match('/^\d+(\.\d+)?$/', $v)){
+            } else {
+                if (! preg_match('/^\d+(\.\d+)?$/', $v)) {
                     $node = $doc->createElement($k);
                     $node->appendChild($doc->createCDATASection($v));
                     $xml->appendChild($node);
-                }else{
-                    $xml->appendChild($doc->createElement($k,$v));
+                } else {
+                    $xml->appendChild($doc->createElement($k, $v));
                 }
             }
         }
-//         $str = $doc->saveXML();
+        // $str = $doc->saveXML();
         
-//         ( new \DOMDocument('1.0','UTF-8'))->saveXML();
+        // ( new \DOMDocument('1.0','UTF-8'))->saveXML();
         
         return $doc->saveXML($xml);
     }
-    
 
     function httpPost($url, $data = [])
     {
         // TODO error
         $ch = curl_init();
-    
+        
         if (! empty($data)) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         }
-    
+        
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-    
+        
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    
+        
         $res = curl_exec($ch);
-    
-        if(false === $res){
+        
+        if (false === $res) {
             curl_errno($ch);
             curl_error($ch);
         }
         curl_close($ch);
-    
+        
         return $res;
     }
-    
+
+    public function pjb()
+    {
+        
+        // define("JAVA_DEBUG", true); //调试设置
+        define("JAVA_HOSTS", "127.0.0.1:8080"); // 设置javabridge监听端口，如果开启javabridge.jar设置的端口不是8080，可通过此语句更改
+        
+        require_once (public_path('Java.inc')); // p
+        $here = realpath(dirname($_SERVER["SCRIPT_FILENAME"]));
+        
+        
+//         \java_set_library_path($here . PATH_SEPARATOR . '.'); // 设置java开发包（class或jar文件）路径，多个路径就用PATH_SEPARATOR分隔，保证跨平的支持。
+//         \java_set_file_encoding("UTF-8"); // 设置JAVA编码。没试过其它的编码，也没深入研究如何能用其它的编码。
+                                         
+        // 前面是配置环境，下面开始真正的调用：
+//         System.currentTimeMillis();
+        $system = new \Java("java.lang.System"); // 初始化JAVA下的类，主要操作就是创建Java类的实例，Java类的第一个参数是JAVA开发的类的名字包含包路径，路径表示按JAVA里导入包的格式。如果JAVA下的类需要使用构造函数，可以在使用第二个参数。
+//UUID.randomUUID()
+        $uuid = new \Java("java.util.UUID"); 
+        $timestamp = new \Java('java.sql.Timestamp',$system->currentTimeMillis());
+//         new TimestampC
+//props.getProperty("java.home"));
+        dump(''.$uuid->randomUUID());
+        dump(''.$timestamp->toString());
+        print "Java version=" . $system->getProperty("java.home") . " /n";
+        print "Java vendor=" . $system->getProperty("java.vendor") . " /n/n";
+        print "OS=" . $system->getProperty("os.name") . " " . $system->getProperty("os.version") . " on " . $system->getProperty("os.arch") . " /n";
+    }
+
     public function test()
     {
-        \App\Models\Common\Bill::run();
+        
+        \App\Services\MyBank\Main::main();
+        
         exit;
         
+        $this->pjb();
+        exit();
+        \App\Models\Common\Bill::run();
+        exit();
         
         $date = new \DateTime('NOW');
         
-        dump( $date->format('Y-m-d H:i:s.u'));
-        dump( $date->format(\DateTime::W3C));
+        dump($date->format('Y-m-d H:i:s.u'));
+        dump($date->format(\DateTime::W3C));
         
-        exit;
+        exit();
         
         dump(\Request::getRequestUri());
         
         dump(\Route::getCurrentRoute()->getPath());
         
-        exit;
+        exit();
         
         $a = [
             'a' => [
                 'a' => 0
             ]
         ];
-        dump(array_get($a,'a.a'));
-        edump(array_get($a,'a.a') === 0);
-//         $pattern = '/[\u4E00-\u9FA5]{2,5}(?:·[\u4E00-\u9FA5]{2,5})*';
+        dump(array_get($a, 'a.a'));
+        edump(array_get($a, 'a.a') === 0);
+        // $pattern = '/[\u4E00-\u9FA5]{2,5}(?:·[\u4E00-\u9FA5]{2,5})*';
         $pattern = '/^[\x{4E00}-\x{9FA5}]{2,5}(?:·[\x{4E00}-\x{9FA5}]{2,5})*$/u';
         
-        /// ，例如：阿沛·阿旺晋美、卡尔·马克思
+        // / ，例如：阿沛·阿旺晋美、卡尔·马克思
         
         edump(preg_match($pattern, '阿沛·阿旺晋美'));
         
         phpinfo();
-        exit;
+        exit();
         $asd = cookie('asd');
-        cookie('asd','123',12);
-       
+        cookie('asd', '123', 12);
+        
         dump($asd);
-        exit;
+        exit();
         $data = session('ads');
         
-//         \Session::put('ads','ssssssss');
+        // \Session::put('ads','ssssssss');
         
-        session(['ads'=>'ssssssss']);
+        session([
+            'ads' => 'ssssssss'
+        ]);
         dump_object_name(app('session'));
-//         dump_object_name(app('session.store'));
+        // dump_object_name(app('session.store'));
         dump($data);
         return '';
         
         $url = 'http://api.xb.com/v1/employee/payrollAuthority';
-        $res = $this->httpPost($url,['uid' => 27]);
+        $res = $this->httpPost($url, [
+            'uid' => 27
+        ]);
         edump($res);
         
         edump(\Config::get('session.driver'));
-//         session(['ads' => time()]);
-//         $data = \Session::get('ads');
+        // session(['ads' => time()]);
+        // $data = \Session::get('ads');
         $data = session('ads');
         dump(time());
         edump($data);
-        \Session::put('ads',time());
+        \Session::put('ads', time());
         
-        
-        
-        exit;
-        
+        exit();
         
         $a = null;
         edump(isset($a));
         
         $str = '333838393967388619435193';
         
-//         preg_split('//', $str)
+        // preg_split('//', $str)
         
-       edump( array_sum( preg_split('//', $str)));
+        edump(array_sum(preg_split('//', $str)));
         
-        exit;
+        exit();
         
         $xml = '<xml>
     <ToUserName>
@@ -336,34 +370,29 @@ class GeneralTestController extends BaseController
         
         edump($array);
         
-//         edump($res);
+        // edump($res);
         
-        
-        
-        
-        exit;
-        edump( openssl_get_md_methods() );
+        exit();
+        edump(openssl_get_md_methods());
         \App\Services\MyBank\BalanceQuery::main();
-        exit;
-//         1468034664090
-//         1468034687
-edump(uuid());
+        exit();
+        // 1468034664090
+        // 1468034687
+        edump(uuid());
         edump(microtime());
         
-        exit;
+        exit();
         
-        $doc = new \DOMDocument('1.0','UTF-8');
+        $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->loadXML('<document><request id="request"><head></head><body></body></request></document>');
-//         $nod = new \DOMNode();
+        // $nod = new \DOMNode();
         
+        exit();
         
+        exit();
+        // debug_backtrace()
         
-        exit;
-        
-        exit;
-//         debug_backtrace()
-        
-        $str ='6222801464011032243
+        $str = '6222801464011032243
 6212261202033044
 6212261202033044
 6228480018653809576
@@ -378,9 +407,9 @@ edump(uuid());
 6222020710002688624
 6222021202030140314';
         edump($str);
-//         6222620170931032
-//         6222620170003931032
-
+        // 6222620170931032
+        // 6222620170003931032
+        
         edump($this->LUHN('6214855710279726'));
         
         $str = "
@@ -409,23 +438,21 @@ define('ORDER_PAY_STATUS_QUERY', 3);
  */
 define('ORDER_PAY_STATUS_RESULT', 4);";
         
-
-        echo(preg_replace("!define\('([^\']*)', (\d)\)!", "\tconst \\1 = \\2", $str));
-        exit;
-        dump(4007.00 -2003.01 +2004.00 -2004.00 );
+        echo (preg_replace("!define\('([^\']*)', (\d)\)!", "\tconst \\1 = \\2", $str));
+        exit();
+        dump(4007.00 - 2003.01 + 2004.00 - 2004.00);
         dump(2003.99);
         
-        $a = 4007.00 -2003.01 +2004.00 -2004.00;
-        $b = 2003.99 ;
-        $a = $a.'';
-        $b = $b.'';
+        $a = 4007.00 - 2003.01 + 2004.00 - 2004.00;
+        $b = 2003.99;
+        $a = $a . '';
+        $b = $b . '';
         dump($a - $b);
-        dump($a  == $b);
-        exit;
+        dump($a == $b);
+        exit();
         echo '<style>body{background-color:#18171B;}</style>';
         
-        
-        $xmlStr ='<?xml version="1.0" encoding="GBK"?>
+        $xmlStr = '<?xml version="1.0" encoding="GBK"?>
 <CMBSDKPGK>
     <INFO>
         <DATTYP>2</DATTYP>
@@ -505,7 +532,7 @@ define('ORDER_PAY_STATUS_RESULT', 4);";
         <YURREF>qfq10114334071352266040</YURREF>
     </NTQTSINFZ>
 </CMBSDKPGK>';
-//         edump(loadXml($xmlStr));
+        // edump(loadXml($xmlStr));
         
         $xmlStr = '<?xml version="1.0" encoding="UTF-8"?>
 <document>
@@ -562,140 +589,136 @@ define('ORDER_PAY_STATUS_RESULT', 4);";
         $doc = new \DOMDocument();
         $doc->loadXML($xmlStr);
         echo '<style>body{background-color:#18171B;}</style>';
+        
+        $stack = [
+            $doc->nodeName => $doc
+        ];
 
-        $stack = [ $doc->nodeName => $doc];
-        function visitNode($node,$prefix,&$data){
-            if($node->nodeName != '#comment'){
+        function visitNode($node, $prefix, &$data)
+        {
+            if ($node->nodeName != '#comment') {
                 
-                if(ends_with($prefix,'DigestMethod')){
-//                     edump($node);
+                if (ends_with($prefix, 'DigestMethod')) {
+                    // edump($node);
                 }
                 
-                if($node->childNodes->length == 0){
-                    dump($prefix.' ===> ');
+                if ($node->childNodes->length == 0) {
+                    dump($prefix . ' ===> ');
                     array_set($data, $prefix, '');
-                }else if($node->childNodes->length == 1
-                    && $node->childNodes[0]->nodeType == XML_TEXT_NODE){
-                    dump($prefix.' ===> '.$node->nodeName.':'.trim($node->childNodes[0]->wholeText));
-                    array_set($data, $prefix, trim($node->childNodes[0]->wholeText));
-                }else{
-                    dump($prefix);
-                }
+                } else 
+                    if ($node->childNodes->length == 1 && $node->childNodes[0]->nodeType == XML_TEXT_NODE) {
+                        dump($prefix . ' ===> ' . $node->nodeName . ':' . trim($node->childNodes[0]->wholeText));
+                        array_set($data, $prefix, trim($node->childNodes[0]->wholeText));
+                    } else {
+                        dump($prefix);
+                    }
             }
         }
         
         $data = [];
         // 先序
-        while (!empty($stack)){
+        while (! empty($stack)) {
             $prefix = array_keys($stack);
             $prefix = end($prefix);
             $node = array_pop($stack);
-            visitNode($node,$prefix,$data);
-            if($childrens = $node->childNodes){
-                if($childrens->length > 1 
-                    || ($childrens->length == 1 && $childrens[0]->nodeType != XML_TEXT_NODE)){
+            visitNode($node, $prefix, $data);
+            if ($childrens = $node->childNodes) {
+                if ($childrens->length > 1 || ($childrens->length == 1 && $childrens[0]->nodeType != XML_TEXT_NODE)) {
                     $unshift = [];
-                    foreach ($childrens as $k => $v){
-                        $v->nodeType != XML_TEXT_NODE && $unshift [$prefix.'.'.$v->nodeName] = $v;
+                    foreach ($childrens as $k => $v) {
+                        $v->nodeType != XML_TEXT_NODE && $unshift[$prefix . '.' . $v->nodeName] = $v;
                     }
                     $unshift = array_reverse($unshift);
-                    foreach ($unshift as $k => $v){
+                    foreach ($unshift as $k => $v) {
                         $stack[$k] = $v;
                     }
                 }
             }
         }
         dump($data);
-        exit;
+        exit();
         
-        
-        
-        
-        
-        $doc = new \DOMDocument('1.0','UTF-8');
+        $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->loadXML($xmlStr);
-        dump( $doc->hasChildNodes());
-        foreach ($doc->childNodes as $k => $v){
-//             dump($v);
-            foreach ($v->childNodes as $k1 => $v1){
-//                 dump($v1);
-// XML_ELEMENT_NODE
-                if($v1->nodeType != XML_TEXT_NODE){
+        dump($doc->hasChildNodes());
+        foreach ($doc->childNodes as $k => $v) {
+            // dump($v);
+            foreach ($v->childNodes as $k1 => $v1) {
+                // dump($v1);
+                // XML_ELEMENT_NODE
+                if ($v1->nodeType != XML_TEXT_NODE) {
                     dump($v1);
-                    foreach ($v1->childNodes as $k2 => $v2){
+                    foreach ($v1->childNodes as $k2 => $v2) {
                         dump($v2);
                     }
                 }
-                
             }
         }
         edump($doc);
         
+        exit();
         
-        exit;
-        
-        
-        
-        
-        $xml = simplexml_load_string($xmlStr,'\SimpleXMLElement',0,'',true);
+        $xml = simplexml_load_string($xmlStr, '\SimpleXMLElement', 0, '', true);
         echo '<style>body{background-color:#18171B;}</style>';
         
-        $stack = [ $xml->getName() => $xml];
-        function visitNode($node,$prefix,&$data){
-            if($node->count()){
+        $stack = [
+            $xml->getName() => $xml
+        ];
+
+        function visitNode($node, $prefix, &$data)
+        {
+            if ($node->count()) {
                 dump($prefix);
-            }else{
-                dump($prefix.'=>'.$node->getName().':'.$node->__toString());
+            } else {
+                dump($prefix . '=>' . $node->getName() . ':' . $node->__toString());
                 array_set($data, $prefix, $node->__toString());
             }
         }
         
         $data = [];
-        $prefix = $xml->getName() ;
+        $prefix = $xml->getName();
         // 先序
-        while (!empty($stack)){
+        while (! empty($stack)) {
             $prefix = array_keys($stack);
             $prefix = end($prefix);
             $node = array_pop($stack);
-            visitNode($node,$prefix,$data);
-            if($childrens = $node->children()){
+            visitNode($node, $prefix, $data);
+            if ($childrens = $node->children()) {
                 $unshift = [];
-                foreach ($childrens as $k => $v){
-                    $unshift [$prefix.'.'.$k] = $v;
+                foreach ($childrens as $k => $v) {
+                    $unshift[$prefix . '.' . $k] = $v;
                 }
                 $unshift = array_reverse($unshift);
-                foreach ($unshift as $k => $v){
+                foreach ($unshift as $k => $v) {
                     $stack[$k] = $v;
                 }
             }
         }
         dump($data);
-        exit;
+        exit();
         
-        
-        
-        
-        
-        
-        $stack = [ $xml->getName() => $xml];
-        function visitNode($node){
-            if($node->count()){
+        $stack = [
+            $xml->getName() => $xml
+        ];
+
+        function visitNode($node)
+        {
+            if ($node->count()) {
                 dump($node->getName());
-            }else{
-                dump($node->getName().':'.$node->__toString());
+            } else {
+                dump($node->getName() . ':' . $node->__toString());
             }
         }
         
-        
         // 先序
-        while (!empty($stack)){
+        while (! empty($stack)) {
             $prefix = array_keys($stack)[0];
             $node = array_shift($stack);
             visitNode($node);
-            if($childrens = $node->children()){
+            if ($childrens = $node->children()) {
                 $unshift = [];
-                foreach ($childrens as $k => $v){
-                    $unshift [$k] = $v;
+                foreach ($childrens as $k => $v) {
+                    $unshift[$k] = $v;
                 }
                 $unshift = array_reverse($unshift);
                 array_unshift($unshift, 0);
@@ -703,7 +726,7 @@ define('ORDER_PAY_STATUS_RESULT', 4);";
                 call_user_func_array('array_unshift', $unshift);
             }
         }
-        exit;
+        exit();
         $resultArray = [];
         foreach ($xml->children() as $k => $v) {
             if ($v instanceof \SimpleXMLElement) {
@@ -725,12 +748,9 @@ define('ORDER_PAY_STATUS_RESULT', 4);";
         dump($resultArray);
         edump($xml);
         
+        exit();
         
-        exit;
-        
-        
-        
-        exit;
+        exit();
         Bill::run();
         // 房租、多人支出、由谁付
         

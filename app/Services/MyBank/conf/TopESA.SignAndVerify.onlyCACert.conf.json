@@ -8,7 +8,7 @@
       "name" : "testKeyStore",
       "type" : "PKCS12",
       "provider" : "",
-      "keyStorePath" : "conf/yinqizhiliantest.pfx",
+      "keyStorePath" : "D:/wnmp/www/transfer/app/Services/MyBank/conf/yinqizhiliantest.pfx",
       "password" : "mayibank"
     }
   ]
