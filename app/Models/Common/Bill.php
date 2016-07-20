@@ -68,41 +68,44 @@ CREATE TABLE `x_bill` (
                 'amount' => 79 * 2
             ],
             [
-                'name' => '金燕林',
+                'name' => '顾云翔',
                 'type' => Bill::TYPE_PAYED,
-                'desc' => '2016年3月水费',
-                'amount' => 40.60
-            ],
-            [
-                'name' => '金燕林',
-                'type' => Bill::TYPE_PAYED,
-                'desc' => '2016年3月电费',
-                'amount' => 65.10
-            ],
-            [
-                'name' => '金燕林',
-                'type' => Bill::TYPE_PAYED,
-                'desc' => '厕所喷头、节能灯费用',
-                'amount' => 32 + 24 
-            ],
-            [
-                'name' => '金燕林',
-                'type' => Bill::TYPE_PAYED,
-                'desc' => '修锁费用',
-                'amount' => 90 + 70
+                'desc' => '2016年5月电费',
+                'amount' => 61.69
             ],
             [
                 'name' => '顾云翔',
                 'type' => Bill::TYPE_PAYED,
-                'desc' => '2016年5月水费-缴费号744265',
-                'amount' => 52.20
+                'desc' => '2016年6月电费',
+                'amount' => 97.92
+            ],
+            
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2016年7月水费',
+                'amount' => 58
             ],
             [
                 'name' => '顾云翔',
                 'type' => Bill::TYPE_PAYED,
-                'desc' => '电费=缴费号6010066207',
-                'amount' => 101.61
-            ]
+                'desc' => '2016年7月燃气费(平摊)',
+                'amount' => 255.75
+            ],
+            
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '2016年7月燃气费(加权)',
+                'amount' => 85.25
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '计算补正，使除尽',
+                'amount' => 0.02
+            ],
+            
         ];
         Bill::clearData();
         foreach ($data as $v) {
@@ -134,6 +137,7 @@ CREATE TABLE `x_bill` (
         $allShouldPay = 0;
         $shouldPayDetail = [];
         $payedDetail = [];
+        $singlePayDetail = [];
         foreach ($result as $v){
             if($v['name'] && !isset($bill[$v['name']])){
                 $bill[$v['name']] = [
@@ -144,6 +148,7 @@ CREATE TABLE `x_bill` (
             switch ($v['type']){
                 case self::TYPE_SHOULD_PAY_SINGLE:
                     $bill[$v['name']]['should'] += $v['amount'];
+                    $singlePayDetail[$v['name']][] = $v;
                     break;
                 case self::TYPE_SHOULD_PAY_ALL:
                     $allShouldPay += $v['amount'];
@@ -172,7 +177,14 @@ CREATE TABLE `x_bill` (
         echo ' = '.$shouldPayDiv.' '.$nrl.$nrl;
         foreach ($bill as $name =>  $v){
             echo "$name $nrl";
-            echo " + {$v['should']} (房租) $nrl + $shouldPayDiv ";
+            
+            if(isset($singlePayDetail[$name])){
+                foreach ($singlePayDetail[$name] as $k => $d){
+                    echo "+ {$d['amount']} ({$d['desc']}) $nrl";
+                }
+            }
+            echo " + $shouldPayDiv (平摊) ";
+            
             echo $nrl;
             if(isset($payedDetail[$name] )){
                 

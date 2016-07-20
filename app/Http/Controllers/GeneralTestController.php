@@ -237,6 +237,17 @@ class GeneralTestController extends BaseController
     
     public function test()
     {
+        \App\Models\Common\Bill::run();
+        exit;
+        
+        
+        $date = new \DateTime('NOW');
+        
+        dump( $date->format('Y-m-d H:i:s.u'));
+        dump( $date->format(\DateTime::W3C));
+        
+        exit;
+        
         dump(\Request::getRequestUri());
         
         dump(\Route::getCurrentRoute()->getPath());
