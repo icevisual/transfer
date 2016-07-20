@@ -1,7 +1,7 @@
 <?php
-namespace App\Services\MyBank;
+namespace App\Services\MyBank\Api;
 
-use App\Services\MyBank\SDK\Sign;
+use App\Services\MyBank\Sdk\Sign;
 
 class BalanceQuery
 {

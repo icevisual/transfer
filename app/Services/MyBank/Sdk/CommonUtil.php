@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\MyBank;
+namespace App\Services\MyBank\Sdk;
 
 class CommonUtil
 {
