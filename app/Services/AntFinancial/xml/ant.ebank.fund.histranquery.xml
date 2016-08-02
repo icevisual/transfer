@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 客户余利宝历史交易查询<ant.ebank.fund.histranquery> -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="queryStartDate"></xmlTag>
+	<xmlTag tagName="queryEndDate"></xmlTag>
+	<xmlTag tagName="pageSize"></xmlTag>
+	<xmlTag tagName="pageIndex"></xmlTag>
+	<xmlTag tagName="fundChannel"></xmlTag>
+	<xmlTag tagName="cardNo"></xmlTag>
+	<xmlTag tagName="transTypes"></xmlTag>
+	<xmlTag tagName="transStatuses"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>
+
+
+
+
+
+
+
+
+

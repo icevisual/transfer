@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 	客户余利宝产品查询<ant.ebank. fund .query> -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="queryEndDate"></xmlTag>
+	<xmlTag tagName="queryStartDate"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>

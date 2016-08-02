@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 4.10	余利宝申购预算<ant.ebank.fund.purchase.budget>  -->
+<body>
+<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+<xmlTag tagName="cardNo"></xmlTag>
+<xmlTag tagName="fundChannel" defaultValue="MYBANK"></xmlTag>
+<xmlTag tagName="sign"></xmlTag>
+</body>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!-- 4.17	账户余额查询< ant.ebank .acount.balance.query > -->
+<body>
+<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+<xmlTag tagName="cardNo"></xmlTag>
+<xmlTag tagName="currencyCode"></xmlTag>
+<xmlTag tagName="cashExCode"></xmlTag>
+<xmlTag tagName="sign"></xmlTag>
+</body>

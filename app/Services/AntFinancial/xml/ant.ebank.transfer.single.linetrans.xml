@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 4.20	行内单笔转账< ant.ebank.transfer.single .linetrans > -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="bizNo"></xmlTag>
+	<xmlTag tagName="smsCode"></xmlTag>
+	<xmlTag tagName="amt"></xmlTag>
+	<xmlTag tagName="currencyCode"></xmlTag>
+	<xmlTag tagName="payerCardNo"></xmlTag>
+	<xmlTag tagName="payerName"></xmlTag>
+	<xmlTag tagName="payeeAccountNo"></xmlTag>
+	<xmlTag tagName="payeeName"></xmlTag>
+	<xmlTag tagName="remark"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 4.14	批量代发确认<ant.ebank. transfer .batchpay.confirm> -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="bizNo"></xmlTag>
+	<xmlTag tagName="smsCode"></xmlTag>
+	<xmlTag tagName="fileName"></xmlTag>
+	<xmlTag tagName="totalCount"></xmlTag>
+	<xmlTag tagName="totalAmount"></xmlTag>
+	<xmlTag tagName="currencyCode"></xmlTag>
+	<xmlTag tagName="remark"></xmlTag>
+	<xmlTag tagName="companyCardNo"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>

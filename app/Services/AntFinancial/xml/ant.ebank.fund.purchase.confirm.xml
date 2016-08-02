@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 4.11	余利宝申购确认<ant.ebank.fund. purchase. confirm> -->
+<body>
+<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+<xmlTag tagName="bizNo"></xmlTag>
+<xmlTag tagName="smsCode"></xmlTag>
+<xmlTag tagName="amount"></xmlTag>
+<xmlTag tagName="currencyCode"></xmlTag>
+<xmlTag tagName="cardNo"></xmlTag>
+<xmlTag tagName="sign"></xmlTag>
+</body>

@@ -1,0 +1,62 @@
+<document>
+    <response id="response">
+        <head>
+            <version>1.0.0</version>
+            <appid>2016011800000001</appid>
+            <function>ant.ebank.acount.balance.query</function>
+            <respTime>20160725102418</respTime>
+            <respTimeZone>UTC+8</respTimeZone>
+            <reqMsgId>B936736A-925E-2C63-DF72-56937DD5C9C1</reqMsgId>
+            <reserve></reserve>
+            <signType>RSA</signType>
+            <inputCharset>UTF-8</inputCharset>
+        </head>
+        <body>
+            <resultInfo>
+                <resultStatus>S</resultStatus>
+                <resultCode>0000</resultCode>
+                <resultMsg>成功</resultMsg>
+            </resultInfo>
+            <customerType>2</customerType>
+            <openOrg>100001</openOrg>
+            <arrangementId>2016022201012000000023413614</arrangementId>
+            <accountId>20010000000011649618</accountId>
+            <cashExCode>CSH</cashExCode>
+            <openDate>2016-02-22</openDate>
+            <closeDate></closeDate>
+            <termUnit></termUnit>
+            <term>null</term>
+            <arrangementChineseName>新增企业八</arrangementChineseName>
+            <arrangementEnglishName>TestName</arrangementEnglishName>
+            <businessType>0</businessType>
+            <accountPurpose>113</accountPurpose>
+            <accountAttribute>6000</accountAttribute>
+            <accountStatus>T</accountStatus>
+            <availableBalance>198999999219959110</availableBalance>
+            <actualBalance>198999999219959110</actualBalance>
+            <freezeAmount>000000000000000</freezeAmount>
+            <currencyCode>156</currencyCode>
+            <creditFreeze>T</creditFreeze>
+            <debtFreeze>T</debtFreeze>
+        </body>
+    </response>
+    <ds:Signature
+        xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+            <ds:Reference URI="">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+                <ds:DigestValue>zeZS8Kn5GkHXg10vdhokfBVK4P8=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>
+xBI8Tqo0Mt3dyM1N6RbCiqdiiDG0YT7IZOxDjD/wkmmexNZ+j8MvptGWirz4Mz8WjT7ruZDhX8he
+WvoTT/gvfmFRa+oQ+S7FCjCqZgoueb1dEoWJlPpqKas9CuKvo91/VJssQTCpUzKF9sE5MwvpLtg7
+QJsYkAC3r08EHqZi/28=
+</ds:SignatureValue>
+    </ds:Signature>
+</document>

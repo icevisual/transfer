@@ -169,6 +169,10 @@ class LocalTestController extends  BaseController
 	
 	public function format(){
 	    $str = \Input::get('content');
+	    $type = \Input::get('type');
+	    if(method_exists($this, $type)){
+	        return $this->$type();
+	    }
 	    $array = $this->tableViewToArrayAnn($str);
 	}
 	
@@ -287,6 +291,17 @@ EOL;
 	    exit;
 	}
 	
+	public function base64decode(){
+	    $content = \Input::get('content');
+	    if($content){
+	        try {
+	            $res = base64_decode($content);
+	            echo $res;
+	        }catch(\Exception $e){
+	            
+	        }
+	    }
+	}
 	
 	public function gzdecode(){
 	    $content = \Input::get('content');

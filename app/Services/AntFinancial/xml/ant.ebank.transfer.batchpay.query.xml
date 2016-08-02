@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 4.15	批量业务状态查询<ant.ebank. transfer .batchpay.query> -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="queryStartDate"></xmlTag>
+	<xmlTag tagName="queryEndDate"></xmlTag>
+	<xmlTag tagName="pageSize"></xmlTag>
+	<xmlTag tagName="pageIndex"></xmlTag>
+	<xmlTag tagName="batchTransNo"></xmlTag>
+	<xmlTag tagName="batchState"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>
+
+
+
+
+

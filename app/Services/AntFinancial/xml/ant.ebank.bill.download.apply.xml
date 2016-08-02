@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 4.19 申请下载回单< ant.ebank. bill .download.apply > -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="tradeNo"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>
+
+
+
+
+
+

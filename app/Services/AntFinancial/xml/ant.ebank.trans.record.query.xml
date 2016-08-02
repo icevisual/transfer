@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 4.18	交易记录查询<ant.ebank.trans.record.query> -->
+<body>
+	<xmlTag tagName="partner" defaultValue="202210000000000001025"></xmlTag>
+	<xmlTag tagName="queryStartDate"></xmlTag>
+	<xmlTag tagName="queryEndDate"></xmlTag>
+	<xmlTag tagName="pageSize"></xmlTag>
+	<xmlTag tagName="pageIndex"></xmlTag>
+	<xmlTag tagName="cardNo"></xmlTag>
+	<xmlTag tagName="bizTypeList"></xmlTag>
+	<xmlTag tagName="tradeInStatusList"></xmlTag>
+	<xmlTag tagName="tradeAmtMin"></xmlTag>
+	<xmlTag tagName="tradeAmtMax"></xmlTag>
+	<xmlTag tagName="sign"></xmlTag>
+</body>
