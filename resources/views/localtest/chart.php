@@ -3,11 +3,11 @@
 <head > 
     <title>Highchart js export module sample</title> 
     <!-- 1.引入jquery库 --> 
-    <script src="flatUI/js/jquery-1.8.3.min.js"></script>
+    <script src="/flatUI/js/jquery-1.8.3.min.js"></script>
     <!-- 2.引入highcharts的核心文件 --> 
-    <script src="Highcharts/highcharts.js" type="text/javascript"></script> 
+    <script src="/Highcharts/highcharts.js" type="text/javascript"></script> 
     <!-- 3.引入导出需要的js库文件 --> 
-    <script src="Highcharts/modules/exporting.js" type="text/javascript"></script> 
+    <script src="/Highcharts/modules/exporting.js" type="text/javascript"></script> 
 	<script language="javascript" type="text/javascript"> 
     var chart; 
     $(document).ready(function () { 
@@ -72,7 +72,7 @@
 <body> 
     <form id="form1" runat="server"> 
     <!--5.导入容器用于显示图表--> 
-    <div id="container" style="width: 900px;"> 
+    <div id="container" style="width: 100%;"> 
     </div> 
     </form> 
 </body> 
