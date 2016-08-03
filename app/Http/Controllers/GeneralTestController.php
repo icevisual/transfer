@@ -264,6 +264,12 @@ class GeneralTestController extends BaseController
 
     public function test()
     {
+        $accessKeyId = "";
+        $accessSecret = "";
+        $iClientProfile = \DefaultProfile::getProfile("cn-hangzhou", $accessKeyId, $accessSecret);
+        $client = new \DefaultAcsClient($iClientProfile);
+        dump('--end--');
+        exit;
         $str = "100 邮储银行
 102 工商银行
 103 农业银行

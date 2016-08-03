@@ -40,7 +40,8 @@
             "App\\": "app/"
         },
         "files": [
-            "app/Gather/Utils/loader.php"
+            "app/Gather/Utils/loader.php",
+            "vendor/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php"
         ]
     },
     "autoload-dev": {

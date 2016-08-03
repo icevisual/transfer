@@ -20,4 +20,5 @@ return array(
     'f0906e6318348a765ffb6eb24e0d0938' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
     '58571171fd5812e6e447dce228f52f4d' => $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
     'ec9dd17eb30ad6c2e399d738ab19eb02' => $baseDir . '/app/Gather/Utils/loader.php',
+    '50b2cf50abb8552141f00dbcf80e1d66' => $vendorDir . '/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php',
 );
