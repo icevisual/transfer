@@ -22,7 +22,8 @@
         "zf-commons/zfc-rbac": "~2.4",
         "barryvdh/laravel-ide-helper": "^2.1",
         "dcn/rbac": "~1.1.0",
-	    "ixudra/curl": "5.*"
+	    "ixudra/curl": "5.*",
+		"bosnadev/repositories": "^0.12.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
