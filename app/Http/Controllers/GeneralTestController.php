@@ -266,6 +266,26 @@ class GeneralTestController extends BaseController
 
     public function test()
     {
+        
+        
+        function getMoneyFunc() {
+            $rmb = 1;
+            $func = function() use ( &$rmb ) {
+                echo $rmb.'<br/>';
+                //把$rmb的值加1
+                $rmb++;
+            };
+            return $func;
+        }
+        
+        $getMoney = getMoneyFunc();
+        $getMoney();
+        $getMoney();
+        $getMoney();
+        
+        exit;
+        
+        
         $accessKeyId = "nL5Y7fL9P7RXUZ5J";
         $accessSecret = "saBQK7zYCkWXBi7vV7YCI8Fl7kc5i2";
         $iClientProfile = \DefaultProfile::getProfile("cn-hangzhou", $accessKeyId, $accessSecret);

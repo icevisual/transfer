@@ -23,7 +23,8 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "dcn/rbac": "~1.1.0",
 	    "ixudra/curl": "5.*",
-		"bosnadev/repositories": "^0.12.0"
+		"bosnadev/repositories": "^0.12.0",
+		"anlutro/l4-repository": "^0.7.9"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

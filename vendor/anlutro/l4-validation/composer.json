@@ -1,0 +1,26 @@
+{
+	"name": "anlutro/l4-validation",
+	"description": "Validation service class for Laravel.",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Andreas Lutro",
+			"email": "anlutro@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"illuminate/validation": ">=4.1, <6.0",
+		"illuminate/support": ">=4.1, <6.0"
+	},
+	"require-dev": {
+		"mockery/mockery": "0.9.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"anlutro\\LaravelValidation\\": "src/"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}

@@ -4,9 +4,92 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ed2bc21e8b971d9d95273ab4bab2cf47",
-    "content-hash": "2019e330e59365387b8ca558b2bd15f1",
+    "hash": "9cf685b01a12c27a2c9c65272f6b4ce7",
+    "content-hash": "398d5efc9a8176667cf2b238eeb5d9d1",
     "packages": [
+        {
+            "name": "anlutro/l4-repository",
+            "version": "0.7.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anlutro/laravel-repository.git",
+                "reference": "5a7ae6cd5433195f3c34a46e877d76bc19ab00d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anlutro/laravel-repository/zipball/5a7ae6cd5433195f3c34a46e877d76bc19ab00d9",
+                "reference": "5a7ae6cd5433195f3c34a46e877d76bc19ab00d9",
+                "shasum": ""
+            },
+            "require": {
+                "anlutro/l4-validation": "~0.5.5",
+                "illuminate/database": ">=4.1 <6.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "anlutro/l4-testing": "0.2.*",
+                "mockery/mockery": "0.9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "anlutro\\LaravelRepository\\": "src/"
+                }
+            },
+            "notification-url": "http://packagist.cn/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Lutro",
+                    "email": "anlutro@gmail.com"
+                }
+            ],
+            "description": "Repository classes for Laravel.",
+            "time": "2015-02-08 19:41:58"
+        },
+        {
+            "name": "anlutro/l4-validation",
+            "version": "0.5.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anlutro/laravel-validation.git",
+                "reference": "fb653cf29f230bf53beda4b35a4e1042d52faaeb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anlutro/laravel-validation/zipball/fb653cf29f230bf53beda4b35a4e1042d52faaeb",
+                "reference": "fb653cf29f230bf53beda4b35a4e1042d52faaeb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=4.1, <6.0",
+                "illuminate/validation": ">=4.1, <6.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "anlutro\\LaravelValidation\\": "src/"
+                }
+            },
+            "notification-url": "http://packagist.cn/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Lutro",
+                    "email": "anlutro@gmail.com"
+                }
+            ],
+            "description": "Validation service class for Laravel.",
+            "time": "2015-02-06 18:23:35"
+        },
         {
             "name": "barryvdh/laravel-ide-helper",
             "version": "v2.2.1",
