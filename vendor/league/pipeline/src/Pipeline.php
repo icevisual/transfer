@@ -12,19 +12,13 @@ class Pipeline implements PipelineInterface
     private $stages = [];
 
     /**
-     * @var ProcessorInterface
-     */
-    private $processor;
-
-    /**
      * Constructor.
      *
-     * @param callable[]         $stages
-     * @param ProcessorInterface $processor
+     * @param callable[] $stages
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $stages = [], ProcessorInterface $processor = null)
+    public function __construct(array $stages = [])
     {
         foreach ($stages as $stage) {
             if (false === is_callable($stage)) {
@@ -33,7 +27,6 @@ class Pipeline implements PipelineInterface
         }
 
         $this->stages = $stages;
-        $this->processor = $processor ?: new FingersCrossedProcessor;
     }
 
     /**
@@ -56,7 +49,11 @@ class Pipeline implements PipelineInterface
      */
     public function process($payload)
     {
-        return $this->processor->process($this->stages, $payload);
+        foreach ($this->stages as $stage) {
+            $payload = call_user_func($stage, $payload);
+        }
+
+        return $payload;
     }
 
     /**

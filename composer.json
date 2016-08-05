@@ -24,7 +24,8 @@
         "dcn/rbac": "~1.1.0",
 	    "ixudra/curl": "5.*",
 		"bosnadev/repositories": "^0.12.0",
-		"anlutro/l4-repository": "^0.7.9"
+		"anlutro/l4-repository": "^0.7.9",
+		"league/pipeline": "^0.2.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -39,8 +40,7 @@
             "database"
         ],
         "psr-4": {
-            "App\\": "app/",
-            "League\\Pipeline\\": "vendor/pipeline/src"
+            "App\\": "app/"
         },
         "files": [
             "app/Gather/Utils/loader.php",
