@@ -48,6 +48,7 @@ return array(
     'Predis\\' => array($vendorDir . '/predis/predis/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'League\\Pipeline\\' => array($vendorDir . '/pipeline/src'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
     'Interop\\Container\\' => array($vendorDir . '/container-interop/container-interop/src/Interop/Container'),
     'Illuminate\\' => array($vendorDir . '/laravel/framework/src/Illuminate'),
