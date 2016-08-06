@@ -32,7 +32,8 @@
 		       <a onclick="$('#result-field').format({method: 'xml'});" class="btn  btn-primary">XML-FORMAT</a>
 		       <a onclick="$('#result-field').format({method: 'json'});" class="btn  btn-primary">JSON-FORMAT</a>
 		       <a onclick="StrFormat('FBSDK')" class="btn  btn-primary">STR-FORMAT-FBSDK</a>
-			         <a onclick="StrFormat('base64decode')" class="btn  btn-primary">BASE-64-DECODE</a>
+			   <a onclick="StrFormat('base64decode')" class="btn  btn-primary">BASE-64-DECODE</a>
+		       <a onclick="StrFormat('stripslashes')" class="btn  btn-primary">STRIPSLASHES</a>
 		
 			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>

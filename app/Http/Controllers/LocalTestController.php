@@ -166,6 +166,18 @@ class LocalTestController extends  BaseController
         });
     }
 	
+    
+    public function stripslashes(){
+        $content = \Input::get('content');
+        if($content){
+            try {
+                $res = stripslashes($content);
+                echo $res;
+            }catch(\Exception $e){
+                 
+            }
+        }
+    }
 	
 	public function format(){
 	    $str = \Input::get('content');
