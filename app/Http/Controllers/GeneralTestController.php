@@ -5,6 +5,7 @@ use App\Gather\AESTool;
 use App\Models\Bill;
 
 use Iot\Request\V20160530 as Iot;
+use Illuminate\Cache\Repository;
 
 class GeneralTestController extends BaseController
 {
@@ -263,10 +264,22 @@ class GeneralTestController extends BaseController
         print "Java vendor=" . $system->getProperty("java.vendor") . " /n/n";
         print "OS=" . $system->getProperty("os.name") . " " . $system->getProperty("os.version") . " on " . $system->getProperty("os.arch") . " /n";
     }
+    
+    public function __invoke(){
+        dump(' --FUNC-- '.__FUNCTION__);
+    }
 
     public function test()
     {
+        dump(is_callable($this));
+        $this();
         
+        exit;
+        //4060
+        $aa = \App\Models\Common\RequestLog::find('4060');
+        
+        edump($aa->created_at);
+        edump( \Carbon\Carbon::now()->toDateTimeString());
         
         function getMoneyFunc() {
             $rmb = 1;

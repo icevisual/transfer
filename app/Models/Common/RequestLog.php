@@ -10,6 +10,17 @@ class RequestLog extends \Eloquent
 
     protected $guarded = [];
     
+    /**
+     * Custom format for the last login date
+     *
+     * @param $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('d.m.Y.');
+    }
+    
     public static function getTableCreateStatment(){
         return $str = "
 CREATE TABLE `x_request_log` (
