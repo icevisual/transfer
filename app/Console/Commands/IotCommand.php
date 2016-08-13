@@ -20,15 +20,13 @@ class IotCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Display an inspiring quote';
-
+    protected $description = 'internet of thing';
     
     /**
      * 
      * @var \DefaultAcsClien
      */
     protected $client = null;
-    
     
     public function initClient(){
         if(null == $this->client){
@@ -77,7 +75,6 @@ class IotCommand extends Command
     }
     
     public function fireAction(){
-    
     
         $this->comment(__FUNCTION__);
     }

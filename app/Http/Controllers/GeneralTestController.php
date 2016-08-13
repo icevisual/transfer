@@ -6,6 +6,7 @@ use App\Models\Bill;
 
 use Iot\Request\V20160530 as Iot;
 use Illuminate\Cache\Repository;
+use function GuzzleHttp\json_decode;
 
 class GeneralTestController extends BaseController
 {
@@ -271,6 +272,120 @@ class GeneralTestController extends BaseController
 
     public function test()
     {
+        $prefix = '601382610100';
+        $start = 1008932;
+        $fp = fopen(public_path('card.txt'), 'w');
+        foreach (range(1, 600) as $v){
+            $line = $prefix.($v + $start) .PHP_EOL;
+            fwrite($fp, $line);
+        }
+        fclose($fp);
+        exit;
+        $str = '1×× Informational
+100 Continue
+101 Switching Protocols
+102 Processing
+2×× Success
+200 OK
+201 Created
+202 Accepted
+203 Non-authoritative Information
+204 No Content
+205 Reset Content
+206 Partial Content
+207 Multi-Status
+208 Already Reported
+226 IM Used
+3×× Redirection
+300 Multiple Choices
+301 Moved Permanently
+302 Found
+303 See Other
+304 Not Modified
+305 Use Proxy
+307 Temporary Redirect
+308 Permanent Redirect
+4×× Client Error
+400 Bad Request
+401 Unauthorized
+402 Payment Required
+403 Forbidden
+404 Not Found
+405 Method Not Allowed
+406 Not Acceptable
+407 Proxy Authentication Required
+408 Request Timeout
+409 Conflict
+410 Gone
+411 Length Required
+412 Precondition Failed
+413 Payload Too Large
+414 Request-URI Too Long
+415 Unsupported Media Type
+416 Requested Range Not Satisfiable
+417 Expectation Failed
+418 I\'m a teapot
+421 Misdirected Request
+422 Unprocessable Entity
+423 Locked
+424 Failed Dependency
+426 Upgrade Required
+428 Precondition Required
+429 Too Many Requests
+431 Request Header Fields Too Large
+444 Connection Closed Without Response
+451 Unavailable For Legal Reasons
+499 Client Closed Request
+5×× Server Error
+500 Internal Server Error
+501 Not Implemented
+502 Bad Gateway
+503 Service Unavailable
+504 Gateway Timeout
+505 HTTP Version Not Supported
+506 Variant Also Negotiates
+507 Insufficient Storage
+508 Loop Detected
+510 Not Extended
+511 Network Authentication Required
+599 Network Connect Timeout Error';
+        $lines = preg_split('/[\r\n]+/', $str);
+        foreach ($lines as $v){
+            $res = explode(' ', $v,2);
+            $vv = intval($res[0]);
+           
+            $k = 'HTTP_'.strtoupper($res[1]);
+            $k = 'HTTP_'.$vv;
+            $k = preg_replace('/[- \']+/', '_', $k);
+            echo '<pre>';
+            echo "/**
+ * {$v}
+ * @var int
+ */";
+            echo '</pre>';
+           
+            echo 'const '.$k.' = '.$vv.';<br/>';
+        }
+//         edump(preg_split('/[\r\n]+/', $str));
+        
+        
+        exit;
+        
+        
+        $message = \Input::get('data');
+        $messageJsonArray = json_decode($message,1);
+        $data = [
+            'message' => array_get($messageJsonArray, 'message'),//message
+            'topic' => array_get($messageJsonArray, 'topic'),//topic
+            'sign' => array_get($messageJsonArray, 'sign'),//sign= md5_32(productKey+(message)+productSecret)
+            'messageId' => array_get($messageJsonArray, 'messageId'),//messageId
+            'appKey' => array_get($messageJsonArray, 'appKey'),//appKey
+            'deviceId' => array_get($messageJsonArray, 'deviceId'),//deviceId
+        ];
+        $sql = createInsertSql('xb_topic_msg', $data);
+        \DB::insert($sql);
+        
+        
         dump(is_callable($this));
         $this();
         

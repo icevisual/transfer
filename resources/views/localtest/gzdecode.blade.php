@@ -34,6 +34,7 @@
 		       <a onclick="StrFormat('FBSDK')" class="btn  btn-primary">STR-FORMAT-FBSDK</a>
 			   <a onclick="StrFormat('base64decode')" class="btn  btn-primary">BASE-64-DECODE</a>
 		       <a onclick="StrFormat('stripslashes')" class="btn  btn-primary">STRIPSLASHES</a>
+		       <a onclick="StrFormat('table2Array')" class="btn  btn-primary">TABLE2ARRAY</a>
 		
 			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>
