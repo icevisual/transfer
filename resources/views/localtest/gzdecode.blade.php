@@ -35,6 +35,8 @@
 			   <a onclick="StrFormat('base64decode')" class="btn  btn-primary">BASE-64-DECODE</a>
 		       <a onclick="StrFormat('stripslashes')" class="btn  btn-primary">STRIPSLASHES</a>
 		       <a onclick="StrFormat('table2Array')" class="btn  btn-primary">TABLE2ARRAY</a>
+		       <a onclick="$('#result-field').val(CSSencode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-HORIZONTAL </a>
+		       <a onclick="$('#result-field').val(CSSdecode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-VERTICAL</a>
 		
 			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>
@@ -65,6 +67,39 @@
         	$('#result-field').val(d);
         },'text');
     }
+
+    function CSSencode(code) 
+    { 
+     code = code.replace(/\r\n/ig,''); 
+     code = code.replace(/(\s){2,}/ig,'$1'); 
+     code = code.replace(/\t/ig,''); 
+     code = code.replace(/\n\}/ig,'\}'); 
+     code = code.replace(/\n\{\s*/ig,'\{'); 
+     code = code.replace(/(\S)\s*\}/ig,'$1\}'); 
+     code = code.replace(/(\S)\s*\{/ig,'$1\{'); 
+     code = code.replace(/\{\s*(\S)/ig,'\{$1'); 
+     return code; 
+    } 
+    function CSSdecode(code) 
+    { 
+     code = code.replace(/(\s){2,}/ig,'$1'); 
+     code = code.replace(/(\S)\s*\{/ig,'$1 {'); 
+     code = code.replace(/\*\/(.[^\}\{]*)}/ig,'\*\/\n$1}'); 
+     code = code.replace(/\/\*/ig,'\n\/\*'); 
+     code = code.replace(/;\s*(\S)/ig,';\n\t$1'); 
+     code = code.replace(/\}\s*(\S)/ig,'\}\n$1'); 
+     code = code.replace(/\n\s*\}/ig,'\n\}'); 
+     code = code.replace(/\{\s*(\S)/ig,'\{\n\t$1'); 
+     code = code.replace(/(\S)\s*\*\//ig,'$1\*\/'); 
+     code = code.replace(/\*\/\s*([^\}\{]\S)/ig,'\*\/\n\t$1'); 
+     code = code.replace(/(\S)\}/ig,'$1\n\}'); 
+     code = code.replace(/(\n){2,}/ig,'\n'); 
+     code = code.replace(/:/ig,':'); 
+     code = code.replace(/  /ig,' '); 
+     return code; 
+    } 
+
+    
 	
     $(function(){
         

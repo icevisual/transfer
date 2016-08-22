@@ -326,24 +326,22 @@ if (! function_exists('qishu')) {
         $html = call_curl_reconnect($curl, [], false); //
         
         $html = iconv(detect_encoding($html), 'UTF-8', $html);
-        
-        
 //         $html = http_fsocket($curl,[],'GET'); //
-        
-        
-                                            // $html = file_get_contents($curl);
                                             // $html = iconv("gb2312", "utf-8//IGNORE",$html);
         $html = preg_replace('/target="_blank"/i', '', $html);
+        
         $html = preg_replace('/<script.*<\/script>/i', '', $html);
         // <a href="/32848.html" style="color:default" class="name">《传奇控卫》全集</a>
-        $html = preg_replace('/(<a href=")(\/\d*.html)("[^>]*>《)(.*)(》全集<\/a>)/i', '\\1http://dzs.qisuu.com/txt/\\4.txt\\3\\4\\5', $html);
         $html = preg_replace('/(<a href=")(\/\d*.html)("><img src="[:\-\d\w\/\.]*">《)(.*)(》全集<\/a>)/i', '\\1http://dzs.qisuu.com/txt/\\4.txt\\3\\4\\5', $html);
+        
+        $html = preg_replace('/(<a href=")(\/\d*.html)("[^>]*>《)(.*)(》全集<\/a>)/i', '\\1http://dzs.qisuu.com/txt/\\4.txt\\3\\4\\5', $html);
+        
+        $html = preg_replace('!http://dzs.qisuu.com/txt/([^(]*)\(.*\).txt!i', 'http://dzs.qisuu.com/txt/\\1.txt', $html);
         // <a class="downButton" href="http://dzs.qisuu.com/txt/都市全能系统.txt" title="《都市全能系统》全集txt下载">Txt格式下载</a>
         $html = preg_replace('/(<link href=")([\w\.\/]*)(".*\/>)/i', '\\1' . $url . '/' . '\\2\\3', $html);
         // edump($str);
         $html = preg_replace('/(<img src=")([\w\.\/]*)/i', '\\1' . $url . '/' . '\\2', $html);
         // <img src="/skin/blue/logo.png"
-        
         return $html;
     }
 }

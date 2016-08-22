@@ -272,6 +272,10 @@ class GeneralTestController extends BaseController
 
     public function test()
     {
+        exit;
+        $res = \App\Services\Sms\Yuntongxun\YuntongxunSms::sendSms('18767135775', 98838, ['22222', 15]);
+        edump($res);
+        exit;
         $prefix = '601382610100';
         $start = 1008932;
         $fp = fopen(public_path('card.txt'), 'w');
