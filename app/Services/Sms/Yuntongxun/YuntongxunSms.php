@@ -87,6 +87,46 @@ class YuntongxunSms
         return $sendResult;
     }
 
+    
+    public static function matchSmsMsg($subject,$date = ''){
+        $data = [
+            111912 => '您找回密码的验证码为：([\d]+)，如不是本人操作请忽略',
+            111917 => '您的还款日已到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            112170 => '同学您好，您的自动还款设置账户([\d]+)，扣款未成功，扣款金额([\d\.]+)，请及时还款，逾期将产生滞纳金!',
+    
+            111923 => '您的还款日将到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            111924 => '请在本月([\d]+)日前登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            111925 => '尊敬的用户！您购买的商品还款日已到，逾期会有滞纳金产生，请尽快还款哦！',
+    
+            112007 => '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分期APP进行还款。若有疑问，请致电([\d\-]+)。如已还款，请忽略。',
+            111927 => '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分官网或APP进行还款。若有疑问，请致电客服小妹：([\d\-]+)。如已还款，请忽略',
+            112008 => '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，若有疑问，请致电([\d\-]+)。',
+        ];
+        $ret = [
+            'msgId' => '',
+            'params' => []
+        ];
+        foreach ($data as $key =>  $msgReg){
+            if(preg_match('/^'.$msgReg.'$/iu', $subject,$matchs)){
+                $ret['msgId'] = $key ;
+                array_shift($matchs);
+                $ret['params'] = $matchs;
+                return $ret;
+            }
+        }
+        return false;
+    }
+    
+    
+    public static function sendSms($phones, $message){
+        $ret = self::matchSmsMsg(trim($message));
+        if($ret){
+            return self::sendYun($phones,$ret['msgId'],$ret['params']);
+        }
+        return ['Msg Not Match TEMPALTE'];
+    }
+    
+    
     /**
      * 发送短信
      *
@@ -98,11 +138,14 @@ class YuntongxunSms
      *            内容数据 格式为数组 例如：array('Marry','Alon')，如不需替换请填 null
      *            
      */
-    public static function sendSms($phones, $tempID = 1, $data = null)
+    public static function sendYun($phones, $tempID = 1, $data = null)
     {
         static $instance = null;
         if (! $instance) {
             $instance = new static();
+        }
+        if (is_array($phones)) {
+            $phones = implode(",", $phones);
         }
         return $instance->send($phones, $tempID, $data);
     }

@@ -187,6 +187,17 @@ class LocalTestController extends  BaseController
         }
     }
     
+    
+    public function table2ArrayData(){
+        $str = \Input::get('content');
+        preg_match_all('/`([\w]+)`[^\n]+COMMENT \'([^\n]+)\'/i', $str,$matchs);
+        foreach ($matchs[1] as $k => $v){
+            echo "'$v' => \$data['$v'],//{$matchs[2][$k]}\n";
+        }
+    }
+    
+    
+    
 	public function format(){
 	    $str = \Input::get('content');
 	    $type = \Input::get('type');

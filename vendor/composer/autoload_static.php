@@ -22,6 +22,7 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         'ec9dd17eb30ad6c2e399d738ab19eb02' => __DIR__ . '/../..' . '/app/Gather/Utils/loader.php',
         '50b2cf50abb8552141f00dbcf80e1d66' => __DIR__ . '/..' . '/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php',
+        '9d98252e877bad574e8d7e045a24f35c' => __DIR__ . '/..' . '/aliyun/sms/TopSdk.php',
     );
 
     public static $prefixLengthsPsr4 = array (

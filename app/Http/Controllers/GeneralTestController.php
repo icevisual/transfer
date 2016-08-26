@@ -270,8 +270,295 @@ class GeneralTestController extends BaseController
         dump(' --FUNC-- '.__FUNCTION__);
     }
 
+    
+    
+    public function dumpMatchs($_St,$data){
+        
+        echo '<table>';
+        foreach ($data as $k => $v){
+            echo '<tr>';
+            echo '<td>';
+            echo $k;
+            echo '</td>';
+            echo '<td>';
+            echo array_get($_St, 'time.'.$k,'[null]');
+            echo '</td>';
+            echo '<td>';
+            echo array_get($_St, 'date.'.$k,'[null]');
+            echo '</td>';
+            echo '<td style="width:70%">';
+            echo $data[$k];
+            echo '</td>';
+            
+            echo '</tr>';
+        }
+        
+        echo '</table>';
+    }
+    
+    
+    public function matchSmsMsg($subject,$date = ''){
+        static $_St = [
+            'time' => [],
+            'date' => [],
+        ];
+        
+        $data = [
+            '您注册的验证码为：([\d]+)，如不是本人操作请忽略。',
+            '您找回密码的验证码为：([\d]+)，如不是本人操作请忽略',
+            '您的还款日已到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            '同学您好，您的自动还款设置账户([\d]+)，扣款未成功，扣款金额([\d\.]+)，请及时还款，逾期将产生滞纳金!',
+            '您的还款日将到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            '请在本月([\d]+)日前登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            '尊敬的用户！您购买的商品还款日已到，逾期会有滞纳金产生，请尽快还款哦！',
+            '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分期APP进行还款。若有疑问，请致电([\d\-]+)。如已还款，请忽略。',
+            '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分官网或APP进行还款。若有疑问，请致电客服小妹：([\d\-]+)。如已还款，请忽略',
+            '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，若有疑问，请致电([\d\-]+)。',
+        
+            '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，交由律师处理，若有疑问，请致电([\d\-]+)。',
+            '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，情节严重者将通过法律手段处理此事。若有疑问，请致电([\d\-]+)。',
+            '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，情节严重者将采取法律手段。若有疑问，请致电([\d\-]+)。',
+            '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，情节严重者将采取法律手段处理此事。若有疑问，请致电([\d\-]+)。',
+            '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，情节严重者将采取法律手段处理欠款。若有疑问，请致电([\d\-]+)或([\d]+)。',
+        
+            '([^\x{ff0c}]+)，身份证：([\dX]+)，手机号([\d]+)，此人于([\d]+)年([\d]+)月([\d]+)日在仁仁分期分期购买产品，至今未还款，我公司将上报全国个人诚信档案系统，烦请转告，如果打扰敬请原谅！若有疑问请致电([\d\-]+)或([\d]+)',
+            '([^\x{ff0c}]+)，身份证：([\dX]+)，手机号([\d]+)，此人于([\d]+)年([\d]+)月([\d]+)日在仁仁分期借款，至今未还，我公司将上报全国个人诚信档案系统，烦请转告，如果打扰敬请原谅！若有疑问请致电([\d\-]+)或([\d]+)',
+            '([^\x{ff0c}]+)，身份证：([\dX]+)，手机号([\d]+)，你于([\d]+)年([\d]+)月([\d]+)日在仁仁分期分期购买产品，至今未还款，我公司将上报全国个人诚信档案系统，请尽快安排还款，若恶意拖欠我公司不排除将采取法律手段处理此事！若有疑问请致电([\d\-]+)或([\d]+)',
+            '([^\x{ff0c}]+)，身份证：([\dX]+)，手机号([\d]+)，此人于([\d]+)年([\d]+)月([\d]+)日在仁仁分期分期购买产品，至今未还款，我公司将上报全国个人诚信档案系统，情节严重者将采取法律手段处理此事，烦请转告，如果打扰敬请原谅！若有疑问请致电([\d\-]+)或([\d]+)',
+            '([^\x{ff0c}]+)，身份证：([\dX]+)，手机号([\d]+)，此人于([\d]+)年([\d]+)月([\d]+)日在仁仁分期分期借款，至今未还款，我公司将上报全国个人诚信档案系统，情节严重者将采取法律手段处理此事，烦请转告，如果打扰敬请原谅！若有疑问请致电([\d\-]+)或([\d]+)',
+        
+        ];
+        
+        if('[dump]' == $subject){
+            $this->dumpMatchs($_St, $data);
+            return $_St;
+        }
+        
+        foreach ($data as $key =>  $msgReg){
+            if(preg_match('/^'.$msgReg.'$/iu', $subject,$matchs)){
+                if(isset($_St['time'][$key])){
+                    $_St['time'][$key] ++;
+                    if($date > $_St['date'][$key])
+                    $_St['date'][$key] = $date;
+                }else{
+                    $_St['time'][$key] = 1;
+                    $_St['date'][$key] = $date;
+                }
+                return $matchs;
+            }
+        }
+        return false;
+    }
+    
+    public function anLog (){
+        $dirPath = public_path('logs').DIRECTORY_SEPARATOR;
+        $scandir = scandir($dirPath);
+        $ignorl = '银行代扣款失败，请跟进处理';
+        foreach ($scandir as $path){
+            if(is_file($dirPath.$path)){
+                $fileLineArray = file($dirPath.$path);
+                //                 dump('Process '.$dirPath.$path);
+                foreach ($fileLineArray as $line){
+                    $line = trim($line);
+        
+                    if(preg_match('/'.$ignorl.'/', $line)){
+                        continue;
+                    }
+        
+                    $i = 0 ;
+                    $j = strlen($line) - 1;
+                    while ($i <= $j && '{' != $line{$i++});
+                    if($i < $j){
+                        while ('}' != $line{$j--} && $j >= $i );
+                        if($i < $j){
+                            $json = substr($line,$i - 1, $j - $i + 3);
+                            $data = json_decode($json,1);
+                            if(isset($data['message']) && $data['message']){
+                                if(!$this->matchSmsMsg(trim($data['message']) ,substr($line, 0,21))){
+//                                     dump($line);
+                                }
+                            }
+                        }
+                    }
+        
+                }
+            }
+        }
+        
+        $res = $this->matchSmsMsg('[dump]');
+        ksort($res['time']);
+        ksort($res['date']);
+        dump($res);
+        
+        exit;
+        
+    }
+    
+    public function generatePunctuationRegex()
+    {
+        $specialChars = '，。！？';
+        $tsr = iconv('UTF-8', 'UCS-2', $specialChars);
+        $arrstr = str_split($tsr, 2);
+        $res = [];
+        foreach ($arrstr as $value) {
+            $res[] = bin2hex($value{0}) . bin2hex($value{1});
+        }
+        return $regex = '/[\d\x{' . implode('}\x{', $res) . '}]/u';
+    }
+    
+    public function matchSmsMsg1($subject,$date = ''){
+        $data = [
+            111912 => '您找回密码的验证码为：([\d]+)，如不是本人操作请忽略',
+            111917 => '您的还款日已到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            112170 => '同学您好，您的自动还款设置账户([\d]+)，扣款未成功，扣款金额([\d\.]+)，请及时还款，逾期将产生滞纳金!',
+            
+            111923 => '您的还款日将到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            111924 => '请在本月([\d]+)日前登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：([\d\-]+)',
+            111925 => '尊敬的用户！您购买的商品还款日已到，逾期会有滞纳金产生，请尽快还款哦！',
+            
+            112007 => '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分期APP进行还款。若有疑问，请致电([\d\-]+)。如已还款，请忽略。',
+            111927 => '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分官网或APP进行还款。若有疑问，请致电客服小妹：([\d\-]+)。如已还款，请忽略',
+            112008 => '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，若有疑问，请致电([\d\-]+)。',
+        ];
+        $ret = [
+            'msgId' => '',
+            'params' => []
+        ];
+        foreach ($data as $key =>  $msgReg){
+            if(preg_match('/^'.$msgReg.'$/iu', $subject,$matchs)){
+                $ret['msgId'] = $key ;
+                array_shift($matchs);
+                $ret['params'] = $matchs;
+                return $ret;
+            }
+        }
+        return false;
+    }
+    
+    public function ang(){
+        $ignorl = '银行代扣款失败，请跟进处理';
+         
+        $dirPath = public_path('logs').DIRECTORY_SEPARATOR;
+        $scandir = scandir($dirPath);
+        $retDmo = [];
+        foreach ($scandir as $path){
+            if(is_file($dirPath.$path)){
+                $fileLineArray = file($dirPath.$path);
+                //                 dump('Process '.$dirPath.$path);
+                foreach ($fileLineArray as $line){
+                    $line = trim($line);
+        
+                    if(preg_match('/'.$ignorl.'/', $line)){
+                        continue;
+                    }
+        
+                    $i = 0 ;
+                    $j = strlen($line) - 1;
+                    while ($i <= $j && '{' != $line{$i++});
+                    if($i < $j){
+                        while ('}' != $line{$j--} && $j >= $i );
+                        if($i < $j){
+                            $json = substr($line,$i - 1, $j - $i + 3);
+                            $data = json_decode($json,1);
+                            if(isset($data['message']) && $data['message']){
+                                $ret = $this->matchSmsMsg1(trim($data['message']) ,substr($line, 0,21));
+                                if($ret){
+                                    if(!isset($retDmo[$ret['msgId']])){
+                                        $retDmo[$ret['msgId']] = $ret;
+                                    }
+                                }
+                            }
+                        }
+                    }
+        
+                }
+            }
+        }
+        ksort($retDmo);
+        dump($retDmo);;
+        return $retDmo;
+    }
+    
+
+    
     public function test()
     {
+        
+        $msg = '尊敬的客户，您仁仁分期的订单已逾期，为避免留下不良信用记录与相关服务受限，请及时登陆仁仁分期APP进行还款。若有疑问，请致电4007800087。如已还款，请忽略。';
+        $msg = '尊敬的客户，您仁仁分期的订单已逾期多日，虽经我司多次提醒仍未入账。请重视您的个人信用记录，尽快安排缴款。否则我司将根据合同相关规定终止您的赊销分期权利，届时需提前全额缴清，若有疑问，请致电4007800087。';
+        
+        $ret = $this->matchSmsMsg1($msg);
+        
+        edump($ret);
+        
+//         $res = \App\Services\Sms\Yuntongxun\YuntongxunSms::sendYun('18767135775', 111924, [12, 15]);
+//         edump($res);
+//         $this->ang();
+        exit;
+        $this->anLog();
+        $message = '您的还款日已到，请登录网站或打开仁仁分期APP还款，逾期将产生滞纳金。客服小妹：400-780-0087';
+        $res = \App\Services\Sms\Yuntongxun\YuntongxunSms::sendSms('18767135775', $message);
+        
+        edump($res);
+        
+//         $this->anLog();
+        $retDmo = $this->ang();
+        $ret = [];
+        foreach ($retDmo as $v){
+            $ret [] = \App\Services\Sms\Yuntongxun\YuntongxunSms::sendSms('18767135775', $v['msgId'], $v['params']);
+        }
+        edump($ret);
+//         \App\Services\Sms\Yuntongxun\YuntongxunSms::sendSms('18767135775', 98838, ['22222', 15]);
+        exit;
+        $client = new \TopClient;
+        $client->appkey = '23336039';
+        $client->secretKey = 'b7c3d3ec7ad79a0252ba59df635e83ed';
+        $p0=['phone'=>'18767135775', 'code'=>'123456'];
+        $p1=['product'=>'大风', 'tpl'=>'SMS_2520565'];
+        $p = $p0 + $p1;
+        $req = new \AlibabaAliqinFcSmsNumSendRequest;
+        $req->setSmsType('normal');
+        $req->setSmsTemplateCode($p['tpl']);
+        $req->setSmsFreeSignName('注册验证');   // 【注册验证】
+        $req->setSmsParam("{\"code\":\"{$p['code']}\",\"product\":\"{$p['product']}\"}");
+        $req->setRecNum($p['phone']);
+        
+        $response = $client->execute($req);
+        
+        dump($response);
+        // Error
+        if (isset($response->code)) {
+            $msg = 'unknown error';
+            $code = 6003;
+        
+            if (isset($response->sub_code)) {
+                if ($response->sub_code == 'isv.MOBILE_NUMBER_ILLEGAL') {
+                    $msg = '手机号码格式错误';
+                    $code = 6000;
+                } else if ($response->sub_code == 'isv.BUSINESS_LIMIT_CONTROL') {
+                    /**
+                     *
+                     * 短信验证码，使用同一个签名，对同一个手机号码发送短信验证码，
+                     * 允许每分钟1条，累计每小时7条。
+                     *
+                     * 短信通知，使用同一签名、同一模板，对同一手机号发送短信通知，
+                     * 允许每天50条（自然日）。
+                     *
+                     */
+                    $msg = '短信发送过于频繁';
+                    $code = 6002;
+                }
+            }
+        
+            throw new \Exception($msg, $code);
+        }
+        
+//         'sms' => [
+//             'app_key' => '23336039',
+//             'app_secret' => 'b7c3d3ec7ad79a0252ba59df635e83ed',
+//             'expire' => 3000,
+//         ],
+        
         exit;
         $res = \App\Services\Sms\Yuntongxun\YuntongxunSms::sendSms('18767135775', 98838, ['22222', 15]);
         edump($res);

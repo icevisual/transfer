@@ -35,6 +35,7 @@
 			   <a onclick="StrFormat('base64decode')" class="btn  btn-primary">BASE-64-DECODE</a>
 		       <a onclick="StrFormat('stripslashes')" class="btn  btn-primary">STRIPSLASHES</a>
 		       <a onclick="StrFormat('table2Array')" class="btn  btn-primary">TABLE2ARRAY</a>
+		       <a onclick="StrFormat('table2ArrayData')" class="btn  btn-primary">TABLE2ARRAY</a>
 		       <a onclick="$('#result-field').val(CSSencode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-HORIZONTAL </a>
 		       <a onclick="$('#result-field').val(CSSdecode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-VERTICAL</a>
 		

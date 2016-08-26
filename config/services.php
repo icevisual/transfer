@@ -41,7 +41,7 @@ return [
     'yuntongxun' => array(
         '_ACCOUNT_SID_'            => '8a48b5514f73ea32014f8195a47b14b6',    //主帐号
         '_ACCOUNT_TOKEN_'          => 'a0bc7537cba642a49e4c204fc6bebd6d',    //主帐号Token
-        '_APP_ID_'                 => '8aaf070855b647ab0155bddb8c8609f5',    //应用Id
+        '_APP_ID_'                 => '8aaf070856bbb3c50156c0c2dd970567',    //应用Id
         '_SERVER_IP_'              => 'app.cloopen.com',             //请求地址，格式如下，不需要写https://
         '_SERVER_PORT_'            => '8883',                               //请求端口
         '_SOFT_VERSION_'           => '2013-12-26',                         //REST版本号

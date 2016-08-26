@@ -44,7 +44,8 @@
         },
         "files": [
             "app/Gather/Utils/loader.php",
-            "vendor/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php"
+            "vendor/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php",
+            "vendor/aliyun/sms/TopSdk.php"
         ]
     },
     "autoload-dev": {
