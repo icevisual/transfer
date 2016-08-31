@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Common;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Common\Bill;
 
-class CommonController extends BaseController{
+class CommonController extends Controller{
     
         
     /**

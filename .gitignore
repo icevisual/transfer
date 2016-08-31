@@ -9,3 +9,4 @@ Homestead.json
 .project
 .settings
 storage/sqlLog/
+public/log*

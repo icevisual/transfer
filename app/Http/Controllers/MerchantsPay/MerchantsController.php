@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\MerchantsPay;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Services\Merchants\FBSdkService;
 use function Symfony\Component\Debug\header;
 
-class MerchantsController extends BaseController{
+class MerchantsController extends Controller{
     
     
     protected $FBSdk = null;

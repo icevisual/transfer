@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-class MerchantsPayTestController extends BaseController
+class MerchantsPayTestController extends Controller
 {
 
     protected $FBSdk;

@@ -28,6 +28,23 @@ class IotCommand extends Command
      */
     protected $client = null;
     
+    
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        $action = $this->argument('action');
+        $funcName = strtolower($action).'Action';
+        if(method_exists($this, $funcName)){
+            call_user_func([$this,$funcName]);
+        }else{
+            $this->error(PHP_EOL. 'No Action Found');
+        }
+    }
+    
     public function initClient(){
         if(null == $this->client){
             $accessKeyId = "nL5Y7fL9P7RXUZ5J";
@@ -79,19 +96,4 @@ class IotCommand extends Command
         $this->comment(__FUNCTION__);
     }
     
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
-        $action = $this->argument('action');
-        $funcName = strtolower($action).'Action';
-        if(method_exists($this, $funcName)){
-            call_user_func([$this,$funcName]);
-        }else{
-            $this->error(PHP_EOL. 'No Action Found');
-        }
-    }
 }

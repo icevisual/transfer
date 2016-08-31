@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Transfer;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Common\Transfer;
 
-class TransferController extends BaseController{
+class TransferController extends Controller{
     
     
     public function put(){

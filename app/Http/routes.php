@@ -46,8 +46,6 @@ Route::match(['get','post'],'kindEditor/file_manager_json','Common\KindEditor@fi
     Route::get('/{id}.html', function ($id) {
         return qishu('/' . $id . '.html');
     });
-    
-    
 });
 
 /**

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Route;
 use View;
 
-class LocalTestController extends  BaseController
+class LocalTestController extends  Controller
 {
 	/**
 	 * 分割action
