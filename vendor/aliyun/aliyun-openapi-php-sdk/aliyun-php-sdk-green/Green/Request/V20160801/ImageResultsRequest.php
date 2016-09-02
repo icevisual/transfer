@@ -17,25 +17,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-namespace Green\Request\V20160627;
+namespace Green\Request\V20160801;
 
-class TextKeywordFilterRequest extends \RpcAcsRequest
+class ImageResultsRequest extends \RpcAcsRequest
 {
 	function  __construct()
 	{
-		parent::__construct("Green", "2016-06-27", "TextKeywordFilter");
-		$this->setMethod("POST");
+		parent::__construct("Green", "2016-08-01", "ImageResults");
 	}
 
-	private  $text;
+	private  $taskId;
 
-	public function getText() {
-		return $this->text;
+	public function getTaskId() {
+		return $this->taskId;
 	}
 
-	public function setText($text) {
-		$this->text = $text;
-		$this->queryParameters["Text"]=$text;
+	public function setTaskId($taskId) {
+		$this->taskId = $taskId;
+		$this->queryParameters["TaskId"]=$taskId;
 	}
 	
 }

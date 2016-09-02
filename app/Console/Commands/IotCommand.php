@@ -24,9 +24,12 @@ class IotCommand extends Command
     
     /**
      * 
-     * @var \DefaultAcsClien
+     * @var \DefaultAcsClient
      */
     protected $client = null;
+    
+    
+    protected $productID = '1000067525';
     
     
     /**
@@ -47,8 +50,8 @@ class IotCommand extends Command
     
     public function initClient(){
         if(null == $this->client){
-            $accessKeyId = "nL5Y7fL9P7RXUZ5J";
-            $accessSecret = "saBQK7zYCkWXBi7vV7YCI8Fl7kc5i2";
+            $accessKeyId = "Pv76EaJOq60VzLJc";
+            $accessSecret = "758pf5jAOt6Mb1uLlXI0mmrwyxfzmB";
             $iClientProfile = \DefaultProfile::getProfile("cn-hangzhou", $accessKeyId, $accessSecret);
             $this->client = new \DefaultAcsClient($iClientProfile);
         }
@@ -59,22 +62,37 @@ class IotCommand extends Command
         $this->initClient();
         
         $request = new Iot\SubRequest();
-        $request->setProductKey(23344127);
-        $request->setSubCallback("http://api.xb.guozhongbao.com/mock/consumer");//当topic有消息时候，接受消息的地址，参考服务器回调
-        $request->setTopicList("/23344127/#");//订阅的topic列表
+        $request->setProductKey($this->productID);
+        $request->setSubCallback("http://test.open.qiweiwangguo.com/iot/consumer");//当topic有消息时候，接受消息的地址，参考服务器回调
+        $request->setTopicList("/{$this->productID}/#");//订阅的topic列表
         $response = $this->client->getAcsResponse($request);
         print_r("\r\n");
         print_r($response);
     }
     
+
+    public function registAction(){
+        $this->initClient();
+    
+        $request = new Iot\RegistDeviceRequest();
+    
+        $request->setProductKey($this->productID);
+        $request->setDeviceName('device0002');// Hello world base64 String.
+        $response = $this->client->getAcsResponse($request);
+    
+        print_r("\r\n");
+        print_r($response);
+    }
     
     public function pubAction(){
         $this->initClient();
         
+        $msg = 'When there is no desire - Laozi';
         $request = new Iot\PubRequest();
-        $request->setProductKey(23344127);
-        $request->setMessageContent("aGVsbG93b3JsZA==");// Hello world base64 String.
-        $request->setTopicFullName("/23344127/home/admin/adfadsfa/dsafsfa");//消息发送给哪个topic中.
+        
+        $request->setProductKey($this->productID);
+        $request->setMessageContent(base64_encode($msg));// Hello world base64 String.
+        $request->setTopicFullName("/{$this->productID}/a");//消息发送给哪个topic中.
         $response = $this->client->getAcsResponse($request);
         
         print_r("\r\n");

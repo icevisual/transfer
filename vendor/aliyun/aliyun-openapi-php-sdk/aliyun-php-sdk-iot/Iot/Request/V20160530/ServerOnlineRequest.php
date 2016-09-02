@@ -17,27 +17,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+namespace Iot\Request\V20160530;
 
-include_once '../aliyun-php-sdk-core/Config.php';
-use \Push\Request\V20150827 as Push;
+class ServerOnlineRequest extends \RpcAcsRequest
+{
+	function  __construct()
+	{
+		parent::__construct("Iot", "2016-05-30", "ServerOnline");
+	}
 
-// 设置你的AccessKeyId/AccessSecret/AppKey
-$accessKeyId = "";
-$accessSecret = "";
-$appKey = 123456;
+	private  $productKey;
 
-$iClientProfile = DefaultProfile::getProfile("cn-hangzhou", $accessKeyId, $accessSecret);
-$client = new DefaultAcsClient($iClientProfile);
+	public function getProductKey() {
+		return $this->productKey;
+	}
 
-// 示例: 调用 PushNoticeToAndroidRequest API
-$request = new Push\PushNoticeToAndroidRequest();
-$request->setAppKey($appKey);
-$request->setTarget("all");
-$request->setTargetValue("all");
-$request->setTitle("Hello OpenAPI!");
-$request->setSummary("PushMessageToAndroid from OpenAPI by PHP SDK!");
-
-
-$response = $client->getAcsResponse($request);
-print_r("\r\n");
-print_r($response);
+	public function setProductKey($productKey) {
+		$this->productKey = $productKey;
+		$this->queryParameters["ProductKey"]=$productKey;
+	}
+	
+}

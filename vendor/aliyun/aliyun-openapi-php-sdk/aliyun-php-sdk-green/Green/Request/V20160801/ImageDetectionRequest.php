@@ -17,13 +17,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-namespace Green\Request\V20160627;
+namespace Green\Request\V20160801;
 
 class ImageDetectionRequest extends \RpcAcsRequest
 {
 	function  __construct()
 	{
-		parent::__construct("Green", "2016-06-27", "ImageDetection");
+		parent::__construct("Green", "2016-08-01", "ImageDetection");
 		$this->setMethod("POST");
 	}
 

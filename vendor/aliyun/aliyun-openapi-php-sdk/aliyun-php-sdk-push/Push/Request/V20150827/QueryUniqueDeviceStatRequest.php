@@ -17,24 +17,46 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-namespace Green\Request\V20160621;
+namespace Push\Request\V20150827;
 
-class ImageResultRequest extends \RpcAcsRequest
+class QueryUniqueDeviceStatRequest extends \RpcAcsRequest
 {
 	function  __construct()
 	{
-		parent::__construct("Green", "2016-06-21", "ImageResult");
+		parent::__construct("Push", "2015-08-27", "QueryUniqueDeviceStat");
 	}
 
-	private  $taskId;
+	private  $appKey;
 
-	public function getTaskId() {
-		return $this->taskId;
+	private  $startTime;
+
+	private  $endTime;
+
+	public function getAppKey() {
+		return $this->appKey;
 	}
 
-	public function setTaskId($taskId) {
-		$this->taskId = $taskId;
-		$this->queryParameters["TaskId"]=$taskId;
+	public function setAppKey($appKey) {
+		$this->appKey = $appKey;
+		$this->queryParameters["AppKey"]=$appKey;
+	}
+
+	public function getStartTime() {
+		return $this->startTime;
+	}
+
+	public function setStartTime($startTime) {
+		$this->startTime = $startTime;
+		$this->queryParameters["StartTime"]=$startTime;
+	}
+
+	public function getEndTime() {
+		return $this->endTime;
+	}
+
+	public function setEndTime($endTime) {
+		$this->endTime = $endTime;
+		$this->queryParameters["EndTime"]=$endTime;
 	}
 	
 }

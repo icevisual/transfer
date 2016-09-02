@@ -17,24 +17,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-namespace Green\Request\V20160616;
+namespace Push\Request\V20150827;
 
-class ImageResultRequest extends \RpcAcsRequest
+class QueryPushStatRequest extends \RpcAcsRequest
 {
 	function  __construct()
 	{
-		parent::__construct("Green", "2016-06-16", "ImageResult");
+		parent::__construct("Push", "2015-08-27", "QueryPushStat");
 	}
 
-	private  $taskId;
+	private  $appKey;
 
-	public function getTaskId() {
-		return $this->taskId;
+	private  $messageId;
+
+	public function getAppKey() {
+		return $this->appKey;
 	}
 
-	public function setTaskId($taskId) {
-		$this->taskId = $taskId;
-		$this->queryParameters["TaskId"]=$taskId;
+	public function setAppKey($appKey) {
+		$this->appKey = $appKey;
+		$this->queryParameters["AppKey"]=$appKey;
+	}
+
+	public function getMessageId() {
+		return $this->messageId;
+	}
+
+	public function setMessageId($messageId) {
+		$this->messageId = $messageId;
+		$this->queryParameters["MessageId"]=$messageId;
 	}
 	
 }

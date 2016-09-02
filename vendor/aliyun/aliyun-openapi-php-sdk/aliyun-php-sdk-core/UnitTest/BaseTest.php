@@ -23,9 +23,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
 	function setUp()
 	{
 		$path = substr(dirname(__FILE__), 0,strripos(dirname(__FILE__),DIRECTORY_SEPARATOR)).DIRECTORY_SEPARATOR;
-		include_once $path.'Config.php';
-		include_once 'Ecs/Rquest/DescribeRegionsRequest.php';
-		include_once 'BatchCompute/ListImagesRequest.php';
+		include_once $pathaliyun-openapi-php-sdk 'Ecs/Rquest/DescribeRegionaliyun-openapi-php-sdk 'BatchCompute/ListImagesRequest.php';
 
 		$iClientProfile = DefaultProfile::getProfile("cn-hangzhou", "5slyhuy4sv30bmppvgew0rps", "NGYL1I7hXC6SgSqkcE5DJdPgJM8=");
 		$this->client = new DefaultAcsClient($iClientProfile);

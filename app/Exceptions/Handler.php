@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        \App\Http\Controllers\BaseController::setHeader();
+        \App\Http\Controllers\Common\CommonController::setHeader();
     	/**
     	 * Handle Service Exceptions
     	 */

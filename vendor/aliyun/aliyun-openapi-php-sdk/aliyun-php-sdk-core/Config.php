@@ -15,12 +15,13 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under aliyun-openapi-php-sdk 'Autoloader/aliyun-openapi-php-sdk 'Regions/EndpointConfig.php';
  */
+//config sdk auto load path.
+
 include_once 'Autoloader/Autoloader.php';
 include_once 'Regions/EndpointConfig.php';
 
-//config sdk auto load path.
 Autoloader::addAutoloadPath("aliyun-php-sdk-ecs");
 Autoloader::addAutoloadPath("aliyun-php-sdk-batchcompute");
 Autoloader::addAutoloadPath("aliyun-php-sdk-sts");
