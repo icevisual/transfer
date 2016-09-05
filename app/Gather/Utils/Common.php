@@ -1,5 +1,13 @@
 <?php
 
+if(!function_exists('now')){
+    
+    function now($format = 'Y-m-d H:i:s'){
+        return date($format,time());
+    }
+    
+}
+
 
 if (! function_exists('excelDate2Date')) {
 
