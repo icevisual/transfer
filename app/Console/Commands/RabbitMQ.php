@@ -28,7 +28,6 @@ class RabbitMQ extends Command
      */
     protected $channel = null;
     
-    
     /**
      *
      * @var \PhpAmqpLib\Connection\AMQPStreamConnection
@@ -75,18 +74,202 @@ class RabbitMQ extends Command
     }
     
     
+    public function less6_pAction(){
+        $fibonacci_rpc = new FibonacciRpcClient();
+        
+        $msg = $this->argument('msg');
+        $msg = intval($msg);
+        $msg || $msg = 30;
+        $response = $fibonacci_rpc->call($msg);
+        echo " [.] Got ", $response, "\n";
+    }
+    
+    
+    public function less6_rAction()
+    {
+        $this->template(function(\PhpAmqpLib\Connection\AMQPStreamConnection $connection,\PhpAmqpLib\Channel\AMQPChannel  $channel){
+        
+            $channel->queue_declare('rpc_queue', false, false, false, false);
+    
+            function fib($n) {
+                static $cache = [0,1,1,2,3];
+                if(isset($cache[$n])){
+                    return $cache[$n];
+                }
+                $cache[$n] = fib($n-1) + fib($n-2);
+                return fib($n-1) + fib($n-2);
+                
+                if ($n == 0)
+                    return 0;
+                if ($n == 1)
+                    return 1;
+                return fib($n-1) + fib($n-2);
+            }
+            
+            echo '['.now().']'." [x] Awaiting RPC requests\n";
+            $callback = function($req) {
+                $n = intval($req->body);
+                echo '['.now().']'." [.] fib(", $n, ")\n";
+            
+                $msg = new AMQPMessage(
+                    (string) fib($n),
+                    array('correlation_id' => $req->get('correlation_id'))
+                    );
+                echo '['.now().']'." [.] Done.\n";
+                $req->delivery_info['channel']->basic_publish(
+                    $msg, '', $req->get('reply_to'));
+                $req->delivery_info['channel']->basic_ack(
+                    $req->delivery_info['delivery_tag']);
+            };
+            
+            $channel->basic_qos(null, 1, null);
+            $channel->basic_consume('rpc_queue', '', false, false, false, false, $callback);
+            
+            while(count($channel->callbacks)) {
+                $channel->wait();
+            }
+        });
+    }
     
     
     
     
     
     
+    public function less5_pAction(){
+        $this->template(function(\PhpAmqpLib\Connection\AMQPStreamConnection $connection,\PhpAmqpLib\Channel\AMQPChannel  $channel){
+            $argv = $this->argument('msg');
+    
+            $data = $argv;
+            if(empty($data)) $data = "info Hello World!";
+    
+            $segments = explode(' ',$data);
+    
+            if(count($segments) > 1 ){
+                $routing_key = $segments[0];
+                $data = explode(' ',$data,2)[1];
+            }else{
+                $routing_key = 'anonymous.info';
+            }
+    
+            $channel->exchange_declare('topic_logs', 'topic', false, false, false);
+    
+            $msg = new AMQPMessage($data);
+    
+            $channel->basic_publish($msg, 'topic_logs',$routing_key);
+    
+            echo " [x] Sent ",$routing_key,':', $data, "\n";
+    
+        });
+    }
     
     
+    public function less5_rAction()
+    {
+        $this->template(function(\PhpAmqpLib\Connection\AMQPStreamConnection $connection,\PhpAmqpLib\Channel\AMQPChannel  $channel){
+    
+            $channel->exchange_declare('topic_logs', 'topic', false, false, false);
+    
+            list($queue_name, ,) = $channel->queue_declare("", false, false, true, false);
+    
+            $argv = $this->argument('msg');
+    
+            $severities = explode(' ', $argv);
+            if(empty($severities )) {
+                file_put_contents('php://stderr', "Usage: [info] [warning] [error]\n");
+                exit(1);
+            }
+    
+            foreach($severities as $severity) {
+                $channel->queue_bind($queue_name, 'topic_logs', $severity);
+            }
+    
+            echo '['.now().']'.' [*] Waiting for logs. To exit press CTRL+C', "\n";
+    
+            $callback = function($msg){
+                echo '['.now().']'.' [x] ',$msg->delivery_info['routing_key'], ':', $msg->body, "\n";
+            };
+    
+            $channel->basic_consume($queue_name, '', false, true, false, false, $callback);
+    
+            while(count($channel->callbacks)) {
+                $channel->wait();
+            }
+        });
+    }
     
     
+
+    public function less4_pAction(){
+        $this->template(function(\PhpAmqpLib\Connection\AMQPStreamConnection $connection,\PhpAmqpLib\Channel\AMQPChannel  $channel){
+            $argv = $this->argument('msg');
+    
+            $data = $argv;
+            if(empty($data)) $data = "info Hello World!";
+            
+            $severityArray = [
+                'error','info','warning'
+            ];
+            $severityArray = array_flip($severityArray);
+            $segments = explode(' ',$data);
+            
+            if(count($segments) > 1 && isset($severityArray[$segments[0]]) ){
+                $severity = $segments[0];
+                $data = explode(' ',$data,2)[1];
+            }else{
+                $severity = 'info';
+            }
+    
+            $channel->exchange_declare('direct_logs', 'direct', false, false, false);
+            
+            $msg = new AMQPMessage($data);
+    
+            $channel->basic_publish($msg, 'direct_logs',$severity);
+    
+            echo " [x] Sent ",$severity,':', $data, "\n";
+    
+        });
+    }
     
     
+    public function less4_rAction()
+    {
+        $this->template(function(\PhpAmqpLib\Connection\AMQPStreamConnection $connection,\PhpAmqpLib\Channel\AMQPChannel  $channel){
+    
+            $channel->exchange_declare('direct_logs', 'direct', false, false, false);
+            
+            list($queue_name, ,) = $channel->queue_declare("", false, false, true, false);
+    
+            $argv = $this->argument('msg');
+            
+            $severityArray = [
+                'error','info','warning'
+            ];
+            $severityArray = array_flip($severityArray);
+            
+            $severities = explode(' ', $argv);
+            if(empty($severities ) || !isset($severityArray[$severities[0]]) ) {
+                file_put_contents('php://stderr', "Usage: [info] [warning] [error]\n");
+                exit(1);
+            }
+            
+            foreach($severities as $severity) {
+                $channel->queue_bind($queue_name, 'direct_logs', $severity);
+            }
+            
+            echo '['.now().']'.' [*] Waiting for logs. To exit press CTRL+C', "\n";
+            
+            $callback = function($msg){
+                echo '['.now().']'.' [x] ',$msg->delivery_info['routing_key'], ':', $msg->body, "\n";
+            };
+    
+            $channel->basic_consume($queue_name, '', false, true, false, false, $callback);
+
+            while(count($channel->callbacks)) {
+                $channel->wait();
+            }
+        });
+    }
     
     public function less3_pAction(){
         $this->template(function(\PhpAmqpLib\Connection\AMQPStreamConnection $connection,\PhpAmqpLib\Channel\AMQPChannel  $channel){
@@ -198,17 +381,16 @@ class RabbitMQ extends Command
         $this->connection->close();
     }
     
-    
-    
-
     public function less1_pAction()
     {
         $this->init();
         
-        $this->channel->queue_declare('hello', false, false, false, false);
+        $queue_name = 'hello';
+        
+        $this->channel->queue_declare($queue_name, false, false, false, false);
         
         $msg = new AMQPMessage('Hello World!');
-        $this->channel->basic_publish($msg, '', 'hello');
+        $this->channel->basic_publish($msg, '', $queue_name);
         
         echo " [x] Sent 'Hello World!'\n";
         
@@ -243,3 +425,47 @@ class RabbitMQ extends Command
     
     
 }
+
+class FibonacciRpcClient {
+    private $connection;
+    private $channel;
+    private $callback_queue;
+    private $response;
+    private $corr_id;
+
+    public function __construct() {
+        $this->connection = new AMQPStreamConnection(
+            '192.168.5.46', 5672, 'guest', 'guest');
+        $this->channel = $this->connection->channel();
+        list($this->callback_queue, ,) = $this->channel->queue_declare(
+            "", false, false, true, false);
+        $this->channel->basic_consume(
+            $this->callback_queue, '', false, false, false, false,
+            array($this, 'on_response'));
+    }
+    public function on_response($rep) {
+        if($rep->get('correlation_id') == $this->corr_id) {
+            $this->response = $rep->body;
+        }
+    }
+
+    public function call($n) {
+        $this->response = null;
+        $this->corr_id = uniqid();
+
+        $msg = new AMQPMessage(
+            (string) $n,
+            array('correlation_id' => $this->corr_id,
+                'reply_to' => $this->callback_queue)
+        );
+        $this->channel->basic_publish($msg, '', 'rpc_queue');
+        while(!$this->response) {
+            echo '['.now().']'.' [*]',"\n";
+            $this->channel->wait();
+            echo '['.now().']'.' [*]',"\n";
+        }
+        return intval($this->response);
+    }
+};
+
+
