@@ -92,12 +92,12 @@ class RabbitMQ extends Command
             $channel->queue_declare('rpc_queue', false, false, false, false);
     
             function fib($n) {
-                static $cache = [0,1,1,2,3];
-                if(isset($cache[$n])){
-                    return $cache[$n];
-                }
-                $cache[$n] = fib($n-1) + fib($n-2);
-                return fib($n-1) + fib($n-2);
+//                 static $cache = [0,1,1,2,3];
+//                 if(isset($cache[$n])){
+//                     return $cache[$n];
+//                 }
+//                 $cache[$n] = fib($n-1) + fib($n-2);
+//                 return fib($n-1) + fib($n-2);
                 
                 if ($n == 0)
                     return 0;
@@ -439,6 +439,7 @@ class FibonacciRpcClient {
         $this->channel = $this->connection->channel();
         list($this->callback_queue, ,) = $this->channel->queue_declare(
             "", false, false, true, false);
+        
         $this->channel->basic_consume(
             $this->callback_queue, '', false, false, false, false,
             array($this, 'on_response'));
@@ -446,6 +447,8 @@ class FibonacciRpcClient {
     public function on_response($rep) {
         if($rep->get('correlation_id') == $this->corr_id) {
             $this->response = $rep->body;
+        }else{
+            echo '['.now().']'.' [*] correlation_id not match',$rep->body,"\n";
         }
     }
 
@@ -460,9 +463,7 @@ class FibonacciRpcClient {
         );
         $this->channel->basic_publish($msg, '', 'rpc_queue');
         while(!$this->response) {
-            echo '['.now().']'.' [*]',"\n";
             $this->channel->wait();
-            echo '['.now().']'.' [*]',"\n";
         }
         return intval($this->response);
     }

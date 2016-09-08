@@ -527,9 +527,7 @@ class GeneralTestController extends BaseController
         $req->setSmsFreeSignName('注册验证');   // 【注册验证】
         $req->setSmsParam("{\"code\":\"{$p['code']}\",\"product\":\"{$p['product']}\"}");
         $req->setRecNum($p['phone']);
-        
         $response = $client->execute($req);
-        
         dump($response);
         // Error
         if (isset($response->code)) {
