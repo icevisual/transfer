@@ -41,8 +41,9 @@ CREATE TABLE `x_bill` (
             ";
     }
 
-    public static function run(){
-        $data = [
+    public static function run($data = [],$nrl = '<br/>'){
+    	
+    	$data || $data = [
             [
                 'name' => '金燕林',
                 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
@@ -111,7 +112,7 @@ CREATE TABLE `x_bill` (
         foreach ($data as $v) {
             Bill::addRecord($v['name'], $v['type'], $v['amount'], $v['desc']);
         }
-        Bill::settlement();
+        return Bill::settlement($nrl);
     }
     
     
@@ -119,7 +120,7 @@ CREATE TABLE `x_bill` (
     /**
      * 结算
      */
-    public static function settlement(){
+    public static function settlement($nrl = '<br/>'){
         
         $prefix = \DB::getTablePrefix();
         $handle = self::select([
@@ -162,7 +163,6 @@ CREATE TABLE `x_bill` (
             }
         }
         $num = count($bill);
-        $nrl = '<br/>';
         $shouldPayCount = count($shouldPayDetail);
         foreach ($shouldPayDetail as $k => $shp){
             if($k == 0){
@@ -175,12 +175,13 @@ CREATE TABLE `x_bill` (
         }
         $shouldPayDiv = $allShouldPay / $num;
         echo ' = '.$shouldPayDiv.' '.$nrl.$nrl;
+        $shouldPayAll = 0;
         foreach ($bill as $name =>  $v){
             echo "$name $nrl";
             
             if(isset($singlePayDetail[$name])){
                 foreach ($singlePayDetail[$name] as $k => $d){
-                    echo "+ {$d['amount']} ({$d['desc']}) $nrl";
+                    echo " + {$d['amount']} ({$d['desc']}) $nrl";
                 }
             }
             echo " + $shouldPayDiv (平摊) ";
@@ -189,13 +190,15 @@ CREATE TABLE `x_bill` (
             if(isset($payedDetail[$name] )){
                 
                 foreach ($payedDetail[$name] as $k => $shp){
-                    echo "- {$shp['amount']} ({$shp['desc']}) $nrl";
+                    echo " - {$shp['amount']} ({$shp['desc']}) $nrl";
                 }
                 echo $nrl;
             }
             $shouldPay = $v['should'] + $shouldPayDiv - $v['payed'];
             echo "$name 应付  $shouldPay $nrl $nrl";
+            $shouldPayAll += $shouldPay;
         }
+        return $shouldPayAll;
     }
     
     
