@@ -8,7 +8,7 @@ class CommonController extends Controller{
     
         
     /**
-     * 合租计费
+     * 鍚堢璁¤垂
      */
     public function bill(){
         
