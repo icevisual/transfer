@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Transfer::class,
         \App\Console\Commands\IotCommand::class,
         \App\Console\Commands\RabbitMQ::class,
+        \App\Console\Commands\RabbitMQCtl::class,
         \App\Console\Commands\AliyunSms::class,
     ];
 

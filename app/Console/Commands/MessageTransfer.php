@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use Iot\Request\V20160530 as Iot;
 
-class IotCommand extends Command
+class MessageTransfer extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'iot {action=pub} {deviceID=DEVICEID} {msg=hello}';
+    protected $signature = 'message:transfer';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'internet of thing';
+    protected $description = 'message transfer';
     
     /**
      * 
@@ -39,6 +39,13 @@ class IotCommand extends Command
      */
     public function handle()
     {
+        /**
+         * connect Aliyun Iot & RabbitMQ , And Transfer Message Between Them
+         * Send MQ msg to Aliyun Iot 
+         * Send Aliyun Iot Msg to MQ
+         */
+        
+        
         $action = $this->argument('action');
         $funcName = strtolower($action).'Action';
         if(method_exists($this, $funcName)){
@@ -56,6 +63,7 @@ class IotCommand extends Command
             $this->client = new \DefaultAcsClient($iClientProfile);
         }
     }
+    
     
     public function subAction(){
         $this->initClient();
@@ -85,14 +93,13 @@ class IotCommand extends Command
     
     public function pubAction(){
         $this->initClient();
-        $msg = $this->argument('msg');
-        $deviceID = $this->argument('deviceID');
         
+        $msg = 'When there is no desire - Laozi';
         $request = new Iot\PubRequest();
         
         $request->setProductKey($this->productID);
         $request->setMessageContent(base64_encode($msg));// Hello world base64 String.
-        $request->setTopicFullName("/{$this->productID}/{$deviceID}");//消息发送给哪个topic中.
+        $request->setTopicFullName("/{$this->productID}/a");//消息发送给哪个topic中.
         $response = $this->client->getAcsResponse($request);
         
         print_r("\r\n");
