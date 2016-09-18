@@ -55,7 +55,7 @@ class RabbitMQ extends Command
 
     public function init()
     {
-        $this->connection = new AMQPStreamConnection('192.168.5.46', 5672, 'guest', 'guest');
+        $this->connection = new AMQPStreamConnection('192.168.5.21', 5672, 'guest', 'guest');
 //         $this->connection = new AMQPStreamConnection('120.26.200.128', 5672, 'guest', 'guest');
         $this->channel = $this->connection->channel();
     }
@@ -416,10 +416,11 @@ class RabbitMQ extends Command
         
         while(count($this->channel->callbacks)) {
             $this->channel->wait();
+                break;
         }
-        
-        
-        $this->channel->close();
+        if(!is_null($this->channel)){
+            $this->channel->close();
+        }
         $this->connection->close();
     }
     

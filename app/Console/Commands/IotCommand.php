@@ -57,6 +57,23 @@ class IotCommand extends Command
         }
     }
     
+    
+    ///1000067525/status_callback
+
+    public function subcallbackAction(){
+        $this->initClient();
+    
+        $request = new Iot\SubRequest();
+        $request->setProductKey($this->productID);
+        $request->setSubCallback("http://test.open.qiweiwangguo.com/iot/consumer");//当topic有消息时候，接受消息的地址，参考服务器回调
+        $request->setTopicList("/{$this->productID}/status_callback");//订阅的topic列表
+        $response = $this->client->getAcsResponse($request);
+    
+        print_r("\r\n");
+        print_r($response);
+    }
+    
+    
     public function subAction(){
         $this->initClient();
         
@@ -65,6 +82,7 @@ class IotCommand extends Command
         $request->setSubCallback("http://test.open.qiweiwangguo.com/iot/consumer");//当topic有消息时候，接受消息的地址，参考服务器回调
         $request->setTopicList("/{$this->productID}/#");//订阅的topic列表
         $response = $this->client->getAcsResponse($request);
+        
         print_r("\r\n");
         print_r($response);
     }
