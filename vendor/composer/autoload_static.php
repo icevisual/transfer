@@ -59,6 +59,7 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         ),
         'W' => 
         array (
+            'Workerman\\' => 10,
             'Webmozart\\Assert\\' => 17,
         ),
         'T' => 
@@ -217,6 +218,10 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         'XdgBaseDir\\' => 
         array (
             0 => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src',
+        ),
+        'Workerman\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/workerman',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -479,13 +484,19 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\AliyunSms' => __DIR__ . '/../..' . '/app/Console/Commands/AliyunSms.php',
         'App\\Console\\Commands\\ApiCheckCommand' => __DIR__ . '/../..' . '/app/Console/Commands/ApiCheckCommand.php',
         'App\\Console\\Commands\\Apidoc' => __DIR__ . '/../..' . '/app/Console/Commands/Apidoc.php',
         'App\\Console\\Commands\\DataUpgrade' => __DIR__ . '/../..' . '/app/Console/Commands/DataUpgrade.php',
         'App\\Console\\Commands\\ExportErrorXml' => __DIR__ . '/../..' . '/app/Console/Commands/ExportErrorXml.php',
+        'App\\Console\\Commands\\FibonacciRpcClient' => __DIR__ . '/../..' . '/app/Console/Commands/RabbitMQ.php',
         'App\\Console\\Commands\\FindFRMCOD' => __DIR__ . '/../..' . '/app/Console/Commands/FindFRMCOD.php',
         'App\\Console\\Commands\\Inspire' => __DIR__ . '/../..' . '/app/Console/Commands/Inspire.php',
         'App\\Console\\Commands\\IotCommand' => __DIR__ . '/../..' . '/app/Console/Commands/IotCommand.php',
+        'App\\Console\\Commands\\LongConnection' => __DIR__ . '/../..' . '/app/Console/Commands/LongConnection.php',
+        'App\\Console\\Commands\\MessageTransfer' => __DIR__ . '/../..' . '/app/Console/Commands/MessageTransfer.php',
+        'App\\Console\\Commands\\RabbitMQ' => __DIR__ . '/../..' . '/app/Console/Commands/RabbitMQ.php',
+        'App\\Console\\Commands\\RabbitMQCtl' => __DIR__ . '/../..' . '/app/Console/Commands/RabbitMQCtl.php',
         'App\\Console\\Commands\\Transfer' => __DIR__ . '/../..' . '/app/Console/Commands/Transfer.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Events\\BalanceEvent' => __DIR__ . '/../..' . '/app/Events/BalanceEvent.php',
@@ -4148,6 +4159,26 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         'TijsVerkoyen\\CssToInlineStyles\\Selector' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Selector.php',
         'TijsVerkoyen\\CssToInlineStyles\\Specificity' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Specificity.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
+        'Workerman\\Autoloader' => __DIR__ . '/..' . '/workerman/workerman/Autoloader.php',
+        'Workerman\\Connection\\AsyncTcpConnection' => __DIR__ . '/..' . '/workerman/workerman/Connection/AsyncTcpConnection.php',
+        'Workerman\\Connection\\ConnectionInterface' => __DIR__ . '/..' . '/workerman/workerman/Connection/ConnectionInterface.php',
+        'Workerman\\Connection\\TcpConnection' => __DIR__ . '/..' . '/workerman/workerman/Connection/TcpConnection.php',
+        'Workerman\\Connection\\UdpConnection' => __DIR__ . '/..' . '/workerman/workerman/Connection/UdpConnection.php',
+        'Workerman\\Events\\Ev' => __DIR__ . '/..' . '/workerman/workerman/Events/Ev.php',
+        'Workerman\\Events\\Event' => __DIR__ . '/..' . '/workerman/workerman/Events/Event.php',
+        'Workerman\\Events\\EventInterface' => __DIR__ . '/..' . '/workerman/workerman/Events/EventInterface.php',
+        'Workerman\\Events\\Libevent' => __DIR__ . '/..' . '/workerman/workerman/Events/Libevent.php',
+        'Workerman\\Events\\Select' => __DIR__ . '/..' . '/workerman/workerman/Events/Select.php',
+        'Workerman\\Lib\\Timer' => __DIR__ . '/..' . '/workerman/workerman/Lib/Timer.php',
+        'Workerman\\Protocols\\Frame' => __DIR__ . '/..' . '/workerman/workerman/Protocols/Frame.php',
+        'Workerman\\Protocols\\Http' => __DIR__ . '/..' . '/workerman/workerman/Protocols/Http.php',
+        'Workerman\\Protocols\\HttpCache' => __DIR__ . '/..' . '/workerman/workerman/Protocols/Http.php',
+        'Workerman\\Protocols\\ProtocolInterface' => __DIR__ . '/..' . '/workerman/workerman/Protocols/ProtocolInterface.php',
+        'Workerman\\Protocols\\Text' => __DIR__ . '/..' . '/workerman/workerman/Protocols/Text.php',
+        'Workerman\\Protocols\\Websocket' => __DIR__ . '/..' . '/workerman/workerman/Protocols/Websocket.php',
+        'Workerman\\Protocols\\Ws' => __DIR__ . '/..' . '/workerman/workerman/Protocols/Ws.php',
+        'Workerman\\WebServer' => __DIR__ . '/..' . '/workerman/workerman/WebServer.php',
+        'Workerman\\Worker' => __DIR__ . '/..' . '/workerman/workerman/Worker.php',
         'XdgBaseDir\\Xdg' => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
         'Zend\\Diactoros\\AbstractSerializer' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/AbstractSerializer.php',
         'Zend\\Diactoros\\CallbackStream' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/CallbackStream.php',

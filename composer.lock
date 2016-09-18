@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "826622c41ef02695b0e0ea5a879a9646",
-    "content-hash": "1907806e570f7edb64d0f4c77e75f11f",
+    "hash": "f9900a674dca1a6bd2cc9ee7aa8bb4ad",
+    "content-hash": "215c764af223012adaf0c2b4d7ef2966",
     "packages": [
         {
             "name": "anlutro/l4-repository",
@@ -2812,6 +2812,52 @@
                 "environment"
             ],
             "time": "2016-06-14 14:14:52"
+        },
+        {
+            "name": "workerman/workerman",
+            "version": "v3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/walkor/Workerman.git",
+                "reference": "72dcfe49b70566be36cca7426542ea21dec2197b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/walkor/Workerman/zipball/72dcfe49b70566be36cca7426542ea21dec2197b",
+                "reference": "72dcfe49b70566be36cca7426542ea21dec2197b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "suggest": {
+                "ext-libevent": "For better performance."
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Workerman\\": "./"
+                }
+            },
+            "notification-url": "http://packagist.cn/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "walkor",
+                    "email": "walkor@workerman.net",
+                    "homepage": "http://www.workerman.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "An asynchronous event driven PHP framework for easily building fast, scalable network applications.",
+            "homepage": "http://www.workerman.net",
+            "keywords": [
+                "asynchronous",
+                "event-loop"
+            ],
+            "time": "2016-07-01 12:40:31"
         },
         {
             "name": "zendframework/zend-diactoros",

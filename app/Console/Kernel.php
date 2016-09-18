@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\RabbitMQ::class,
         \App\Console\Commands\RabbitMQCtl::class,
         \App\Console\Commands\AliyunSms::class,
+        \App\Console\Commands\LongConnection::class,
     ];
 
     /**
