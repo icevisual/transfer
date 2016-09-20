@@ -15,6 +15,12 @@ class CommonController extends Controller{
         Bill::run();
     }
     
+    
+    public function websocket(){
+        
+        \Artisan::call('ws');
+    }
+    
 }
 
 

@@ -61,6 +61,7 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         array (
             'Workerman\\' => 10,
             'Webmozart\\Assert\\' => 17,
+            'WebSocket\\' => 10,
         ),
         'T' => 
         array (
@@ -226,6 +227,10 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'WebSocket\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/textalk/websocket/lib',
         ),
         'TijsVerkoyen\\CssToInlineStyles\\' => 
         array (
@@ -498,6 +503,7 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         'App\\Console\\Commands\\RabbitMQ' => __DIR__ . '/../..' . '/app/Console/Commands/RabbitMQ.php',
         'App\\Console\\Commands\\RabbitMQCtl' => __DIR__ . '/../..' . '/app/Console/Commands/RabbitMQCtl.php',
         'App\\Console\\Commands\\Transfer' => __DIR__ . '/../..' . '/app/Console/Commands/Transfer.php',
+        'App\\Console\\Commands\\WebSocket' => __DIR__ . '/../..' . '/app/Console/Commands/WebSocket.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Events\\BalanceEvent' => __DIR__ . '/../..' . '/app/Events/BalanceEvent.php',
         'App\\Events\\Event' => __DIR__ . '/../..' . '/app/Events/Event.php',
@@ -4158,6 +4164,13 @@ class ComposerStaticInit998a077a31778be2bb481bedd74ef45f
         'TijsVerkoyen\\CssToInlineStyles\\Exception' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Exception.php',
         'TijsVerkoyen\\CssToInlineStyles\\Selector' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Selector.php',
         'TijsVerkoyen\\CssToInlineStyles\\Specificity' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Specificity.php',
+        'WebSocket\\BadOpcodeException' => __DIR__ . '/..' . '/textalk/websocket/lib/BadOpcodeException.php',
+        'WebSocket\\BadUriException' => __DIR__ . '/..' . '/textalk/websocket/lib/BadUriException.php',
+        'WebSocket\\Base' => __DIR__ . '/..' . '/textalk/websocket/lib/Base.php',
+        'WebSocket\\Client' => __DIR__ . '/..' . '/textalk/websocket/lib/Client.php',
+        'WebSocket\\ConnectionException' => __DIR__ . '/..' . '/textalk/websocket/lib/ConnectionException.php',
+        'WebSocket\\Exception' => __DIR__ . '/..' . '/textalk/websocket/lib/Exception.php',
+        'WebSocket\\Server' => __DIR__ . '/..' . '/textalk/websocket/lib/Server.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Workerman\\Autoloader' => __DIR__ . '/..' . '/workerman/workerman/Autoloader.php',
         'Workerman\\Connection\\AsyncTcpConnection' => __DIR__ . '/..' . '/workerman/workerman/Connection/AsyncTcpConnection.php',

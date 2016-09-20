@@ -27,7 +27,8 @@
 		"anlutro/l4-repository": "^0.7.9",
 		"league/pipeline": "^0.2.2",
 		"php-amqplib/php-amqplib": "^2.6",
-		"workerman/workerman": "^3.3"
+		"workerman/workerman": "^3.3",
+		"textalk/websocket": "^1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

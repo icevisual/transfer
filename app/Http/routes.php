@@ -67,7 +67,7 @@ Route::match(['get','post'],'kindEditor/file_manager_json','Common\KindEditor@fi
     'prefix' => '/output/'
 ], function () {
     \Route::get('bill', 'Common\CommonController@bill');
-    
+    \Route::get('websocket', 'Common\CommonController@websocket');
 });
 
 
