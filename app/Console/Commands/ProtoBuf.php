@@ -44,8 +44,8 @@ class ProtoBuf extends Command
         var_dump($packed);
         $parsedFoo->dump();
         
-        $this->comment ( PHP_EOL. '--END--' . Inspiring::quote () . PHP_EOL );
-	}
+        $this->comment(PHP_EOL . '--END--' . Inspiring::quote() . PHP_EOL);
+    }
 }
 
 
