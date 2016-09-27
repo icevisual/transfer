@@ -38,8 +38,12 @@ function onConnectionLost(responseObject) {
         log("onConnectionLost:" + responseObject.errorMessage);
     }
 }
+
+var arriveMsg ;
+
 // called when a message arrives
 function onMessageArrived(message) {
+    arriveMsg = message;
     var data = message.payloadString;
     console.log(message);
     log("onMessageArrived:" + data);
@@ -69,7 +73,23 @@ function subscribe(){
 }
 
 function sendProto(){
-    message = new Paho.MQTT.Message(car.encode().toArrayBuffer());
+    var msgData = car.encode().toArrayBuffer();
+
+    var msgData = new Uint8Array(car.encode().toArrayBuffer());
+    var payloadLength = msgData.length;
+    var payloadByteLength = msgData.byteLength;
+    var headerLength = 8;//包头字节长度
+    var b = new Uint8Array(payloadLength + headerLength);
+    b.set(msgData,headerLength);
+// fe（MagicNumber）01（版本号）00 3b（总长度） 2711（命令号）0001（Seq）
+// （变长包体：
+// fe 01 00 3b 27 11 00 01 
+    var header = [0xfe,0x01,0x00,payloadByteLength+headerLength,0x27,0x11,0x00,0x01];
+    for(var i in header){
+        b[i] = header[i];
+    }
+    console.log(b);
+    message = new Paho.MQTT.Message(msgData);
     message.destinationName = "/word";
     client.send(message);
     return;
