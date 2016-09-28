@@ -138,7 +138,7 @@ var decryptedStr = AESDecrypt(res, key, iv);
 console.log('============Decrypted Data============');
 console.log(decryptedStr.words);
 // console.log(Car.decodeHex(decrypted));
-var v1 = new Int32Array(decryptedStr.words);
+var v1 = new Uint32Array(decryptedStr.words);
 console.log(new Uint8Array(v1.buffer));
 console.log(new Uint8Array(car.encode().toArrayBuffer()));
 // console.log(Car.decode(v1.buffer));
