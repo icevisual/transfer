@@ -28,7 +28,8 @@
 		"league/pipeline": "^0.2.2",
 		"php-amqplib/php-amqplib": "^2.6",
 		"workerman/workerman": "^3.3",
-		"textalk/websocket": "^1.2"
+		"textalk/websocket": "^1.2",
+		"binsoul/net-mqtt": "^0.2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

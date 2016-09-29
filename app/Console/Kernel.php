@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\LongConnection::class,
         \App\Console\Commands\WebSocketServer::class,
         \App\Console\Commands\ProtoBuf::class,
+        \App\Console\Commands\Emqtt::class,
     ];
 
     /**

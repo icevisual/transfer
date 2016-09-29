@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f06d1bb282d2ce2d59c5afabf2a8b52d",
-    "content-hash": "75f28d1fe8aab433e4a3f5476bed2a04",
+    "hash": "216c121f4333399eadac96c8b5319ee8",
+    "content-hash": "c1af366dca94c8a4ac4789089ae4f8ee",
     "packages": [
         {
             "name": "anlutro/l4-repository",
@@ -204,6 +204,58 @@
                 }
             ],
             "time": "2016-06-13 19:28:20"
+        },
+        {
+            "name": "binsoul/net-mqtt",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/binsoul/net-mqtt.git",
+                "reference": "cf32dfabeb4d9400737271259ab2498bb3499c30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/binsoul/net-mqtt/zipball/cf32dfabeb4d9400737271259ab2498bb3499c30",
+                "reference": "cf32dfabeb4d9400737271259ab2498bb3499c30",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6|~7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~1.0",
+                "phpunit/phpunit": "~4.0||~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BinSoul\\Net\\Mqtt\\": "src"
+                }
+            },
+            "notification-url": "http://packagist.cn/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Mößler",
+                    "email": "code@binsoul.de",
+                    "homepage": "https://github.com/binsoul",
+                    "role": "Developer"
+                }
+            ],
+            "description": "MQTT protocol implementation",
+            "homepage": "https://github.com/binsoul/net-mqtt",
+            "keywords": [
+                "mqtt",
+                "net"
+            ],
+            "time": "2016-08-21 21:27:54"
         },
         {
             "name": "bosnadev/repositories",

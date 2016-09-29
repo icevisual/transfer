@@ -5487,5 +5487,59 @@
             }
         ],
         "description": "WebSocket client and server"
+    },
+    {
+        "name": "binsoul/net-mqtt",
+        "version": "0.2.0",
+        "version_normalized": "0.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/binsoul/net-mqtt.git",
+            "reference": "cf32dfabeb4d9400737271259ab2498bb3499c30"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/binsoul/net-mqtt/zipball/cf32dfabeb4d9400737271259ab2498bb3499c30",
+            "reference": "cf32dfabeb4d9400737271259ab2498bb3499c30",
+            "shasum": ""
+        },
+        "require": {
+            "php": "~5.6|~7.0"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "~1.0",
+            "phpunit/phpunit": "~4.0||~5.0"
+        },
+        "time": "2016-08-21 21:27:54",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "BinSoul\\Net\\Mqtt\\": "src"
+            }
+        },
+        "notification-url": "http://packagist.cn/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Sebastian Mößler",
+                "email": "code@binsoul.de",
+                "homepage": "https://github.com/binsoul",
+                "role": "Developer"
+            }
+        ],
+        "description": "MQTT protocol implementation",
+        "homepage": "https://github.com/binsoul/net-mqtt",
+        "keywords": [
+            "mqtt",
+            "net"
+        ]
     }
 ]
