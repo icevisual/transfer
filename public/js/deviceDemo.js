@@ -9,14 +9,13 @@ SmellOpen = {
         'mqtt': {
             'hostname': '192.168.5.21',
             'port': '8083',
+        },
+        'AES':{
+        	'key' : 'XqCEMSzhsdWHfwhm',
+        	'iv' : 'Pkcs7',
         }
     },
     configs: {},
-    log: function() {
-        for (var i in arguments) {
-            console.log("[" + now() + "] " + arguments[i]);
-        }
-    },
     init: function(configs) {
         this.configs = this.defaults;
         for (var i in configs) {
@@ -60,12 +59,12 @@ SmellOpen = {
     },
 
     onConnect: function() {
-        SmellOpen.log("onConnect,clientId = " + SmellOpen.configs.deviceId);
+        SmellOpen.utils.log("onConnect,clientId = " + SmellOpen.configs.deviceId);
         SmellOpen.subscribe("/" + SmellOpen.configs.deviceId);
     },
     onConnectionLost: function(responseObject) {
         if (responseObject.errorCode !== 0) {
-            SmellOpen.log("onConnectionLost:" + responseObject.errorMessage);
+            SmellOpen.utils.log("onConnectionLost:" + responseObject.errorMessage);
         }
     },
     onMessageArrived: function(message) {
@@ -86,12 +85,10 @@ SmellOpen = {
                 var payloadBytesBody = message.payloadBytes.slice(headerLength);// Get payload body
                 byteBody = payloadBytesBody;
                 console.log('payloadBytesBody',payloadBytesBody);
-                var key = '1231231231231232'; //密钥
-                var iv = 'Pkcs7';
                 var payloadHex = SmellOpen.utils.intArray2HexStr(payloadBytesBody);// Convert 2 hex string
                 console.log('payloadHexString',payloadHex);
                 var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(payloadHex));// Convert 2 base64 string 
-                var res1 = SmellOpen.utils.AESDecrypt(b64str,key,iv);// AES decrypt
+                var res1 = SmellOpen.utils.AESDecrypt(b64str,SmellOpen.configs.AES.key,SmellOpen.configs.AES.iv);// AES decrypt
                 var obj = root.Scentrealm.AuthRequest.decodeHex(res1.toString());// Proto decode
                 console.log('Proto Data',obj);
             } catch (e) {
@@ -133,10 +130,8 @@ SmellOpen = {
         return b;
     },
     protoDataPackageWithAES: function(protoData,cmdId,seqId) {
-        var key = '1231231231231232'; //密钥
-        var iv = 'Pkcs7';
         var hexData = CryptoJS.enc.Hex.parse(protoData.encodeHex());// Word Array
-        var encryptData = SmellOpen.utils.AESEncrypt(hexData, key, iv);// AES encrypt
+        var encryptData = SmellOpen.utils.AESEncrypt(hexData, SmellOpen.configs.AES.key,SmellOpen.configs.AES.iv);// AES encrypt
         var base64Words = CryptoJS.enc.Base64.parse(encryptData.toString());//Base64 Decode 2 Word Array
         var hexEncryptedStr = CryptoJS.enc.Hex.stringify(base64Words);// Convert 2 hex String 
         var intArray = SmellOpen.utils.hex2IntArray(hexEncryptedStr);// Convert 2 int Array 
@@ -159,6 +154,11 @@ SmellOpen = {
 var u8 ;
 var u9 ;
 SmellOpen.utils = {
+    log: function() {
+        for (var i in arguments) {
+            console.log("[" + now() + "] " + arguments[i]);
+        }
+    },
     ten2sixteen: function(d){
         return [ d >> 8 , d > 256 ? d - 256 : d];
     },
