@@ -99,7 +99,6 @@ SmellOpen = {
             }
         }
     },
-
     analyzeHeader: function(payloadBytes) {
         var headerLength = 8;
         var msgHeader = new Uint8Array(payloadBytes);
@@ -146,7 +145,7 @@ SmellOpen = {
     },
     sendProtoTest: function() {
         var b = this.protoDataPackage(car.encode().toArrayBuffer(),10001,1);
-        console.log(b);
+        console.log('protoDataPackage',b);
         this.publish("/" + this.configs.deviceId, b);
         return true;
     },
@@ -211,46 +210,36 @@ SmellOpen.utils = {
         var iv = 'Pkcs7';
         var car = auth;
         console.log('============Test Proto & AES============');
-        console.log('Uint8Array',new Uint8Array(car.encodeAB()));
-        var u8data = CryptoJS.enc.Hex.parse(car.encodeHex());
+        console.log('Uint8Array',new Uint8Array(car.encodeAB()));// Proto data ArrayBuffer
+        var u8data = CryptoJS.enc.Hex.parse(car.encodeHex());// Convert 2 word array
         console.log('EncodeHex',u8data.toString());
         console.log('============Encrypt Data============');
-        u8 = this.AESEncrypt(u8data, key, iv);
-        console.log('AESEncrypt.toString',u8.toString());
-        var base64Words = CryptoJS.enc.Base64.parse(u8.toString());
+        u8 = this.AESEncrypt(u8data, key, iv);// AES encrypt
+        console.log('AESEncrypt.toString',u8.toString());// Base64 string
+        var base64Words = CryptoJS.enc.Base64.parse(u8.toString());// Convert 2 word array
         console.log('AESEncrypt.toWords',base64Words);
         u9 = base64Words;
         console.log('AESEncrypt.words',base64Words.words);
-        var hexEncryptedStr = CryptoJS.enc.Hex.stringify(base64Words);
+        var hexEncryptedStr = CryptoJS.enc.Hex.stringify(base64Words);// Convert 2 hex string
         console.log('AESEncrypt.toHex',hexEncryptedStr);
         console.log('AESEncrypt.length',hexEncryptedStr.length);
-        var intArray = [];
-        for(var i = 0 ; i < hexEncryptedStr.length ; i +=2){
-        	var s = hexEncryptedStr.substr(i,2);
-        	intArray[i/2] = parseInt(s,16);
-        }
-        var sss = '';
-        for(var i = 0 ; i < intArray.length ; i ++){
-        	var s = parseInt(intArray[i]).toString(16);
-        	if(s.length == 1){
-        		s = '0' + s;
-        	}
-        	sss += s;
-        }
+        var intArray = SmellOpen.utils.hex2IntArray(hexEncryptedStr);// Convert 2 int Array 
+        // ...transfer
+        // ...receive ArrayBuffer
+        var sss = SmellOpen.utils.intArray2HexStr(intArray);// Convert 2 hex string
         console.log('AESEncrypt.sssss',sss);
         console.log('AESEncrypt.intArray',intArray.length,intArray);
         console.log('AESEncrypt.Uint8Array',new Uint8Array(intArray));
         console.log('AESEncrypt.u8',new Uint8Array(intArray));
-        var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(sss));
-//        stringify
+        var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(sss));// Convert base64 string
         console.log('Decrypted.b64str',b64str);
-        var decryptedStr = this.AESDecrypt(b64str, key, iv);
+        var decryptedStr = this.AESDecrypt(b64str, key, iv);// AES decrypt
         console.log('============Decrypted Data============');
         console.log(decryptedStr.words);
-        console.log(decryptedStr.toString());
-        console.log(root.Scentrealm.AuthRequest.decodeHex(decryptedStr.toString()));
+        console.log(decryptedStr.toString());// Hex string
+        console.log(root.Scentrealm.AuthRequest.decodeHex(decryptedStr.toString()));// Proto Decode
     }
 };
 
 SmellOpen.connect();
-SmellOpen.utils.AESTest();
+//SmellOpen.utils.AESTest();
