@@ -1,5 +1,5 @@
 
-var arrivesMsg ;
+var arrivesMsg ,byteBody;
 
 SmellOpen = {
     initFlag: false,
@@ -72,26 +72,28 @@ SmellOpen = {
         // 读取内容，分析指令
         arrivesMsg = message;
         console.log("onMessageArrived From Topic " + message.destinationName);
-        var res = SmellOpen.analyzeHeader(message.payloadBytes);
+        var headerInfo = SmellOpen.analyzeHeader(message.payloadBytes);
         console.log('analyzing End');
-        if (false === res) {
+        if (false === headerInfo) {
             console.log('Header Not Match');
             console.log(message.payloadString);
         } else {
             console.log('Header Found');
+            console.log(headerInfo);
+//            analyze header
             try {
                 var headerLength = 8;
-                payloadBytesBody = message.payloadBytes.slice(headerLength);
-                var msgHeader = new Uint8Array(payloadBytesBody);
-                console.log(payloadBytesBody);
-                // 截取
-                var dd = Car.decode(payloadBytesBody);
-                console.log(dd.model);
-                console.log(dd.vendor);
-                console.log(dd.vendor.name);
-                console.log(dd.vendor.address);
-                console.log(dd.vendor.address.country);
-                console.log(dd.speed);
+                var payloadBytesBody = message.payloadBytes.slice(headerLength);// Get payload body
+                byteBody = payloadBytesBody;
+                console.log('payloadBytesBody',payloadBytesBody);
+                var key = '1231231231231232'; //密钥
+                var iv = 'Pkcs7';
+                var payloadHex = SmellOpen.utils.intArray2HexStr(payloadBytesBody);// Convert 2 hex string
+                console.log('payloadHexString',payloadHex);
+                var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(payloadHex));// Convert 2 base64 string 
+                var res1 = SmellOpen.utils.AESDecrypt(b64str,key,iv);// AES decrypt
+                var obj = root.Scentrealm.AuthRequest.decodeHex(res1.toString());// Proto decode
+                console.log('Proto Data',obj);
             } catch (e) {
                 console.log('protobuf decode error');
             }
@@ -115,8 +117,8 @@ SmellOpen = {
             return false;
         }
     },
-    protoDataPackage: function(protoData,cmdId,seqId) {
-        var msgData = new Uint8Array(protoData.encode().toArrayBuffer());
+    protoDataPackage: function(protoDataArrayBuffer,cmdId,seqId) {
+        var msgData = new Uint8Array(protoDataArrayBuffer);
         var payloadLength = msgData.length;
         var payloadByteLength = msgData.byteLength;
         var headerLength = 8; //包头字节长度
@@ -131,23 +133,57 @@ SmellOpen = {
         }
         return b;
     },
+    protoDataPackageWithAES: function(protoData,cmdId,seqId) {
+        var key = '1231231231231232'; //密钥
+        var iv = 'Pkcs7';
+        var hexData = CryptoJS.enc.Hex.parse(protoData.encodeHex());// Word Array
+        var encryptData = SmellOpen.utils.AESEncrypt(hexData, key, iv);// AES encrypt
+        var base64Words = CryptoJS.enc.Base64.parse(encryptData.toString());//Base64 Decode 2 Word Array
+        var hexEncryptedStr = CryptoJS.enc.Hex.stringify(base64Words);// Convert 2 hex String 
+        var intArray = SmellOpen.utils.hex2IntArray(hexEncryptedStr);// Convert 2 int Array 
+        var u8ArrayBuffer = new Uint8Array(intArray).buffer;// Convert 2 ArrayBuffer
+        return this.protoDataPackage(u8ArrayBuffer,cmdId,seqId); // Call package function
+    },
     sendProtoTest: function() {
-        var b = this.protoDataPackage(car,10001,1);
+        var b = this.protoDataPackage(car.encode().toArrayBuffer(),10001,1);
         console.log(b);
         this.publish("/" + this.configs.deviceId, b);
         return true;
     },
     sendProtoAesTest: function() {
-        var b = this.protoDataPackage(car,10001,1);
-        console.log(b);
+        var b = this.protoDataPackageWithAES(auth,10001,1);
+        console.log('protoDataPackageWithAES',b);
         this.publish("/" + this.configs.deviceId, b);
         return true;
     },
 };
-
+var u8 ;
+var u9 ;
 SmellOpen.utils = {
     ten2sixteen: function(d){
         return [ d >> 8 , d > 256 ? d - 256 : d];
+    },
+    hex2IntArray:function(hexStr){
+    	if(hexStr.length % 2 ){
+    		hexStr = hexStr + '0';
+    	}
+    	var intArray = [];
+        for(var i = 0 ; i < hexStr.length ; i +=2){
+        	var s = hexStr.substr(i,2);
+        	intArray[i/2] = parseInt(s,16);
+        }
+        return intArray;
+    },
+    intArray2HexStr:function(intArray){
+        var sss = '';
+        for(var i = 0 ; i < intArray.length ; i ++){
+        	var s = parseInt(intArray[i]).toString(16);
+        	if(s.length == 1){
+        		s = '0' + s;
+        	}
+        	sss += s;
+        }
+        return sss;
     },
     AESEncrypt: function(data, key, iv) { //加密
         var key = CryptoJS.enc.Hex.parse(key);
@@ -173,23 +209,46 @@ SmellOpen.utils = {
     AESTest:function(){
         var key = '1231231231231232'; //密钥
         var iv = 'Pkcs7';
-        var encrypted = this.AESEncrypt('123', key, iv); //密文
-        console.log(encrypted.toLocaleString());
-        var decryptedStr = this.AESDecrypt(encrypted.toLocaleString(), key, iv);
-        console.log(decryptedStr);
+        var car = auth;
         console.log('============Test Proto & AES============');
-
+        console.log('Uint8Array',new Uint8Array(car.encodeAB()));
         var u8data = CryptoJS.enc.Hex.parse(car.encodeHex());
+        console.log('EncodeHex',u8data.toString());
         console.log('============Encrypt Data============');
-        console.log(u8data);
-        var res = this.AESEncrypt(u8data, key, iv).toString();
-        console.log('============Encrypted Data============');
-        console.log(res);
-        var decryptedStr = this.AESDecrypt(res, key, iv);
-
+        u8 = this.AESEncrypt(u8data, key, iv);
+        console.log('AESEncrypt.toString',u8.toString());
+        var base64Words = CryptoJS.enc.Base64.parse(u8.toString());
+        console.log('AESEncrypt.toWords',base64Words);
+        u9 = base64Words;
+        console.log('AESEncrypt.words',base64Words.words);
+        var hexEncryptedStr = CryptoJS.enc.Hex.stringify(base64Words);
+        console.log('AESEncrypt.toHex',hexEncryptedStr);
+        console.log('AESEncrypt.length',hexEncryptedStr.length);
+        var intArray = [];
+        for(var i = 0 ; i < hexEncryptedStr.length ; i +=2){
+        	var s = hexEncryptedStr.substr(i,2);
+        	intArray[i/2] = parseInt(s,16);
+        }
+        var sss = '';
+        for(var i = 0 ; i < intArray.length ; i ++){
+        	var s = parseInt(intArray[i]).toString(16);
+        	if(s.length == 1){
+        		s = '0' + s;
+        	}
+        	sss += s;
+        }
+        console.log('AESEncrypt.sssss',sss);
+        console.log('AESEncrypt.intArray',intArray.length,intArray);
+        console.log('AESEncrypt.Uint8Array',new Uint8Array(intArray));
+        console.log('AESEncrypt.u8',new Uint8Array(intArray));
+        var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(sss));
+//        stringify
+        console.log('Decrypted.b64str',b64str);
+        var decryptedStr = this.AESDecrypt(b64str, key, iv);
         console.log('============Decrypted Data============');
         console.log(decryptedStr.words);
-        console.log(Car.decodeHex(decryptedStr.toString()));
+        console.log(decryptedStr.toString());
+        console.log(root.Scentrealm.AuthRequest.decodeHex(decryptedStr.toString()));
     }
 };
 

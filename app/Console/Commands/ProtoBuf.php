@@ -34,7 +34,7 @@ class ProtoBuf extends Command
         // $str = crc32($str);
         // printf("%x\n",$str);
         // exit;
-        
+        edump(last_n_days(30));
         
         
         // dump(time());
