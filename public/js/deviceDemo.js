@@ -63,6 +63,7 @@ SmellOpen = {
         SmellOpen.subscribe("/" + SmellOpen.configs.deviceId);
     },
     onConnectionLost: function(responseObject) {
+    	console.log('onConnectionLost',responseObject);
         if (responseObject.errorCode !== 0) {
             SmellOpen.utils.log("onConnectionLost:" + responseObject.errorMessage);
         }
@@ -159,7 +160,7 @@ SmellOpen.utils = {
             console.log("[" + now() + "] " + arguments[i]);
         }
     },
-    ten2sixteen: function(d){
+    ten2sixteen: function(d){// 256 => [01,00]
         return [ d >> 8 , d > 256 ? d - 256 : d];
     },
     hex2IntArray:function(hexStr){
@@ -243,3 +244,5 @@ SmellOpen.utils = {
 
 SmellOpen.connect();
 //SmellOpen.utils.AESTest();
+
+
