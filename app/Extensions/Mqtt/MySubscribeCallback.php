@@ -12,7 +12,16 @@ class MySubscribeCallback extends MessageHandler
         $key = md5("1231231231231232"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
         $iv = '00000000000Pkcs7';
         $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $content, MCRYPT_MODE_CBC, $iv);
-        return trim($decode);
+        return $decode;
+    }
+    
+    
+    public function dumpByte($string){
+        $output = '';
+        for($i = 0 ; $i < strlen($string) ; $i ++){
+            $output .= ' '.ord($string[$i]);
+        }
+        echo $output.PHP_EOL;
     }
     
     
@@ -33,11 +42,20 @@ class MySubscribeCallback extends MessageHandler
 //                 \Proto2\Scentrealm::class
             }
         }
-        
+        dump("Received Bytes");
+        $this->dumpByte($msg);
         if($headerBytes[0] == 0xfe){
+            
             $packed = substr($msg, $headerLength);
             
+            dump("Received Body Bytes");
+            $this->dumpByte($packed);
+            
+            
             $decryptedPack = $this->aesDecrypt($packed);
+            
+            dump("aesDecrypt Body Bytes");
+            $this->dumpByte($decryptedPack);
             
             $AuthRequest = new \Proto2\Scentrealm\AuthRequest();
             $obj = $AuthRequest->parseFromString($decryptedPack);
