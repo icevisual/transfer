@@ -25,12 +25,13 @@ class MySubscribeCallback extends MessageHandler
 //                 \Proto2\Scentrealm::class
             }
         }
-        $packed = substr($msg, $headerLength);
         
-        $AuthRequest = new \Proto2\Scentrealm\AuthRequest();
-        $obj = $AuthRequest->parseFromString($packed);
-        
-        dump($obj);
+        if($headerBytes[0] == chr(0xfe)){
+            $packed = substr($msg, $headerLength);
+            $AuthRequest = new \Proto2\Scentrealm\AuthRequest();
+            $obj = $AuthRequest->parseFromString($packed);
+            dump($obj);
+        }
         
 //         ord($string)
         
