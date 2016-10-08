@@ -1,13 +1,14 @@
 var ProtoBuf = dcodeIO.ProtoBuf;
 var ScentrealmBuilder = ProtoBuf.loadProtoFile("Scentrealm.proto");
 var root = ScentrealmBuilder.build();
-var auth = new root.Proto2.Scentrealm.AuthRequest();
+var Scentrealm = root.Proto2.Scentrealm;
+var auth = new Scentrealm.AuthRequest();
 
-auth.BaseRequest = new root.Proto2.Scentrealm.BaseRequest(
-		root.Proto2.Scentrealm.SrSenderType.SST_controller, 1400255551, '12312312331');
+auth.BaseRequest = new Scentrealm.BaseRequest(
+		Scentrealm.SrSenderType.SST_controller, 1400255551, '12312312331');
 auth.Signature = '123122';
 auth.SignatureNonce = '123122';
-auth.SignatureMethod = root.Proto2.Scentrealm.SrSignatureMethod.SSM_hmac_sha1;
+auth.SignatureMethod = Scentrealm.SrSignatureMethod.SSM_hmac_sha1;
 
 var builder = ProtoBuf.loadProtoFile("complex.proto"), Game = builder
 		.build("Game"), Car = Game.Cars.Car;
