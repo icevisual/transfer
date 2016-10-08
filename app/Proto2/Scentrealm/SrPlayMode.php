@@ -7,11 +7,12 @@
 
 namespace Proto2\Scentrealm {
 /**
- * SrSignatureMethod enum
+ * SrPlayMode enum
  */
-final class SrSignatureMethod
+final class SrPlayMode
 {
-    const SSM_hmac_sha1 = 1;
+    const SOM_relative = 1;
+    const SOM_absolute = 2;
 
     /**
      * Returns defined enum values
@@ -21,7 +22,8 @@ final class SrSignatureMethod
     public function getEnumValues()
     {
         return array(
-            'SSM_hmac_sha1' => self::SSM_hmac_sha1,
+            'SOM_relative' => self::SOM_relative,
+            'SOM_absolute' => self::SOM_absolute,
         );
     }
 }

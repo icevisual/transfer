@@ -1,4 +1,15 @@
-package Scentrealm;
+package Proto2.Scentrealm;
+// 1. 分辨多种云平台
+// 他云接入，我方进行消息流转，需要一个消息中转
+// 我方有一数据库，记录设备、控制器的身份信息
+// 当前通过EMQ本身的订阅系统做流转
+// 应有另一种人工介入的流转方式，需指明
+// 但又要保证用户端的统一化（最好不需设置多余参数）
+// 希望利用到ENQ本身的消息流转，接入设备请求时返回 目标Topic？
+// 授权接口需要人工介入（介入端为PHP）
+// 请求设备资源也需要
+// 这就意味着要用PHP长连接EQM
+
 // 
 enum SrRouteType
 {
@@ -15,7 +26,25 @@ enum SrRouteType
     // push：设备 -> 服务器 -> 控制设备
     SRT_push_recvData = 7; 
 }
+enum SrCmdId
+{
+    SCI_req_auth = 1; // 授权 
+    SCI_req_connect = 2; // 连接设备
+    SCI_req_mac = 3; // 获取设备MAC地址
+    SCI_req_uptime = 4; // 获取设备开机时间
+    SCI_req_downtime = 5; // 获取上次关机时间
+    SCI_req_sleep = 6; // 主机休眠
+    SCI_req_wakeup = 7; // 唤醒主机
+    SCI_req_usedSeconds = 8; // 获取瓶子使用总时间（秒）
+    SCI_req_enableSmell = 9; // 开启某个气味
+    SCI_req_playSmell = 10; // 播放气味
 
+    // resp：服务器 -> 控制设备
+    SCI_resp_auth = 11;// 登录
+    SCI_resp_connect = 12;  // 连接设备
+    // push：设备 -> 服务器 -> 控制设备
+    SCI_push_recvData = 13; 
+}
 
 
 // 相对，什么时候开始，怎么播放（播几秒，循环）
@@ -132,17 +161,7 @@ message PlayRequest {
 }
 // ====================================================
 
-enum SrCmdId
-{
-    SCI_req_mac = 1; // 获取设备MAC地址
-    SCI_req_uptime = 2; // 获取设备开机时间
-    SCI_req_downtime = 3; // 获取上次关机时间
-    SCI_req_sleep = 4; // 主机休眠
-    SCI_req_wakeup = 5; // 唤醒主机
-    SCI_req_usedSeconds = 6; // 获取瓶子使用总时间（秒）
-    SCI_req_enableSmell = 7; // 开启某个气味
-    SCI_req_playSmell = 8; // 播放气味
-}
+
 // 气味播放模式
 enum SrPlayMode
 {
@@ -153,6 +172,5 @@ enum SrPlayMode
 message SrSystemRequest
 {
     required BaseRequest BaseRequest = 1;
-    required SrCmdId cmd = 2;
     required string DeviceResourceID = 3;
 }

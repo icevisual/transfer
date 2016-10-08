@@ -5,10 +5,9 @@ use Illuminate\Console\Command;
 use App\Extensions\Mqtt\BluerhinosMqtt;
 use BinSoul\Net\Mqtt\Flow\OutgoingConnectFlow;
 use BinSoul\Net\Mqtt\Packet\ConnectRequestPacket;
-use sskaje\mqtt\MQTT ;
+use sskaje\mqtt\MQTT;
 use sskaje\mqtt\Debug;
 use sskaje\mqtt\MessageHandler;
-
 
 class Emqtt extends Command
 {
@@ -58,71 +57,58 @@ class Emqtt extends Command
         }
     }
 
-
-    public function test1Action()
+    public function init()
     {
-               
         $mqtt = new MQTT("tcp://192.168.5.21:1883/");
         
         $context = stream_context_create();
         $mqtt->setSocketContext($context);
         
-        Debug::Enable();
+//         Debug::Enable();
         
-        //$mqtt->setAuth('sskaje', '123123');
-        $mqtt->setKeepalive(3600);
+        // $mqtt->setAuth('sskaje', '123123');
+        $mqtt->setKeepalive(36);
         $connected = $mqtt->connect();
-        if (!$connected) {
+        if (! $connected) {
             die("Not connected\n");
         }
-        $topics['/words'] = 2;
         
-        $mqtt->subscribe($topics);
-        
-//         #$mqtt->unsubscribe(array_keys($topics));
-        
-        $callback = new \App\Extensions\Mqtt\MySubscribeCallback();
-        
-        $mqtt->setHandler($callback);
-        
-        $mqtt->loop();
+        $this->connection = $mqtt;
     }
-    
-    
+
+    public function template(callable $function)
+    {
+        $this->init();
+        
+        call_user_func_array($function, [
+            $this->connection
+        ]);
+    }
+
     public function testAction()
     {
-        $mqtt = new BluerhinosMqtt('192.168.5.21', 1883, "PHP"); // Change client name to something unique
-        if (! $mqtt->connect()) {
-            exit(1);
-        }
-        $topics['/word'] = array(
-            "qos" => 0,
-            "function" => "procmsg"
-        );
-        $mqtt->subscribe($topics, 0);
-        while ($mqtt->proc()) {
-//             echo '['.now().']'.PHP_EOL;
-        }
-        $mqtt->close();
+        $this->template(function ($mqtt) {
+            
+            $topics['/0CRngr3ddpVzUBoeF'] = 2;
+            $mqtt->subscribe($topics);
+            
+            // #$mqtt->unsubscribe(array_keys($topics));
+            
+            $callback = new \App\Extensions\Mqtt\MySubscribeCallback();
+            
+            $mqtt->setHandler($callback);
+            
+            $mqtt->loop();
+        });
+    }
 
-        function procmsg($topic, $msg)
-        {
-            echo "Msg Recieved: " . date("r") . "\nTopic:{$topic}\n$msg\n";
-        }
+    public function publishAction()
+    {
+        $this->template(function ($mqtt) {
+            $msg = "eb6881e09a258c1dc1c672cbce0abff16d4ad61a24384ddd743c5a19e6ac3dc54d2c890b65e9fa8c6ba5b3f211e17e4d";
+            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $msg, 0, 0);
+        });
     }
-    
-    
-    public function publishAction(){
-        $mqtt = new Mqtt('192.168.5.21', 1883, "PHP"); // Change client name to something unique
-        if (! $mqtt->connect()) {
-            exit(1);
-        }
-        $mqtt->publish("hello","Hello World! at ".date("r"),0);
-        
-    }
-    
-    
-    
 }
 
 

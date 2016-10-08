@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Scentrealm.proto at 2016-09-22 18:24:29
+ * Auto generated from Scentrealm.proto at 2016-10-08 15:04:40
  *
  * Proto2.Scentrealm package
  */
@@ -11,18 +11,18 @@ namespace Proto2\Scentrealm {
  */
 final class SrErrorCode
 {
-    const SEC_success = 1;
-    const SEC_error = 2;
-    const SEC_unAuth = 3;
-    const SEC_sessionTimeout = 4;
-    const SEC_protoDecode = 5;
-    const SEC_aesDecode = 6;
-    const SEC_sign = 7;
-    const SEC_deviceBlock = 8;
-    const SEC_maxReqInQueue = 9;
-    const SEC_deviceUnavailable = 10;
-    const SEC_serverUnavailable = 11;
-    const SEC_deviceUnconnected = 12;
+    const SEC_success = 0;
+    const SEC_error = -1;
+    const SEC_unAuth = -2;
+    const SEC_sessionTimeout = -3;
+    const SEC_protoDecode = -4;
+    const SEC_aesDecode = -5;
+    const SEC_sign = -6;
+    const SEC_deviceBlock = -7;
+    const SEC_maxReqInQueue = -8;
+    const SEC_deviceUnavailable = -9;
+    const SEC_serverUnavailable = -10;
+    const SEC_deviceUnconnected = -11;
 
     /**
      * Returns defined enum values

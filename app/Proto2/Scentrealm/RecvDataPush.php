@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Scentrealm.proto at 2016-09-22 18:24:29
+ * Auto generated from Scentrealm.proto at 2016-10-08 15:04:40
  *
  * Proto2.Scentrealm package
  */
@@ -13,7 +13,7 @@ class RecvDataPush extends \ProtobufMessage
 {
     /* Field index constants */
     const BASEPUSH = 1;
-    const DEVICEINFO = 2;
+    const DEVICERESOURCEID = 2;
     const DISTINCT = 3;
     const DATA = 4;
 
@@ -24,10 +24,10 @@ class RecvDataPush extends \ProtobufMessage
             'required' => true,
             'type' => '\Proto2\Scentrealm\BasePush'
         ),
-        self::DEVICEINFO => array(
-            'name' => 'DeviceInfo',
+        self::DEVICERESOURCEID => array(
+            'name' => 'DeviceResourceID',
             'required' => true,
-            'type' => '\Proto2\Scentrealm\DeviceInfo'
+            'type' => \ProtobufMessage::PB_TYPE_STRING,
         ),
         self::DISTINCT => array(
             'name' => 'Distinct',
@@ -57,7 +57,7 @@ class RecvDataPush extends \ProtobufMessage
     public function reset()
     {
         $this->values[self::BASEPUSH] = null;
-        $this->values[self::DEVICEINFO] = null;
+        $this->values[self::DEVICERESOURCEID] = null;
         $this->values[self::DISTINCT] = null;
         $this->values[self::DATA] = null;
     }
@@ -95,25 +95,26 @@ class RecvDataPush extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'DeviceInfo' property
+     * Sets value of 'DeviceResourceID' property
      *
-     * @param \Proto2\Scentrealm\DeviceInfo $value Property value
+     * @param string $value Property value
      *
      * @return null
      */
-    public function setDeviceInfo(\Proto2\Scentrealm\DeviceInfo $value=null)
+    public function setDeviceResourceID($value)
     {
-        return $this->set(self::DEVICEINFO, $value);
+        return $this->set(self::DEVICERESOURCEID, $value);
     }
 
     /**
-     * Returns value of 'DeviceInfo' property
+     * Returns value of 'DeviceResourceID' property
      *
-     * @return \Proto2\Scentrealm\DeviceInfo
+     * @return string
      */
-    public function getDeviceInfo()
+    public function getDeviceResourceID()
     {
-        return $this->get(self::DEVICEINFO);
+        $value = $this->get(self::DEVICERESOURCEID);
+        return $value === null ? (string)$value : $value;
     }
 
     /**

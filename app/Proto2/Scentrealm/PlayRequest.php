@@ -7,15 +7,15 @@
 
 namespace Proto2\Scentrealm {
 /**
- * AuthRequest message
+ * PlayRequest message
  */
-class AuthRequest extends \ProtobufMessage
+class PlayRequest extends \ProtobufMessage
 {
     /* Field index constants */
     const BASEREQUEST = 1;
-    const SIGNATUREMETHOD = 2;
-    const SIGNATURENONCE = 3;
-    const SIGNATURE = 4;
+    const DEVICERESOURCEID = 2;
+    const CMDSEQ = 3;
+    const PLAY = 4;
 
     /* @var array Field descriptors */
     protected static $fields = array(
@@ -24,21 +24,20 @@ class AuthRequest extends \ProtobufMessage
             'required' => true,
             'type' => '\Proto2\Scentrealm\BaseRequest'
         ),
-        self::SIGNATUREMETHOD => array(
-            'default' => \Proto2\Scentrealm\SrSignatureMethod::SSM_hmac_sha1,
-            'name' => 'SignatureMethod',
-            'required' => false,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
-        self::SIGNATURENONCE => array(
-            'name' => 'SignatureNonce',
+        self::DEVICERESOURCEID => array(
+            'name' => 'DeviceResourceID',
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_STRING,
         ),
-        self::SIGNATURE => array(
-            'name' => 'Signature',
+        self::CMDSEQ => array(
+            'name' => 'cmdSeq',
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_STRING,
+        ),
+        self::PLAY => array(
+            'name' => 'play',
+            'required' => true,
+            'type' => '\Proto2\Scentrealm\PlaySmell'
         ),
     );
 
@@ -58,9 +57,9 @@ class AuthRequest extends \ProtobufMessage
     public function reset()
     {
         $this->values[self::BASEREQUEST] = null;
-        $this->values[self::SIGNATUREMETHOD] = self::$fields[self::SIGNATUREMETHOD]['default'];
-        $this->values[self::SIGNATURENONCE] = null;
-        $this->values[self::SIGNATURE] = null;
+        $this->values[self::DEVICERESOURCEID] = null;
+        $this->values[self::CMDSEQ] = null;
+        $this->values[self::PLAY] = null;
     }
 
     /**
@@ -96,72 +95,71 @@ class AuthRequest extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'SignatureMethod' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setSignatureMethod($value)
-    {
-        return $this->set(self::SIGNATUREMETHOD, $value);
-    }
-
-    /**
-     * Returns value of 'SignatureMethod' property
-     *
-     * @return integer
-     */
-    public function getSignatureMethod()
-    {
-        $value = $this->get(self::SIGNATUREMETHOD);
-        return $value === null ? (integer)$value : $value;
-    }
-
-    /**
-     * Sets value of 'SignatureNonce' property
+     * Sets value of 'DeviceResourceID' property
      *
      * @param string $value Property value
      *
      * @return null
      */
-    public function setSignatureNonce($value)
+    public function setDeviceResourceID($value)
     {
-        return $this->set(self::SIGNATURENONCE, $value);
+        return $this->set(self::DEVICERESOURCEID, $value);
     }
 
     /**
-     * Returns value of 'SignatureNonce' property
+     * Returns value of 'DeviceResourceID' property
      *
      * @return string
      */
-    public function getSignatureNonce()
+    public function getDeviceResourceID()
     {
-        $value = $this->get(self::SIGNATURENONCE);
+        $value = $this->get(self::DEVICERESOURCEID);
         return $value === null ? (string)$value : $value;
     }
 
     /**
-     * Sets value of 'Signature' property
+     * Sets value of 'cmdSeq' property
      *
      * @param string $value Property value
      *
      * @return null
      */
-    public function setSignature($value)
+    public function setCmdSeq($value)
     {
-        return $this->set(self::SIGNATURE, $value);
+        return $this->set(self::CMDSEQ, $value);
     }
 
     /**
-     * Returns value of 'Signature' property
+     * Returns value of 'cmdSeq' property
      *
      * @return string
      */
-    public function getSignature()
+    public function getCmdSeq()
     {
-        $value = $this->get(self::SIGNATURE);
+        $value = $this->get(self::CMDSEQ);
         return $value === null ? (string)$value : $value;
+    }
+
+    /**
+     * Sets value of 'play' property
+     *
+     * @param \Proto2\Scentrealm\PlaySmell $value Property value
+     *
+     * @return null
+     */
+    public function setPlay(\Proto2\Scentrealm\PlaySmell $value=null)
+    {
+        return $this->set(self::PLAY, $value);
+    }
+
+    /**
+     * Returns value of 'play' property
+     *
+     * @return \Proto2\Scentrealm\PlaySmell
+     */
+    public function getPlay()
+    {
+        return $this->get(self::PLAY);
     }
 }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Scentrealm.proto at 2016-09-22 18:24:29
+ * Auto generated from Scentrealm.proto at 2016-10-08 15:04:40
  *
  * Proto2.Scentrealm package
  */
@@ -12,18 +12,25 @@ namespace Proto2\Scentrealm {
 class BaseRequest extends \ProtobufMessage
 {
     /* Field index constants */
-    const TIMESTAMP = 1;
-    const ACCESSKEY = 2;
+    const SENDER = 1;
+    const TIMESTAMP = 2;
+    const IDENTITY = 3;
 
     /* @var array Field descriptors */
     protected static $fields = array(
+        self::SENDER => array(
+            'default' => \Proto2\Scentrealm\SrSenderType::SST_controller,
+            'name' => 'sender',
+            'required' => false,
+            'type' => \ProtobufMessage::PB_TYPE_INT,
+        ),
         self::TIMESTAMP => array(
             'name' => 'timestamp',
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
-        self::ACCESSKEY => array(
-            'name' => 'accessKey',
+        self::IDENTITY => array(
+            'name' => 'identity',
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_STRING,
         ),
@@ -44,8 +51,9 @@ class BaseRequest extends \ProtobufMessage
      */
     public function reset()
     {
+        $this->values[self::SENDER] = self::$fields[self::SENDER]['default'];
         $this->values[self::TIMESTAMP] = null;
-        $this->values[self::ACCESSKEY] = null;
+        $this->values[self::IDENTITY] = null;
     }
 
     /**
@@ -56,6 +64,29 @@ class BaseRequest extends \ProtobufMessage
     public function fields()
     {
         return self::$fields;
+    }
+
+    /**
+     * Sets value of 'sender' property
+     *
+     * @param integer $value Property value
+     *
+     * @return null
+     */
+    public function setSender($value)
+    {
+        return $this->set(self::SENDER, $value);
+    }
+
+    /**
+     * Returns value of 'sender' property
+     *
+     * @return integer
+     */
+    public function getSender()
+    {
+        $value = $this->get(self::SENDER);
+        return $value === null ? (integer)$value : $value;
     }
 
     /**
@@ -82,25 +113,25 @@ class BaseRequest extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'accessKey' property
+     * Sets value of 'identity' property
      *
      * @param string $value Property value
      *
      * @return null
      */
-    public function setAccessKey($value)
+    public function setIdentity($value)
     {
-        return $this->set(self::ACCESSKEY, $value);
+        return $this->set(self::IDENTITY, $value);
     }
 
     /**
-     * Returns value of 'accessKey' property
+     * Returns value of 'identity' property
      *
      * @return string
      */
-    public function getAccessKey()
+    public function getIdentity()
     {
-        $value = $this->get(self::ACCESSKEY);
+        $value = $this->get(self::IDENTITY);
         return $value === null ? (string)$value : $value;
     }
 }

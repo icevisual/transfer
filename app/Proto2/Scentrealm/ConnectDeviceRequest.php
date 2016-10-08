@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Scentrealm.proto at 2016-09-22 18:24:29
+ * Auto generated from Scentrealm.proto at 2016-10-08 15:04:40
  *
  * Proto2.Scentrealm package
  */
@@ -13,7 +13,7 @@ class ConnectDeviceRequest extends \ProtobufMessage
 {
     /* Field index constants */
     const BASEREQUEST = 1;
-    const DEVICEID = 3;
+    const DEVICEID = 2;
 
     /* @var array Field descriptors */
     protected static $fields = array(

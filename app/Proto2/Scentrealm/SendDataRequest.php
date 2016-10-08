@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Scentrealm.proto at 2016-09-22 18:24:29
+ * Auto generated from Scentrealm.proto at 2016-10-08 15:04:40
  *
  * Proto2.Scentrealm package
  */
@@ -13,7 +13,7 @@ class SendDataRequest extends \ProtobufMessage
 {
     /* Field index constants */
     const BASEREQUEST = 1;
-    const DEVICEINFO = 2;
+    const DEVICERESOURCEID = 2;
     const DATA = 3;
 
     /* @var array Field descriptors */
@@ -23,10 +23,10 @@ class SendDataRequest extends \ProtobufMessage
             'required' => true,
             'type' => '\Proto2\Scentrealm\BaseRequest'
         ),
-        self::DEVICEINFO => array(
-            'name' => 'DeviceInfo',
+        self::DEVICERESOURCEID => array(
+            'name' => 'DeviceResourceID',
             'required' => true,
-            'type' => '\Proto2\Scentrealm\DeviceInfo'
+            'type' => \ProtobufMessage::PB_TYPE_STRING,
         ),
         self::DATA => array(
             'name' => 'Data',
@@ -51,7 +51,7 @@ class SendDataRequest extends \ProtobufMessage
     public function reset()
     {
         $this->values[self::BASEREQUEST] = null;
-        $this->values[self::DEVICEINFO] = null;
+        $this->values[self::DEVICERESOURCEID] = null;
         $this->values[self::DATA] = null;
     }
 
@@ -88,25 +88,26 @@ class SendDataRequest extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'DeviceInfo' property
+     * Sets value of 'DeviceResourceID' property
      *
-     * @param \Proto2\Scentrealm\DeviceInfo $value Property value
+     * @param string $value Property value
      *
      * @return null
      */
-    public function setDeviceInfo(\Proto2\Scentrealm\DeviceInfo $value=null)
+    public function setDeviceResourceID($value)
     {
-        return $this->set(self::DEVICEINFO, $value);
+        return $this->set(self::DEVICERESOURCEID, $value);
     }
 
     /**
-     * Returns value of 'DeviceInfo' property
+     * Returns value of 'DeviceResourceID' property
      *
-     * @return \Proto2\Scentrealm\DeviceInfo
+     * @return string
      */
-    public function getDeviceInfo()
+    public function getDeviceResourceID()
     {
-        return $this->get(self::DEVICEINFO);
+        $value = $this->get(self::DEVICERESOURCEID);
+        return $value === null ? (string)$value : $value;
     }
 
     /**

@@ -7,11 +7,12 @@
 
 namespace Proto2\Scentrealm {
 /**
- * SrSignatureMethod enum
+ * SrSenderType enum
  */
-final class SrSignatureMethod
+final class SrSenderType
 {
-    const SSM_hmac_sha1 = 1;
+    const SST_controller = 1;
+    const SST_device = 2;
 
     /**
      * Returns defined enum values
@@ -21,7 +22,8 @@ final class SrSignatureMethod
     public function getEnumValues()
     {
         return array(
-            'SSM_hmac_sha1' => self::SSM_hmac_sha1,
+            'SST_controller' => self::SST_controller,
+            'SST_device' => self::SST_device,
         );
     }
 }

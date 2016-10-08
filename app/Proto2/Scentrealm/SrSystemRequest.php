@@ -7,20 +7,20 @@
 
 namespace Proto2\Scentrealm {
 /**
- * ConnectDeviceResponse message
+ * SrSystemRequest message
  */
-class ConnectDeviceResponse extends \ProtobufMessage
+class SrSystemRequest extends \ProtobufMessage
 {
     /* Field index constants */
-    const BASERESPONSE = 1;
-    const DEVICERESOURCEID = 2;
+    const BASEREQUEST = 1;
+    const DEVICERESOURCEID = 3;
 
     /* @var array Field descriptors */
     protected static $fields = array(
-        self::BASERESPONSE => array(
-            'name' => 'BaseResponse',
+        self::BASEREQUEST => array(
+            'name' => 'BaseRequest',
             'required' => true,
-            'type' => '\Proto2\Scentrealm\BaseResponse'
+            'type' => '\Proto2\Scentrealm\BaseRequest'
         ),
         self::DEVICERESOURCEID => array(
             'name' => 'DeviceResourceID',
@@ -44,7 +44,7 @@ class ConnectDeviceResponse extends \ProtobufMessage
      */
     public function reset()
     {
-        $this->values[self::BASERESPONSE] = null;
+        $this->values[self::BASEREQUEST] = null;
         $this->values[self::DEVICERESOURCEID] = null;
     }
 
@@ -59,25 +59,25 @@ class ConnectDeviceResponse extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'BaseResponse' property
+     * Sets value of 'BaseRequest' property
      *
-     * @param \Proto2\Scentrealm\BaseResponse $value Property value
+     * @param \Proto2\Scentrealm\BaseRequest $value Property value
      *
      * @return null
      */
-    public function setBaseResponse(\Proto2\Scentrealm\BaseResponse $value=null)
+    public function setBaseRequest(\Proto2\Scentrealm\BaseRequest $value=null)
     {
-        return $this->set(self::BASERESPONSE, $value);
+        return $this->set(self::BASEREQUEST, $value);
     }
 
     /**
-     * Returns value of 'BaseResponse' property
+     * Returns value of 'BaseRequest' property
      *
-     * @return \Proto2\Scentrealm\BaseResponse
+     * @return \Proto2\Scentrealm\BaseRequest
      */
-    public function getBaseResponse()
+    public function getBaseRequest()
     {
-        return $this->get(self::BASERESPONSE);
+        return $this->get(self::BASEREQUEST);
     }
 
     /**
