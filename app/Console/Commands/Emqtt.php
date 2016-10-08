@@ -2,9 +2,13 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Extensions\Mqtt\Mqtt;
+use App\Extensions\Mqtt\BluerhinosMqtt;
 use BinSoul\Net\Mqtt\Flow\OutgoingConnectFlow;
 use BinSoul\Net\Mqtt\Packet\ConnectRequestPacket;
+use sskaje\mqtt\MQTT ;
+use sskaje\mqtt\Debug;
+use sskaje\mqtt\MessageHandler;
+
 
 class Emqtt extends Command
 {
@@ -55,16 +59,39 @@ class Emqtt extends Command
     }
 
 
-//     public function testAction()
-//     {
-//         $OutgoingConnectFlow = new OutgoingConnectFlow(new ConnectRequestPacket());
+    public function test1Action()
+    {
+               
+        $mqtt = new MQTT("tcp://192.168.5.21:1883/");
         
-//     }
+        $context = stream_context_create();
+        $mqtt->setSocketContext($context);
+        
+        Debug::Enable();
+        
+        //$mqtt->setAuth('sskaje', '123123');
+        $mqtt->setKeepalive(3600);
+        $connected = $mqtt->connect();
+        if (!$connected) {
+            die("Not connected\n");
+        }
+        $topics['/words'] = 2;
+        
+        $mqtt->subscribe($topics);
+        
+//         #$mqtt->unsubscribe(array_keys($topics));
+        
+        $callback = new \App\Extensions\Mqtt\MySubscribeCallback();
+        
+        $mqtt->setHandler($callback);
+        
+        $mqtt->loop();
+    }
     
     
     public function testAction()
     {
-        $mqtt = new Mqtt('192.168.5.21', 1883, "PHP"); // Change client name to something unique
+        $mqtt = new BluerhinosMqtt('192.168.5.21', 1883, "PHP"); // Change client name to something unique
         if (! $mqtt->connect()) {
             exit(1);
         }
@@ -74,7 +101,7 @@ class Emqtt extends Command
         );
         $mqtt->subscribe($topics, 0);
         while ($mqtt->proc()) {
-            echo '['.now().']'.PHP_EOL;
+//             echo '['.now().']'.PHP_EOL;
         }
         $mqtt->close();
 

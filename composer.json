@@ -29,7 +29,8 @@
 		"php-amqplib/php-amqplib": "^2.6",
 		"workerman/workerman": "^3.3",
 		"textalk/websocket": "^1.2",
-		"binsoul/net-mqtt": "^0.2.0"
+		"binsoul/net-mqtt": "^0.2.0",
+		"sskaje/mqtt": "dev-v2.0-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -50,7 +51,8 @@
         "files": [
             "app/Gather/Utils/loader.php",
             "vendor/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php",
-            "vendor/aliyun/sms/TopSdk.php"
+            "vendor/aliyun/sms/TopSdk.php",
+            "vendor/sskaje/mqtt/autoload.example.php"
         ]
     },
     "autoload-dev": {

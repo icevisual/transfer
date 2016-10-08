@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "216c121f4333399eadac96c8b5319ee8",
-    "content-hash": "c1af366dca94c8a4ac4789089ae4f8ee",
+    "hash": "d5b643d39248e127b97747ff7980e881",
+    "content-hash": "b593a76e8851db0dc359ea09b1df5477",
     "packages": [
         {
             "name": "anlutro/l4-repository",
@@ -1826,6 +1826,38 @@
                 "shell"
             ],
             "time": "2016-03-09 05:03:14"
+        },
+        {
+            "name": "sskaje/mqtt",
+            "version": "dev-v2.0-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sskaje/mqtt.git",
+                "reference": "855c7274bb164748b3a87aa94be9b16111f17df7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sskaje/mqtt/zipball/855c7274bb164748b3a87aa94be9b16111f17df7",
+                "reference": "855c7274bb164748b3a87aa94be9b16111f17df7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "notification-url": "http://packagist.cn/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "sskaje",
+                    "email": "sskaje@gmail.com",
+                    "homepage": "https://sskaje.me"
+                }
+            ],
+            "description": "sskaje's MQTT Class",
+            "time": "2016-01-11 12:50:07"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5361,7 +5393,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "sskaje/mqtt": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

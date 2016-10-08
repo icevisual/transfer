@@ -5541,5 +5541,39 @@
             "mqtt",
             "net"
         ]
+    },
+    {
+        "name": "sskaje/mqtt",
+        "version": "dev-v2.0-dev",
+        "version_normalized": "dev-v2.0-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sskaje/mqtt.git",
+            "reference": "855c7274bb164748b3a87aa94be9b16111f17df7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sskaje/mqtt/zipball/855c7274bb164748b3a87aa94be9b16111f17df7",
+            "reference": "855c7274bb164748b3a87aa94be9b16111f17df7",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-01-11 12:50:07",
+        "type": "library",
+        "installation-source": "source",
+        "notification-url": "http://packagist.cn/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "sskaje",
+                "email": "sskaje@gmail.com",
+                "homepage": "https://sskaje.me"
+            }
+        ],
+        "description": "sskaje's MQTT Class"
     }
 ]

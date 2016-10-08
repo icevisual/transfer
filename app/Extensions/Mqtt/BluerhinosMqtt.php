@@ -29,7 +29,7 @@ namespace App\Extensions\Mqtt;
  *
  */
 /* phpMQTT */
-class Mqtt
+class BluerhinosMqtt
 {
     private $socket;
  /* holds the socket */
@@ -199,8 +199,8 @@ class Mqtt
         foreach ($topics as $key => $topic) {
             $buffer .= $this->strwritestring($key, $i);
             $buffer .= chr($topic["qos"]);
-            $i ++;
             $this->topics[$key] = $topic;
+            $i ++;
         }
         $cmd = 0x80;
         // $qos

@@ -22,4 +22,5 @@ return array(
     'ec9dd17eb30ad6c2e399d738ab19eb02' => $baseDir . '/app/Gather/Utils/loader.php',
     '50b2cf50abb8552141f00dbcf80e1d66' => $vendorDir . '/aliyun/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php',
     '9d98252e877bad574e8d7e045a24f35c' => $vendorDir . '/aliyun/sms/TopSdk.php',
+    '3c9216359c6dbf22d6f5cf16f606c088' => $vendorDir . '/sskaje/mqtt/autoload.example.php',
 );
