@@ -12,7 +12,7 @@ SmellOpen = {
         },
         'AES':{
         	'key' : 'XqCEMSzhsdWHfwhm',
-        	'iv' : 'Pkcs7',
+        	'iv' : '00000000000Pkcs7',
         }
     },
     configs: {},
@@ -90,6 +90,9 @@ SmellOpen = {
                 console.log('payloadHexString',payloadHex);
                 var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(payloadHex));// Convert 2 base64 string 
                 var res1 = SmellOpen.utils.AESDecrypt(b64str,SmellOpen.configs.AES.key,SmellOpen.configs.AES.iv);// AES decrypt
+                
+                console.log('AESDecrypted Data',SmellOpen.utils.hex2IntArray(CryptoJS.enc.Hex.stringify(res1)));
+                
                 var obj = Scentrealm.AuthRequest.decodeHex(res1.toString());// Proto decode
                 console.log('Proto Data',obj);
             } catch (e) {
@@ -209,11 +212,11 @@ SmellOpen.utils = {
         return decrypted.toString(CryptoJS.enc.Utf8);
     },
     AESTest:function(){
-        var key = '1231231231231232'; //密钥
+        var key = 'XqCEMSzhsdWHfwhm'; //密钥
         var iv = '00000000000Pkcs7';
         var car = auth;
         console.log('============Test AES============');
-        var ecp = this.AESEncrypt("123456789", key, iv);// AES encrypt
+        var ecp = this.AESEncrypt("123456dsfdfas789", key, iv);// AES encrypt
         console.log(ecp.toString());
         var res = this.AESDecrypt(ecp.toString(), key, iv);
         console.log(res.toString(CryptoJS.enc.Utf8));

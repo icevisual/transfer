@@ -9,10 +9,11 @@ class MySubscribeCallback extends MessageHandler
 {
 
     public function aesDecrypt($content){
-        $key = md5("1231231231231232"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
+        $key = md5("XqCEMSzhsdWHfwhm"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
         $iv = '00000000000Pkcs7';
+        $content = base64_decode($content);
         $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $content, MCRYPT_MODE_CBC, $iv);
-        return $decode;
+        return trim($decode);
     }
     
     
