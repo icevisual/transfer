@@ -140,7 +140,7 @@ SmellOpen = {
         return this.protoDataPackage(u8ArrayBuffer,cmdId,seqId); // Call package function
     },
     sendProtoTest: function() {
-        var b = this.protoDataPackage(car.encode().toArrayBuffer(),10001,1);
+        var b = this.protoDataPackage(auth.encode().toArrayBuffer(),10001,1);
         console.log('protoDataPackage',b);
         this.publish("/" + this.configs.deviceId, b);
         return true;
