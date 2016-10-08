@@ -41,11 +41,19 @@ class AESTool{
     }
 
     public function setSecretKey($key){
-        $this->secretKey = md5($key) ;
+        $this->secretKey = $key;// md5($key) ;
     }
 
     public function getSecretKey(){
         return $this->secretKey ? $this->secretKey : static::$defaultKey;
+    }
+    
+    public function setIv($iv){
+        $this->iv = $iv ;
+    }
+    
+    public function getIv(){
+        return $this->iv;
     }
 
 

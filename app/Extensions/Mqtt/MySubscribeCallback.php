@@ -8,6 +8,14 @@ use sskaje\mqtt\Message\PUBLISH;
 class MySubscribeCallback extends MessageHandler
 {
 
+    public function aesDecrypt($content){
+        $key = md5("1231231231231232"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
+        $iv = '00000000000Pkcs7';
+        $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $content, MCRYPT_MODE_CBC, $iv);
+        return trim($decode);
+    }
+    
+    
     public function publish(MQTT $mqtt, PUBLISH $publish_object)
     {
         
@@ -28,8 +36,11 @@ class MySubscribeCallback extends MessageHandler
         
         if($headerBytes[0] == 0xfe){
             $packed = substr($msg, $headerLength);
+            
+            $decryptedPack = $this->aesDecrypt($packed);
+            
             $AuthRequest = new \Proto2\Scentrealm\AuthRequest();
-            $obj = $AuthRequest->parseFromString($packed);
+            $obj = $AuthRequest->parseFromString($decryptedPack);
             dump($obj);
             $AuthRequest->dump();
         }

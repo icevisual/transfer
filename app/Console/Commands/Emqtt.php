@@ -64,7 +64,7 @@ class Emqtt extends Command
         $context = stream_context_create();
         $mqtt->setSocketContext($context);
         
-//         Debug::Enable();
+        // Debug::Enable();
         
         // $mqtt->setAuth('sskaje', '123123');
         $mqtt->setKeepalive(36);
@@ -83,6 +83,35 @@ class Emqtt extends Command
         call_user_func_array($function, [
             $this->connection
         ]);
+    }
+
+    
+    public function aesDecrypt($content){
+        $key = md5("1231231231231232"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
+        $iv = '00000000000Pkcs7';
+        $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $content, MCRYPT_MODE_CBC, $iv);
+        return trim($decode);
+    }
+    
+    public function aesAction()
+    {
+        $aes = new \App\Gather\AESTool();
+        $aes->setSecretKey('1231231231231232');
+        $aes->setIv('Pkcs7');
+        $aes->setIv('00000000000Pkcs7');
+        
+        $encp = $aes->encrypt('123456789');
+        dump($encp);
+        dump($aes->decrypt($encp));
+        dump($aes->decrypt("h6Sk05j5J9YYGyn7fbcNjQ=="));
+        
+        $text = "123456789";
+        $key = md5("1231231231231232"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
+        $iv = '00000000000Pkcs7';
+        $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv);
+        $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $crypttext, MCRYPT_MODE_CBC, $iv);
+        dump(base64_encode($crypttext));
+        dump(trim($decode));
     }
 
     public function testAction()

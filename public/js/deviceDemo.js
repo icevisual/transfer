@@ -90,7 +90,7 @@ SmellOpen = {
                 console.log('payloadHexString',payloadHex);
                 var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(payloadHex));// Convert 2 base64 string 
                 var res1 = SmellOpen.utils.AESDecrypt(b64str,SmellOpen.configs.AES.key,SmellOpen.configs.AES.iv);// AES decrypt
-                var obj = root.Scentrealm.AuthRequest.decodeHex(res1.toString());// Proto decode
+                var obj = Scentrealm.AuthRequest.decodeHex(res1.toString());// Proto decode
                 console.log('Proto Data',obj);
             } catch (e) {
                 console.log('protobuf decode error');
@@ -186,30 +186,39 @@ SmellOpen.utils = {
         return sss;
     },
     AESEncrypt: function(data, key, iv) { //加密
-        var key = CryptoJS.enc.Hex.parse(key);
-        var iv = CryptoJS.enc.Latin1.parse(iv);
+    	var key_hash = CryptoJS.MD5(key);
+        var key = CryptoJS.enc.Utf8.parse(key_hash);
+        var iv = CryptoJS.enc.Utf8.parse(iv);
         var encrypted = CryptoJS.AES.encrypt(data, key, {
             iv: iv,
             mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
+            padding: CryptoJS.pad.ZeroPadding
         });
         return encrypted;
     },
     AESDecrypt: function(encrypted, key, iv) { //解密
-        var key = CryptoJS.enc.Hex.parse(key);
-        var iv = CryptoJS.enc.Latin1.parse(iv);
+    	var key_hash = CryptoJS.MD5(key);
+        var key = CryptoJS.enc.Utf8.parse(key_hash);
+        var iv = CryptoJS.enc.Utf8.parse(iv);
         var decrypted = CryptoJS.AES.decrypt(encrypted, key, {
             iv: iv,
             mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
+            padding: CryptoJS.pad.ZeroPadding
         });
         return decrypted;
         return decrypted.toString(CryptoJS.enc.Utf8);
     },
     AESTest:function(){
         var key = '1231231231231232'; //密钥
-        var iv = 'Pkcs7';
+        var iv = '00000000000Pkcs7';
         var car = auth;
+        console.log('============Test AES============');
+        var ecp = this.AESEncrypt("123456789", key, iv);// AES encrypt
+        console.log(ecp.toString());
+        var res = this.AESDecrypt(ecp.toString(), key, iv);
+        console.log(res.toString(CryptoJS.enc.Utf8));
+        return;
+        
         console.log('============Test Proto & AES============');
         console.log('Uint8Array',new Uint8Array(car.encodeAB()));// Proto data ArrayBuffer
         var u8data = CryptoJS.enc.Hex.parse(car.encodeHex());// Convert 2 word array
