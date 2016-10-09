@@ -11,11 +11,9 @@ class MySubscribeCallback extends MessageHandler
     public function aesDecrypt($content){
         $key = md5("XqCEMSzhsdWHfwhm"); // md5($text); //key的长度必须16，32位,这里直接MD5一个长度为32位的key
         $iv = '00000000000Pkcs7';
-        $content = base64_decode($content);
         $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $content, MCRYPT_MODE_CBC, $iv);
         return trim($decode);
     }
-    
     
     public function dumpByte($string){
         $output = '';
@@ -25,9 +23,18 @@ class MySubscribeCallback extends MessageHandler
         echo $output.PHP_EOL;
     }
     
-    
     public function publish(MQTT $mqtt, PUBLISH $publish_object)
     {
+        
+        printf(
+            "\e[32mI got a message\e[0m:(msgid=%d, QoS=%d, dup=%d, topic=%s) \e[32m%s\e[0m\n",
+            $publish_object->getMsgID(),
+            $publish_object->getQos(),
+            $publish_object->getDup(),
+            $publish_object->getTopic(),
+            $publish_object->getMessage()
+        );
+        
         
         $msg = $publish_object->getMessage();
         
@@ -48,13 +55,11 @@ class MySubscribeCallback extends MessageHandler
         if($headerBytes[0] == 0xfe){
             
             $packed = substr($msg, $headerLength);
-            
             dump("Received Body Bytes");
             $this->dumpByte($packed);
             
-            
             $decryptedPack = $this->aesDecrypt($packed);
-            
+            $decryptedPack = chr(0x0a).$decryptedPack;
             dump("aesDecrypt Body Bytes");
             $this->dumpByte($decryptedPack);
             
@@ -64,15 +69,5 @@ class MySubscribeCallback extends MessageHandler
             $AuthRequest->dump();
         }
         
-//         ord($string)
-        
-        printf(
-            "\e[32mI got a message\e[0m:(msgid=%d, QoS=%d, dup=%d, topic=%s) \e[32m%s\e[0m\n",
-            $publish_object->getMsgID(),
-            $publish_object->getQos(),
-            $publish_object->getDup(),
-            $publish_object->getTopic(),
-            $publish_object->getMessage()
-        );
     }
 }

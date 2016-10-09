@@ -5,9 +5,9 @@ var Scentrealm = root.Proto2.Scentrealm;
 var auth = new Scentrealm.AuthRequest();
 
 auth.BaseRequest = new Scentrealm.BaseRequest(
-		Scentrealm.SrSenderType.SST_controller, 1400255551, '12312312331');
-auth.Signature = '123122';
-auth.SignatureNonce = '123122';
+		Scentrealm.SrSenderType.SST_controller, 1400255551, '33333333');
+auth.Signature = 'sdfadfs';
+auth.SignatureNonce = 'adsff';
 auth.SignatureMethod = Scentrealm.SrSignatureMethod.SSM_hmac_sha1;
 
 var builder = ProtoBuf.loadProtoFile("complex.proto"), Game = builder
