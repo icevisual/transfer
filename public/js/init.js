@@ -13,6 +13,14 @@ auth.SignatureMethod = Scentrealm.SrSignatureMethod.SSM_hmac_sha1;
 var builder = ProtoBuf.loadProtoFile("complex.proto"), Game = builder
 		.build("Game"), Car = Game.Cars.Car;
 
+var personBuilder = ProtoBuf.loadProtoFile("test/Person.pro");
+var pRoot = personBuilder.build();
+var p = new pRoot.tutorial.Person("name",12,"email",[new pRoot.tutorial.Person.PhoneNumber("12312331213",1)]);
+
+var msgBook = new pRoot.tutorial.AddressBook([p]);
+console.log('msgBook',msgBook);
+
+
 // Construct with arguments list in field order:
 var car = new Car("Rusty", new Car.Vendor("Iron Inc.", new Car.Vendor.Address(
 		"US")), Car.Speed.SUPERFAST);

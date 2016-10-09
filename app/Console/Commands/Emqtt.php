@@ -263,9 +263,11 @@ class Emqtt extends Command
 
     public function publishAction()
     {
+        $content = file_get_contents(public_path('ADDRESS_BOOK_FILE.FILE'));
         $this->template(function ($mqtt) {
-            $msg = "eb6881e09a258c1dc1c672cbce0abff16d4ad61a24384ddd743c5a19e6ac3dc54d2c890b65e9fa8c6ba5b3f211e17e4d";
-            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $msg, 0, 0);
+            $content = file_get_contents(public_path('test/ADDRESS_BOOK_FILE.FILE'));
+//             $content = file_get_contents(public_path('test/bin_person.person'));
+            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $content, 0, 0);
         });
     }
 }

@@ -1,13 +1,13 @@
 
 var arrivesMsg ,byteBody;
-
+//http://120.26.109.169:18083/
 SmellOpen = {
     initFlag: false,
     defaults: {
         'deviceId': '0CRngr3ddpVzUBoeF',
         'deviceSecret': 'XqCEMSzhsdWHfwhm',
         'mqtt': {
-            'hostname': '192.168.5.21',
+            'hostname': '120.26.109.169',
             'port': '8083',
         },
         'AES':{
@@ -77,6 +77,12 @@ SmellOpen = {
         if (false === headerInfo) {
             console.log('Header Not Match');
             console.log(message.payloadString);
+            console.log(message.payloadBytes);
+            if(message.payloadBytes[0] == 10){
+            	console.log(pRoot.tutorial.AddressBook.decode(message.payloadBytes));
+            }
+//            console.log(pRoot.tutorial.AddressBook.decode(message.payloadBytes));
+            //pRoot.tutorial.Person.decode(message.payloadBytes);
         } else {
             console.log('Header Found');
             console.log(headerInfo);
@@ -146,6 +152,14 @@ SmellOpen = {
         var b = this.protoDataPackage(auth.encode().toArrayBuffer(),10001,1);
         console.log('protoDataPackage',b);
         this.publish("/" + this.configs.deviceId, b);
+        return true;
+    },
+    sendPerson: function() {
+    	var msgData = new Uint8Array(msgBook.encode().toArrayBuffer());
+    	var b = msgData;
+        console.log('protoDataPackage',b);
+//        this.publish("/" + this.configs.deviceId, b);
+        this.publish("/test/Person", b);
         return true;
     },
     sendProtoAesTest: function() {
