@@ -30,10 +30,6 @@ enum SrCmdId
 	SCI_resp_wakeup = 10;   // 唤醒主机 response;
 	SCI_req_usedSeconds = 11;       // 获取瓶子使用总时间（秒） request;
 	SCI_resp_usedSeconds = 12;      // 获取瓶子使用总时间（秒） response;
-	SCI_req_enableSmell = 13;       // 开启某个气味 request;
-	SCI_resp_enableSmell = 14;      // 开启某个气味 response;
-	SCI_req_setPower = 15;  // 设置播放功率 request;
-	SCI_resp_setPower = 16; // 设置播放功率 response;
 }
 // 返回码
 enum SrErrorCode
@@ -56,17 +52,6 @@ message UsedTimeResponse {
     required BaseResponse response = 1 ; // 返回成功与否
     repeated UsedTime usedTime = 2;
 }
-// 功率指令
-message SetPower {
-    required string bottle = 1 ; // 气味瓶子ID
-    required int32 time = 2; // 时间
-    required int32 power = 3; // 功率
-}
-// 设置播放功率
-message SetPowerRequest {
-    required SetPower setting = 1 ; // 功率指令
-}
-
 // 播放气味请求
 message PlayRequest {
     required string cmdSeq = 3 ; // 指令序列号
@@ -101,15 +86,18 @@ message PlayAction {
 	required string bottle = 1; // 瓶子ID
     required int32 beforeStart = 2; // 几秒后开始
     required int32 duration = 3; // 播放时间，单位秒
-    required bytes circulation = 4; // 是否循环,00不循环,01循环，10无限循环
-    optional int32 interval = 5; // 循环间歇时间 ，-- --
-    optional int32 cycleTime = 6; // 循环次数
+    optional int32 power = 4; // 播放功率
+    required bytes circulation = 5; // 是否循环,00不循环,01循环，10无限循环
+    optional int32 interval = 6; // 循环间歇时间 ，-- --
+    optional int32 cycleTime = 7; // 循环次数
 }
 // 播放气味
 message PlaySmell {
     required PlayStartTime when = 1 ;// 开始播放气味的时间
     repeated PlayAction play = 2 ; // 如何播放气味
 }
+
+// 设置名称
 
 // 场景，
 //  1.电影电视脚本                        长度两小时内，多等待，播放某种气味几秒，重复
