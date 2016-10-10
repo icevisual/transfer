@@ -1,4 +1,4 @@
-syntax proto2;
+syntax="proto2"; 
 package Proto2.Scentrealm.Simple;
 
 // 简化微信蓝牙协议，使用其包头用头结构，
@@ -50,7 +50,7 @@ message BaseResponse {
 }
 // 瓶子已用时间
 message UsedTime {
-    required string bid = 1 ; // 气味瓶子ID
+    required string bottle = 1 ; // 气味瓶子ID
     repeated int32 time = 2; // 使用时间（秒）
 }
 // 获取瓶子使用总时间（秒） response结构
@@ -60,7 +60,7 @@ message UsedTimeResponse {
 }
 // 功率指令
 message SetPower {
-    required string bid = 1 ; // 气味瓶子ID
+    required string bottle = 1 ; // 气味瓶子ID
     required int32 time = 2; // 时间
     required int32 power = 3; // 功率
 }
@@ -74,82 +74,43 @@ message PlayRequest {
     required string cmdSeq = 3 ; // 指令序列号
     required PlaySmell play = 4; // 指令内容
 }
-// 气味播放模式
-enum SrPlayMode
+// 时间模式
+enum SrTimeMode
 {
-    SOM_relative = 1; // 相对时间模式
-    SOM_absolute = 2 ; // 绝对时间模式
+    STM_relative = 1; // 相对时间模式，对应几秒后
+    STM_absolute = 2; // 固定时间点，对应yyyy-MM-dd HH:mm:ss
+    STM_daytime = 3; // 今日第几秒
+    STM_weekday = 4; // 周几
+    STM_monthday = 5; // 某月的第几天
+    STM_month = 6; // 月份
+    STM_year = 7; // 年份
 }
-// ====================================================
+// 时间点
+message TimePoint {
+	required SrTimeMode mode = 1;// 播放模式
+	required int32 value = 2;// 粗略时间
+	optional int32 endValue = 3;// 时间范围，结束点，用以描述周一到周五等情况
+}
+// 开始时间
+message PlayStartTime {
+	required SrTimeMode mode = 1;// 播放模式
+	repeated TimePoint startAt = 2;// 开始时间，整个数组组成一个时间，
+    required bytes circulation = 3;// 是否循环,00不循环,01循环，10无限循环
+    optional int32 cycleTime = 4;// 循环次数
+}
+// 一个播放动作
+message PlayAction {
+	required string bottle = 1; // 瓶子ID
+    required int32 beforeStart = 2; // 几秒后开始
+    required int32 duration = 3; // 播放时间，单位秒
+    required bytes circulation = 4; // 是否循环,00不循环,01循环，10无限循环
+    optional int32 interval = 5; // 循环间歇时间 ，-- --
+    optional int32 cycleTime = 6; // 循环次数
+}
 // 播放气味
 message PlaySmell {
-    required SrPlayMode mode = 1 [default = SOM_relative];// 播放模式
-    required bytes smell = 2;// 播放的气味
-    required int32 start = 3 ;//相对模式，表示多少秒后开始； 绝对模式，表示开始的时间戳
-    optional int32 duration = 4;//播放时间，单位秒
-    optional string end = 5;// 
-    required bytes circulation = 6;// 是否循环,00不循环,01循环，10无限循环
-    optional int32 cycleTime= 7;// 循环次数
-}
-message Who {
-    required string bid = 1 ;// 气味ID，（瓶子ID）
-}
-message When {
-    required int32 start = 3 ;//相对模式，表示多少秒后开始； 绝对模式，表示开始的时间戳
-    optional string end = 5;// 
-    required bytes circulation = 6;// 是否循环,00不循环,01循环，10无限循环
-    optional int32 cycleTime= 7;// 循环次数
-}
-message How {
-	required string bid = 1 ;// 气味ID，（瓶子ID）
-    required int32 startTime = 2 ; // 开始时间，星期
-    required int32 interval = 3 ;// 间歇时间 ，-- --
-    
-    required int32 duration = 4;//播放时间，单位秒
-    required bytes circulation = 6;// 是否循环,00不循环,01循环，10无限循环
-    optional int32 cycleTime = 7;// 循环次数
-}
-// 播放气味
-message Play {
-    required When when = 2 ;// 开始播放气味的时间
-    required How how = 3 ; // 如何播放气味
-}
-//9 绝对时间播放气味00代表绝对时间后面跟具体日期时间 N代表第几组，最多10组，时间按顺序发送
-//F600(绝对时间2个字节)+160616152549(时间6个字节)+气味4个字节(取最低位)+播放气味时间(2个字节,单位秒)+N(第几条命令)+55   //16个字节
-//F6001606171400010000000100050155
-message PlayAbsolute { * N
-    required int32 time = 1 ;
-    required string bid = 2 ;// 播放气味的时间
-    required int32 duration = 3 ; // 时长
-}
-//10 相对时间播放气味  
-//F501(2个字节)+气味(四个字节)+持续秒(2个字节)+55 
-//
-message PlayRelative {
-    required int32 time = 1 ;
-    required string bid = 2 ;// 播放气味的时间
-    required int32 duration = 3 ; // 如何播放气味
-}
-//11.循环播放
-//F401(2个字节)+卡号(4个字节）+开始时间（2个字节）+间歇时间(2个字节)+N(循环次数)+55
-//F4010000000100050005050355
-//
-message PlayCycle {
-    required string bid = 1 ;// 气味
-    required int32 startTime = 2 ; // 开始时间
-    required int32 sleepTime = 3 ;// 间歇时间
-    required int32 duration = 4 ; // 如何播放气味
-    required int32 circulation = 6 ; // 循环次数
-}
-//12.循环播放
-//F301(2个字节)+卡号(4个字节)+星期几(1个字节）+时间(2个字节)+播放时间2个字节
-//F301(2个字节)+卡号(4个字节)+星期几(1个字节）+时间(3个字节)+播放时间2个字节+INDEX(1个字节)+0x55
-message PlayCycle1 {
-    required string bid = 1 ;// 气味
-    required int32 startTime = 2 ; // 开始时间，星期
-    required int32 sleepTime = 3 ;// 间歇时间
-    required int32 duration = 4 ; // 如何播放气味
-    required int32 circulation = 6 ; // 循环次数
+    required PlayStartTime when = 1 ;// 开始播放气味的时间
+    repeated PlayAction play = 2 ; // 如何播放气味
 }
 
 // 场景，

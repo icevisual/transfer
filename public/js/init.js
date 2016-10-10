@@ -16,10 +16,14 @@ var builder = ProtoBuf.loadProtoFile("complex.proto"), Game = builder
 var personBuilder = ProtoBuf.loadProtoFile("test/Person.pro");
 var pRoot = personBuilder.build();
 var p = new pRoot.tutorial.Person("name",12,"email",[new pRoot.tutorial.Person.PhoneNumber("12312331213",1)]);
-
 var msgBook = new pRoot.tutorial.AddressBook([p]);
-
 console.log('msgBook',msgBook);
+
+
+var simpleBuilder = ProtoBuf.loadProtoFile("Simple.proto.js");
+var simpleRoot = simpleBuilder.build();
+var Simple = simpleRoot.Proto2.Scentrealm.Simple;
+console.log(Simple.SrCmdId);
 
 
 // Construct with arguments list in field order:

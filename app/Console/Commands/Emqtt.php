@@ -72,7 +72,6 @@ class Emqtt extends Command
             'setPower' => '设置播放功率',
         ];
         $prefix = ['SCI_req_','SCI_resp_'];
-        
         $i = 0 ;
         foreach ($cmd as $k => $v){
             echo "{$prefix[0]}{$k} = ".($i * 2 + 1). ";\t// {$cmd[$k]} request;".PHP_EOL;
