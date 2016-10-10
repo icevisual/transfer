@@ -18,6 +18,7 @@ var pRoot = personBuilder.build();
 var p = new pRoot.tutorial.Person("name",12,"email",[new pRoot.tutorial.Person.PhoneNumber("12312331213",1)]);
 
 var msgBook = new pRoot.tutorial.AddressBook([p]);
+
 console.log('msgBook',msgBook);
 
 

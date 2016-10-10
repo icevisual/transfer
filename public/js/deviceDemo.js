@@ -7,7 +7,8 @@ SmellOpen = {
         'deviceId': '0CRngr3ddpVzUBoeF',
         'deviceSecret': 'XqCEMSzhsdWHfwhm',
         'mqtt': {
-            'hostname': '120.26.109.169',
+//            'hostname': '120.26.109.169',
+        	'hostname': '192.168.5.21',
             'port': '8083',
         },
         'AES':{
@@ -157,8 +158,7 @@ SmellOpen = {
     sendPerson: function() {
     	var msgData = new Uint8Array(msgBook.encode().toArrayBuffer());
     	var b = msgData;
-        console.log('protoDataPackage',b);
-//        this.publish("/" + this.configs.deviceId, b);
+        console.log('Sending Data Bytes',b);
         this.publish("/test/Person", b);
         return true;
     },

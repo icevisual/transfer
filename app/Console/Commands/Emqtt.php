@@ -56,6 +56,30 @@ class Emqtt extends Command
             $this->error(PHP_EOL . 'No Action Found');
         }
     }
+    
+    
+    public function generAction(){
+        
+        $cmd = [
+            'mac' => '获取设备MAC地址',
+            'uptime' => '获取设备开机时间',
+            'downtime' => '获取上次关机时间',
+            'sleep' => '主机休眠',
+            'wakeup' => '唤醒主机',
+            'usedSeconds' => '获取瓶子使用总时间（秒）',
+            'enableSmell' => '开启某个气味',
+            'playSmell' => '播放气味',
+            'setPower' => '设置播放功率',
+        ];
+        $prefix = ['SCI_req_','SCI_resp_'];
+        
+        $i = 0 ;
+        foreach ($cmd as $k => $v){
+            echo "{$prefix[0]}{$k} = ".($i * 2 + 1). ";\t// {$cmd[$k]} request;".PHP_EOL;
+            echo "{$prefix[1]}{$k} = ".($i * 2 + 2). ";\t// {$cmd[$k]} response;".PHP_EOL;
+            $i ++;
+        }
+    }
 
     public function init()
     {
@@ -252,7 +276,6 @@ class Emqtt extends Command
             $mqtt->subscribe($topics);
             
             // #$mqtt->unsubscribe(array_keys($topics));
-            
             $callback = new \App\Extensions\Mqtt\MySubscribeCallback();
             
             $mqtt->setHandler($callback);
