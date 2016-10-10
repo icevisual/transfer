@@ -68,7 +68,7 @@ class Emqtt extends Command
             'wakeup' => '唤醒主机',
             'usedSeconds' => '获取瓶子使用总时间（秒）',
             'enableSmell' => '开启某个气味',
-            'playSmell' => '播放气味',
+//             'playSmell' => '播放气味',
             'setPower' => '设置播放功率',
         ];
         $prefix = ['SCI_req_','SCI_resp_'];

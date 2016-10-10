@@ -18,24 +18,22 @@ package Proto2.Scentrealm.Simple;
 // 指令集 ，包头 nCmdId字段
 enum SrCmdId
 {
-    SCI_req_mac = 1;        //获取设备MAC地址 request;
-    SCI_resp_mac = 2;       //获取设备MAC地址 response;
-    SCI_req_uptime = 3;     //获取设备开机时间 request;
-    SCI_resp_uptime = 4;    //获取设备开机时间 response;
-    SCI_req_downtime = 5;   //获取上次关机时间 request;
-    SCI_resp_downtime = 6;  //获取上次关机时间 response;
-    SCI_req_sleep = 7;      //主机休眠 request;
-    SCI_resp_sleep = 8;     //主机休眠 response;
-    SCI_req_wakeup = 9;     //唤醒主机 request;
-    SCI_resp_wakeup = 10;   //唤醒主机 response;
-    SCI_req_usedSeconds = 11;       //获取瓶子使用总时间（秒） request;
-    SCI_resp_usedSeconds = 12;      //获取瓶子使用总时间（秒） response;
-    SCI_req_enableSmell = 13;       //开启某个气味 request;
-    SCI_resp_enableSmell = 14;      //开启某个气味 response;
-    SCI_req_playSmell = 15; //播放气味 request;
-    SCI_resp_playSmell = 16;        //播放气味 response;
-    SCI_req_setPower = 17;  //设置播放功率 request;
-    SCI_resp_setPower = 18; //设置播放功率 response;
+	SCI_req_mac = 1;        // 获取设备MAC地址 request;
+	SCI_resp_mac = 2;       // 获取设备MAC地址 response;
+	SCI_req_uptime = 3;     // 获取设备开机时间 request;
+	SCI_resp_uptime = 4;    // 获取设备开机时间 response;
+	SCI_req_downtime = 5;   // 获取上次关机时间 request;
+	SCI_resp_downtime = 6;  // 获取上次关机时间 response;
+	SCI_req_sleep = 7;      // 主机休眠 request;
+	SCI_resp_sleep = 8;     // 主机休眠 response;
+	SCI_req_wakeup = 9;     // 唤醒主机 request;
+	SCI_resp_wakeup = 10;   // 唤醒主机 response;
+	SCI_req_usedSeconds = 11;       // 获取瓶子使用总时间（秒） request;
+	SCI_resp_usedSeconds = 12;      // 获取瓶子使用总时间（秒） response;
+	SCI_req_enableSmell = 13;       // 开启某个气味 request;
+	SCI_resp_enableSmell = 14;      // 开启某个气味 response;
+	SCI_req_setPower = 15;  // 设置播放功率 request;
+	SCI_resp_setPower = 16; // 设置播放功率 response;
 }
 // 返回码
 enum SrErrorCode
@@ -119,16 +117,4 @@ message PlaySmell {
 //  3.安卓|IOS录制的播放脚本      多气味，切换频繁，可能会有小循环，如果作为专门的脚本录入入口，会涉及所有播放模式
 //  4.仿真物品气味                        循环长时间播放
 //  5.广告牌（午饭时间播放气味） 大循环（天、周、月），小循环（每隔几分钟）
-
-// 相对，什么时候开始，怎么播放（播几秒，循环）
-// 考虑多个动作组合整个过程
-// 播放的场景
-//    不循环
-//        过几秒，播放几秒
-//        具体时间，播放几秒
-//    循环，参考crontab
-//        次数循环
-//        时间循环
-//            每周循环，每月
-
 
