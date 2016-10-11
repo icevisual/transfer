@@ -134,7 +134,6 @@ SmellOpen = {
 		SmellOpenLog.debug("onMessageArrived From Topic "
 				+ message.destinationName);
 		var headerInfo = SmellOpen.analyzeHeader(message.payloadBytes);
-		SmellOpenLog.debug('analyzing End');
 		if (false === headerInfo) {
 			SmellOpenLog.debug('Header Not Match');
 			SmellOpenLog.debug('payloadString', message.payloadString);
@@ -186,9 +185,9 @@ SmellOpen = {
 		if (msgHeader[0] == 0xfe) {
 			var info = {
 				'version' : msgHeader[1],
-				'length' : parseInt(msgHeader[2] << 8) + parseInt(msgHeader[3]),
-				'cmdId' : parseInt(msgHeader[4] << 8) + parseInt(msgHeader[5]),
-				'seqId' : parseInt(msgHeader[6] << 8) + parseInt(msgHeader[7]),
+				'length' : msgHeader[2] << 8 | msgHeader[3],
+				'cmdId' : msgHeader[4] << 8 | msgHeader[5],
+				'seqId' : msgHeader[6] << 8 | msgHeader[7],
 			}
 			return info;
 		} else {
