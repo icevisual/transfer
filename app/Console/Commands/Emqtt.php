@@ -286,6 +286,35 @@ class Emqtt extends Command
         });
     }
     
+    public function pubfileAction()
+    {
+        $this->template(function ($mqtt) {
+            $content = file_get_contents(public_path('PlayAction.mqtt.data'));
+            $bodyLength = strlen($content);
+            $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
+            $seq = 1;
+            $header = [
+                0xfe,
+                0x01,
+                $bodyLength >> 4,
+                $bodyLength & 0x0f,
+                $cmdId >> 4 ,
+                $cmdId & 0x0f,
+                $seq >> 4 ,
+                $seq & 0x0f
+            ];
+            $hStr = '';
+            foreach ($header as $v){
+                $hStr .= chr($v);
+            }
+            $sss = $hStr.$content;
+            dumpByte($content);
+            dumpByte($sss);
+            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
+        });
+    }
+    
+    
     public function publishAction()
     {
         $this->template(function ($mqtt) {
@@ -325,6 +354,10 @@ class Emqtt extends Command
             $PlaySmell->appendPlay($PlayAction);
             
             $content = $PlaySmell->serializeToString();
+
+            
+            file_put_contents(public_path('PlayAction.mqtt.data'), $content);
+            
             
             // var len = SmellOpen.utils.ten2sixteen(payloadByteLength + headerLength);
             // var cmd = SmellOpen.utils.ten2sixteen(cmdId);
