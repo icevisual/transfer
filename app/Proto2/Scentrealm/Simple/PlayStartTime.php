@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 09:45:02
+ * Auto generated from Simple.proto.js at 2016-10-11 10:35:21
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -12,18 +12,12 @@ namespace Proto2\Scentrealm\Simple {
 class PlayStartTime extends \ProtobufMessage
 {
     /* Field index constants */
-    const MODE = 1;
-    const STARTAT = 2;
-    const CIRCULATION = 3;
-    const CYCLETIME = 4;
+    const STARTAT = 1;
+    const CIRCULATION = 2;
+    const CYCLETIME = 3;
 
     /* @var array Field descriptors */
     protected static $fields = array(
-        self::MODE => array(
-            'name' => 'mode',
-            'required' => true,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
         self::STARTAT => array(
             'name' => 'startAt',
             'repeated' => true,
@@ -56,7 +50,6 @@ class PlayStartTime extends \ProtobufMessage
      */
     public function reset()
     {
-        $this->values[self::MODE] = null;
         $this->values[self::STARTAT] = array();
         $this->values[self::CIRCULATION] = null;
         $this->values[self::CYCLETIME] = null;
@@ -70,29 +63,6 @@ class PlayStartTime extends \ProtobufMessage
     public function fields()
     {
         return self::$fields;
-    }
-
-    /**
-     * Sets value of 'mode' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setMode($value)
-    {
-        return $this->set(self::MODE, $value);
-    }
-
-    /**
-     * Returns value of 'mode' property
-     *
-     * @return integer
-     */
-    public function getMode()
-    {
-        $value = $this->get(self::MODE);
-        return $value === null ? (integer)$value : $value;
     }
 
     /**

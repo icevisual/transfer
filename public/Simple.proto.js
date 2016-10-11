@@ -78,18 +78,17 @@ message TimePoint {
 }
 // 开始时间
 message PlayStartTime {
-	required SrTimeMode mode = 1;// 播放模式
-	repeated TimePoint startAt = 2;// 开始时间，整个数组组成一个时间，
-    required bytes circulation = 3;// 是否循环,00不循环,01循环，10无限循环
-    optional int32 cycleTime = 4;// 循环次数
+	repeated TimePoint startAt = 1;// 开始时间，整个数组组成一个时间，
+    required bytes circulation = 2;// 是否循环,00不循环,01循环，10无限循环
+    optional int32 cycleTime = 3;// 循环次数
 }
 // 一个播放动作
 message PlayAction {
 	required string bottle = 1; // 瓶子ID
     required int32 beforeStart = 2; // 几秒后开始
     required int32 duration = 3; // 播放时间，单位秒
-    optional int32 power = 4; // 播放功率
-    required bytes circulation = 5; // 是否循环,00不循环,01循环，10无限循环
+    required bytes circulation = 4; // 是否循环,00不循环,01循环，10无限循环
+    optional int32 power = 5; // 播放功率
     optional int32 interval = 6; // 循环间歇时间 ，-- --
     optional int32 cycleTime = 7; // 循环次数
 }

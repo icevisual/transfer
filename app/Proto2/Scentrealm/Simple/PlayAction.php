@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 09:45:02
+ * Auto generated from Simple.proto.js at 2016-10-11 10:35:21
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -15,8 +15,8 @@ class PlayAction extends \ProtobufMessage
     const BOTTLE = 1;
     const BEFORESTART = 2;
     const DURATION = 3;
-    const POWER = 4;
-    const CIRCULATION = 5;
+    const CIRCULATION = 4;
+    const POWER = 5;
     const INTERVAL = 6;
     const CYCLETIME = 7;
 
@@ -37,15 +37,15 @@ class PlayAction extends \ProtobufMessage
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
-        self::POWER => array(
-            'name' => 'power',
-            'required' => false,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
         self::CIRCULATION => array(
             'name' => 'circulation',
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_STRING,
+        ),
+        self::POWER => array(
+            'name' => 'power',
+            'required' => false,
+            'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
         self::INTERVAL => array(
             'name' => 'interval',
@@ -77,8 +77,8 @@ class PlayAction extends \ProtobufMessage
         $this->values[self::BOTTLE] = null;
         $this->values[self::BEFORESTART] = null;
         $this->values[self::DURATION] = null;
-        $this->values[self::POWER] = null;
         $this->values[self::CIRCULATION] = null;
+        $this->values[self::POWER] = null;
         $this->values[self::INTERVAL] = null;
         $this->values[self::CYCLETIME] = null;
     }
@@ -163,29 +163,6 @@ class PlayAction extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'power' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setPower($value)
-    {
-        return $this->set(self::POWER, $value);
-    }
-
-    /**
-     * Returns value of 'power' property
-     *
-     * @return integer
-     */
-    public function getPower()
-    {
-        $value = $this->get(self::POWER);
-        return $value === null ? (integer)$value : $value;
-    }
-
-    /**
      * Sets value of 'circulation' property
      *
      * @param string $value Property value
@@ -206,6 +183,29 @@ class PlayAction extends \ProtobufMessage
     {
         $value = $this->get(self::CIRCULATION);
         return $value === null ? (string)$value : $value;
+    }
+
+    /**
+     * Sets value of 'power' property
+     *
+     * @param integer $value Property value
+     *
+     * @return null
+     */
+    public function setPower($value)
+    {
+        return $this->set(self::POWER, $value);
+    }
+
+    /**
+     * Returns value of 'power' property
+     *
+     * @return integer
+     */
+    public function getPower()
+    {
+        $value = $this->get(self::POWER);
+        return $value === null ? (integer)$value : $value;
     }
 
     /**

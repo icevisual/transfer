@@ -33,6 +33,31 @@ SmellOpen = {
     loadProto:function(){
     	var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
     	Simple = simpleRoot.Proto2.Scentrealm.Simple;
+    	var sData = new Simple.PlaySmell();
+    	sData.when = new Simple.PlayStartTime();
+    	sData.when.startAt = new Array();
+    	sData.when.startAt[0] = new Simple.TimePoint(Simple.SrTimeMode.STM_relative,2);
+    	sData.when.circulation = 0x00;
+    	sData.when.cycleTime = 0;
+    	sData.play = new Array();
+    	sData.play[0] = new Simple.PlayAction();
+    	sData.play[0].bottle = "0000000001";
+    	sData.play[0].beforeStart = 3600;
+    	sData.play[0].duration = 20;
+    	sData.play[0].power = 5;
+    	sData.play[0].circulation = 0x01;
+    	sData.play[0].interval = 0;
+    	sData.play[0].cycleTime = 15;
+//    	sData.play[1] = new Simple.PlayAction(
+//    			'0000000001',
+//    			3600,
+//    			20,
+//    			0x00,
+//    			5,
+//    			0,
+//    			0
+//    	);
+    	console.log('sData',sData);
     },
     initialize: function() {
     	if(null == this.configs){
@@ -68,7 +93,6 @@ SmellOpen = {
     unsubscribe: function(topic) {
         this.client.unsubscribe(topic);
     },
-
     onConnect: function() {
         SmellOpen.utils.log("onConnect,clientId = " + SmellOpen.configs.deviceId);
         SmellOpen.subscribe("/" + SmellOpen.configs.deviceId);
