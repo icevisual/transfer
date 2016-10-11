@@ -285,7 +285,7 @@ class Emqtt extends Command
             $mqtt->loop();
         });
     }
-
+    
     public function publishAction()
     {
         $this->template(function ($mqtt) {
@@ -346,10 +346,10 @@ class Emqtt extends Command
             ];
             $hStr = '';
             foreach ($header as $v){
-                $hStr .= $v;
+                $hStr .= chr($v);
             }
             $sss = $hStr.$content;
-            
+            dumpByte($content);
             dumpByte($sss);
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
