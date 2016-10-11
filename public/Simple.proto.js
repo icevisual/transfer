@@ -89,7 +89,6 @@ message PlayStartTime {
     required SrCycleMode cycleMode = 2;// 是否循环,00不循环,01循环，10无限循环
     optional int32 cycleTime = 3;// 循环次数
 }
-
 // 一个播放动作
 message PlayAction {
 	required string bottle = 1; // 瓶子ID
