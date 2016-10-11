@@ -51,7 +51,7 @@ SmellOpen = {
     	var playStartTime = new Simple.PlayStartTime();
     	playStartTime.startAt = new Array(1);
     	playStartTime.startAt[0] = startAt;
-    	playStartTime.circulation = Simple.SrCirculationMode.SCM_no;
+    	playStartTime.cycleMode = Simple.SrCycleMode.SCM_cycle_no;
     	playStartTime.cycleTime = 0;
     	SmellOpenLog.debug('playStartTime',playStartTime);
     	sData.when = playStartTime;
@@ -72,7 +72,7 @@ SmellOpen = {
     	sData.play[0].beforeStart = 3600;
     	sData.play[0].duration = 72;
     	sData.play[0].power = 73;
-    	sData.play[0].circulation = Simple.SrCirculationMode.SCM_no;
+    	sData.play[0].cycleMode = Simple.SrCycleMode.SCM_cycle_no;
     	sData.play[0].interval = 2;
     	sData.play[0].cycleTime = 15;
     	simpleData = sData;

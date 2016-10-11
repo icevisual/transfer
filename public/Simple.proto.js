@@ -70,11 +70,12 @@ enum SrTimeMode
     STM_month = 6; // 月份
     STM_year = 7; // 年份
 }
-enum SrCirculationMode
+// 循环模式
+enum SrCycleMode
 {
-	SCM_no = 1;
-	SCM_yes = 2;
-	SCM_unlimited = 3;
+	SCM_cycle_no = 1; //不循环
+	SCM_cycle_yes = 2; //循环
+	SCM_cycle_infinite = 3; //无限循环
 }
 // 时间点
 message TimePoint {
@@ -85,7 +86,7 @@ message TimePoint {
 // 开始时间
 message PlayStartTime {
 	repeated TimePoint startAt = 1;// 开始时间，整个数组组成一个时间，
-    required SrCirculationMode circulation = 2;// 是否循环,00不循环,01循环，10无限循环
+    required SrCycleMode cycleMode = 2;// 是否循环,00不循环,01循环，10无限循环
     optional int32 cycleTime = 3;// 循环次数
 }
 
@@ -94,7 +95,7 @@ message PlayAction {
 	required string bottle = 1; // 瓶子ID
     required int32 beforeStart = 2; // 几秒后开始
     required int32 duration = 3; // 播放时间，单位秒
-    required SrCirculationMode circulation = 4; // 是否循环,00不循环,01循环，10无限循环
+    required SrCycleMode cycleMode = 4; // 是否循环,00不循环,01循环，10无限循环
     optional int32 power = 5; // 播放功率
     optional int32 interval = 6; // 循环间歇时间 ，-- --
     optional int32 cycleTime = 7; // 循环次数
