@@ -30,6 +30,8 @@ enum SrCmdId
 	SCI_resp_wakeup = 10;   // 唤醒主机 response;
 	SCI_req_usedSeconds = 11;       // 获取瓶子使用总时间（秒） request;
 	SCI_resp_usedSeconds = 12;      // 获取瓶子使用总时间（秒） response;
+	SCI_req_playSmell = 13; // 播放气味 request;
+	SCI_resp_playSmell = 14;        // 播放气味 response;
 }
 // 返回码
 enum SrErrorCode
