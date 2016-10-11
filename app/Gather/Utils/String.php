@@ -1,4 +1,18 @@
 <?php
+
+if (! function_exists('dumpByte')) {
+    function dumpByte($string){
+        $output = '';
+        for($i = 0 ; $i < strlen($string) ; $i ++){
+            $output .= ' '.ord($string[$i]);
+        }
+        echo $output.PHP_EOL;
+    }
+    
+}
+
+
+
 if (! function_exists('uuid')) {
 
     function uuid()

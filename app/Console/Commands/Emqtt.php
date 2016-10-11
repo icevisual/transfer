@@ -56,9 +56,9 @@ class Emqtt extends Command
             $this->error(PHP_EOL . 'No Action Found');
         }
     }
-    
-    
-    public function generAction(){
+
+    public function generAction()
+    {
         $cmd = [
             'mac' => '获取设备MAC地址',
             'uptime' => '获取设备开机时间',
@@ -66,15 +66,19 @@ class Emqtt extends Command
             'sleep' => '主机休眠',
             'wakeup' => '唤醒主机',
             'usedSeconds' => '获取瓶子使用总时间（秒）',
-//             'enableSmell' => '开启某个气味',
-            'playSmell' => '播放气味',
-//             'setPower' => '设置播放功率',
+            // 'enableSmell' => '开启某个气味',
+            'playSmell' => '播放气味'
+        ]
+        // 'setPower' => '设置播放功率',
+        ;
+        $prefix = [
+            'SCI_req_',
+            'SCI_resp_'
         ];
-        $prefix = ['SCI_req_','SCI_resp_'];
-        $i = 0 ;
-        foreach ($cmd as $k => $v){
-            echo "{$prefix[0]}{$k} = ".($i * 2 + 1). ";\t// {$cmd[$k]} request;".PHP_EOL;
-            echo "{$prefix[1]}{$k} = ".($i * 2 + 2). ";\t// {$cmd[$k]} response;".PHP_EOL;
+        $i = 0;
+        foreach ($cmd as $k => $v) {
+            echo "{$prefix[0]}{$k} = " . ($i * 2 + 1) . ";\t// {$cmd[$k]} request;" . PHP_EOL;
+            echo "{$prefix[1]}{$k} = " . ($i * 2 + 2) . ";\t// {$cmd[$k]} response;" . PHP_EOL;
             $i ++;
         }
     }
@@ -284,11 +288,70 @@ class Emqtt extends Command
 
     public function publishAction()
     {
-        $content = file_get_contents(public_path('ADDRESS_BOOK_FILE.FILE'));
         $this->template(function ($mqtt) {
-            $content = file_get_contents(public_path('test/ADDRESS_BOOK_FILE.FILE'));
-//             $content = file_get_contents(public_path('test/bin_person.person'));
-            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $content, 0, 0);
+            // $content = file_get_contents(public_path('test/ADDRESS_BOOK_FILE.FILE'));
+            // $content = file_get_contents(public_path('test/bin_person.person'));\
+            
+            $PlaySmell = new \Proto2\Scentrealm\Simple\PlaySmell();
+            $when = new \Proto2\Scentrealm\Simple\PlayStartTime();
+            
+            $startAt = new \Proto2\Scentrealm\Simple\TimePoint();
+            $startAt->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_absolute);
+            $startAt->setValue(295);
+            $startAt->setEndValue(296);
+            
+            $startAt1 = new \Proto2\Scentrealm\Simple\TimePoint();
+            $startAt1->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_monthday);
+            $startAt1->setValue(11);
+            $startAt1->setEndValue(12);
+            
+            $when->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_no);
+            $when->setCycleTime(0);
+            $when->appendStartAt($startAt);
+            $when->appendStartAt($startAt1);
+            
+            $PlaySmell->setWhen($when);
+            
+            $PlayAction = new \Proto2\Scentrealm\Simple\PlayAction();
+            
+            $PlayAction->setBottle("0000000b1");
+            $PlayAction->setBeforeStart(222);
+            $PlayAction->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_no);
+            $PlayAction->setCycleTime(0);
+            $PlayAction->setDuration(2222);
+            $PlayAction->setInterval(0);
+            $PlayAction->setPower(5);
+            
+            $PlaySmell->appendPlay($PlayAction);
+            
+            $content = $PlaySmell->serializeToString();
+            
+            // var len = SmellOpen.utils.ten2sixteen(payloadByteLength + headerLength);
+            // var cmd = SmellOpen.utils.ten2sixteen(cmdId);
+            // var seq = SmellOpen.utils.ten2sixteen(seqId);
+            // var header = [ 0xfe, 0x01, len[0], len[1], cmd[0], cmd[1], seq[0],
+            // seq[1] ];
+            $bodyLength = strlen($content);
+            $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
+            $seq = 1;
+            $header = [
+                0xfe,
+                0x01,
+                $bodyLength >> 4,
+                $bodyLength & 0x0f,
+                $cmdId >> 4 ,
+                $cmdId & 0x0f,
+                $seq >> 4 ,
+                $seq & 0x0f
+            ];
+            $hStr = '';
+            foreach ($header as $v){
+                $hStr .= $v;
+            }
+            $sss = $hStr.$content;
+            
+            dumpByte($sss);
+            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
 }
