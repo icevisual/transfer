@@ -296,13 +296,14 @@ class Emqtt extends Command
             $header = [
                 0xfe,
                 0x01,
-                $bodyLength >> 4,
-                $bodyLength & 0x0f,
-                $cmdId >> 4 ,
-                $cmdId & 0x0f,
-                $seq >> 4 ,
-                $seq & 0x0f
+                $bodyLength >> 8,
+                $bodyLength & 0xff,
+                $cmdId >> 8 ,
+                $cmdId & 0xff,
+                $seq >> 8 ,
+                $seq & 0xff
             ];
+            dump($bodyLength);
             $hStr = '';
             foreach ($header as $v){
                 $hStr .= chr($v);
@@ -358,12 +359,6 @@ class Emqtt extends Command
             
             file_put_contents(public_path('PlayAction.mqtt.data'), $content);
             
-            
-            // var len = SmellOpen.utils.ten2sixteen(payloadByteLength + headerLength);
-            // var cmd = SmellOpen.utils.ten2sixteen(cmdId);
-            // var seq = SmellOpen.utils.ten2sixteen(seqId);
-            // var header = [ 0xfe, 0x01, len[0], len[1], cmd[0], cmd[1], seq[0],
-            // seq[1] ];
             $bodyLength = strlen($content);
             $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
             $seq = 1;

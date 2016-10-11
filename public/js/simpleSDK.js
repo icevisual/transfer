@@ -203,6 +203,7 @@ SmellOpen = {
 		var b = new Uint8Array(payloadLength + headerLength);
 		b.set(msgData, headerLength);
 		var len = SmellOpen.utils.ten2sixteen(payloadByteLength + headerLength);
+		SmellOpenLog.debug('protoDataPackage len', payloadByteLength + headerLength);
 		var cmd = SmellOpen.utils.ten2sixteen(cmdId);
 		var seq = SmellOpen.utils.ten2sixteen(seqId);
 		var header = [ 0xfe, 0x01, len[0], len[1], cmd[0], cmd[1], seq[0],
@@ -307,7 +308,8 @@ SmellOpen.utils = {
 		}
 	},
 	ten2sixteen : function(d) {// 256 => [01,00]
-		return [ d >> 8, d > 256 ? d - 256 : d ];
+//		return [ d >> 8, d > 256 ? d - 256 : d ];
+		return [ d >> 8, d & 0xff ];
 	},
 	hex2IntArray : function(hexStr) {
 		if (hexStr.length % 2) {
