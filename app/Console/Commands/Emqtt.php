@@ -59,7 +59,6 @@ class Emqtt extends Command
     
     
     public function generAction(){
-        
         $cmd = [
             'mac' => '获取设备MAC地址',
             'uptime' => '获取设备开机时间',

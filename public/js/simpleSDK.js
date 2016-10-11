@@ -2,11 +2,13 @@
 var arrivesMsg ,byteBody;
 //http://120.26.109.169:18083/
 var Simple ;
+var simpleData ;
 SmellOpen = {
     initFlag: false,
     defaults: {
         'deviceId': '0CRngr3ddpVzUBoeF',
         'deviceSecret': 'XqCEMSzhsdWHfwhm',
+        'env':'debug',
         'mqtt': {
 //            'hostname': '120.26.109.169',
         	'hostname': '192.168.5.21',
@@ -34,20 +36,46 @@ SmellOpen = {
     	var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
     	Simple = simpleRoot.Proto2.Scentrealm.Simple;
     	var sData = new Simple.PlaySmell();
-    	sData.when = new Simple.PlayStartTime();
-    	sData.when.startAt = new Array();
-    	sData.when.startAt[0] = new Simple.TimePoint(Simple.SrTimeMode.STM_relative,2);
-    	sData.when.circulation = 0x00;
-    	sData.when.cycleTime = 0;
-    	sData.play = new Array();
+//    	sData.when = new Simple.PlayStartTime();
+//    	sData.when.startAt = new Array();
+//    	sData.when.startAt[0] = new Simple.TimePoint(Simple.SrTimeMode.STM_relative,2,0);
+//    	sData.when.circulation = 0x00;
+//    	sData.when.cycleTime = 0;
+    	
+    	var startAt = new Simple.TimePoint({
+    		'mode':Simple.SrTimeMode.STM_relative,
+    		'value':46,
+    		'endValue':47
+    	});
+    	SmellOpenLog.debug('startAt',startAt);
+    	var playStartTime = new Simple.PlayStartTime();
+    	playStartTime.startAt = new Array(1);
+    	playStartTime.startAt[0] = startAt;
+    	playStartTime.circulation = Simple.SrCirculationMode.SCM_no;
+    	playStartTime.cycleTime = 0;
+    	SmellOpenLog.debug('playStartTime',playStartTime);
+    	sData.when = playStartTime;
+//    	sData.when = new Simple.PlayStartTime({
+//    		'circulation':0,
+//    		'cycleTime':0
+//    	});
+    	
+    	
+//    	sData.when = new Simple.PlayStartTime([
+//		new Simple.TimePoint(Simple.SrTimeMode.STM_relative,2,0)
+//		],0x00,0);
+    	
+    	
+    	sData.play = new Array(1);
     	sData.play[0] = new Simple.PlayAction();
     	sData.play[0].bottle = "0000000001";
     	sData.play[0].beforeStart = 3600;
-    	sData.play[0].duration = 20;
-    	sData.play[0].power = 5;
-    	sData.play[0].circulation = 0x01;
-    	sData.play[0].interval = 0;
+    	sData.play[0].duration = 72;
+    	sData.play[0].power = 73;
+    	sData.play[0].circulation = Simple.SrCirculationMode.SCM_no;
+    	sData.play[0].interval = 2;
     	sData.play[0].cycleTime = 15;
+    	simpleData = sData;
 //    	sData.play[1] = new Simple.PlayAction(
 //    			'0000000001',
 //    			3600,
@@ -57,7 +85,7 @@ SmellOpen = {
 //    			0,
 //    			0
 //    	);
-    	console.log('sData',sData);
+    	SmellOpenLog.debug('sData',sData);
     },
     initialize: function() {
     	if(null == this.configs){
@@ -71,12 +99,13 @@ SmellOpen = {
     	this.initialize();
     	
         var mqttConfig = this.configs;
-        console.log('SDK Config',mqttConfig);
+        SmellOpenLog.debug('SDK Config',mqttConfig);
         // Create a client instance
         this.client = new Paho.MQTT.Client(mqttConfig.mqtt.hostname, Number(mqttConfig.mqtt.port), mqttConfig.deviceId);
         // set callback handlers
         this.client.onConnectionLost = this.onConnectionLost;
         this.client.onMessageArrived = this.onMessageArrived;
+        this.client.onMessageDelivered = this.onMessageDelivered;
         // connect the client
         this.client.connect({
             onSuccess: this.onConnect
@@ -94,58 +123,64 @@ SmellOpen = {
         this.client.unsubscribe(topic);
     },
     onConnect: function() {
-        SmellOpen.utils.log("onConnect,clientId = " + SmellOpen.configs.deviceId);
+    	SmellOpenLog.debug("onConnect,clientId = " + SmellOpen.configs.deviceId);
         SmellOpen.subscribe("/" + SmellOpen.configs.deviceId);
     },
     onConnectionLost: function(responseObject) {
-    	console.log('onConnectionLost',responseObject);
+    	SmellOpenLog.debug('onConnectionLost',responseObject);
         if (responseObject.errorCode !== 0) {
             SmellOpen.utils.log("onConnectionLost:" + responseObject.errorMessage);
         }
     },
+    onMessageDelivered: function(message) {
+    	SmellOpenLog.debug('onMessageDelivered.payloadBytes',message.payloadBytes);
+//    	console.log('onMessageDelivered.payloadString',message.payloadString);
+    },
     onMessageArrived: function(message) {
         // 读取内容，分析指令
         arrivesMsg = message;
-        console.log("onMessageArrived From Topic " + message.destinationName);
+        SmellOpenLog.debug("onMessageArrived From Topic " + message.destinationName);
         var headerInfo = SmellOpen.analyzeHeader(message.payloadBytes);
-        console.log('analyzing End');
+        SmellOpenLog.debug('analyzing End');
         if (false === headerInfo) {
-            console.log('Header Not Match');
-            console.log(message.payloadString);
-            console.log(message.payloadBytes);
-            if(message.payloadBytes[0] == 10){
-            	console.log(pRoot.tutorial.AddressBook.decode(message.payloadBytes));
-            }
-//            console.log(pRoot.tutorial.AddressBook.decode(message.payloadBytes));
-            //pRoot.tutorial.Person.decode(message.payloadBytes);
+        	SmellOpenLog.debug('Header Not Match');
+        	SmellOpenLog.debug('payloadString',message.payloadString);
+        	SmellOpenLog.debug('payloadBytes',message.payloadBytes);
         } else {
-            console.log('Header Found');
-            console.log(headerInfo);
+        	SmellOpenLog.debug('Header Found',headerInfo);
+        	SmellOpen.decodeData( message.payloadBytes,Simple.PlaySmell,8)
 //            analyze header
-            try {
-                var headerLength = 8;
-                var payloadBytesBody = message.payloadBytes.slice(headerLength);// Get payload body
-                byteBody = payloadBytesBody;
-                console.log('payloadBytesBody',payloadBytesBody);
-                var payloadHex = SmellOpen.utils.intArray2HexStr(payloadBytesBody);// Convert 2 hex string
-                console.log('payloadHexString',payloadHex);
+        }
+    },
+    decodeData: function(payloadBytes,decodeClass,removeHeaderLength,isAES){
+    	try {
+            var payloadBytesBody = payloadBytes
+            if(removeHeaderLength){
+            	payloadBytesBody = payloadBytes.slice(removeHeaderLength);// Get payload body
+            }
+            var decodeObj ;
+            SmellOpenLog.debug('payloadBytesBody',payloadBytesBody);
+            if(isAES === true){
+            	var payloadHex = SmellOpen.utils.intArray2HexStr(payloadBytesBody);// Convert 2 hex string
+            	SmellOpenLog.debug('payloadHexString',payloadHex);
                 var b64str = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(payloadHex));// Convert 2 base64 string 
                 var res1 = SmellOpen.utils.AESDecrypt(b64str,SmellOpen.configs.AES.key,SmellOpen.configs.AES.iv);// AES decrypt
-                
-                console.log('AESDecrypted Data',SmellOpen.utils.hex2IntArray(CryptoJS.enc.Hex.stringify(res1)));
-                
-                var obj = Scentrealm.AuthRequest.decodeHex(res1.toString());// Proto decode
-                console.log('Proto Data',obj);
-            } catch (e) {
-                console.log('protobuf decode error');
+                SmellOpenLog.debug('AESDecrypted Data',SmellOpen.utils.hex2IntArray(CryptoJS.enc.Hex.stringify(res1)));
+                decodeObj = decodeClass.decodeHex(res1.toString());// Proto decode
+            }else{
+            	decodeObj = decodeClass.decode(payloadBytesBody);
             }
+            SmellOpenLog.debug('Proto Data',decodeObj);
+            return decodeObj;
+        } catch (e) {
+        	SmellOpenLog.waring('protobuf decode error');
         }
+        return false;
     },
     analyzeHeader: function(payloadBytes) {
         var headerLength = 8;
         var msgHeader = new Uint8Array(payloadBytes);
-        console.log('analyzing');
-        console.log(msgHeader);
+        SmellOpenLog.debug('analyzing Header',msgHeader);
         if (msgHeader[0] == 0xfe) {
             var info = {
                 'version': msgHeader[1],
@@ -184,27 +219,65 @@ SmellOpen = {
         return this.protoDataPackage(u8ArrayBuffer,cmdId,seqId); // Call package function
     },
     sendProtoTest: function() {
-        var b = this.protoDataPackage(auth.encode().toArrayBuffer(),10001,1);
-        console.log('protoDataPackage',b);
+    	SmellOpenLog.debug('simpleData',simpleData);
+        var b = this.protoDataPackage(simpleData.encode().toArrayBuffer(),10001,1);
+        SmellOpenLog.debug('protoDataPackage',b);
         this.publish("/" + this.configs.deviceId, b);
-        return true;
-    },
-    sendPerson: function() {
-    	var msgData = new Uint8Array(msgBook.encode().toArrayBuffer());
-    	var b = msgData;
-        console.log('Sending Data Bytes',b);
-        this.publish("/test/Person", b);
         return true;
     },
     sendProtoAesTest: function() {
         var b = this.protoDataPackageWithAES(auth,10001,1);
-        console.log('protoDataPackageWithAES',b);
+        SmellOpenLog.debug('protoDataPackageWithAES',b);
         this.publish("/" + this.configs.deviceId, b);
         return true;
     },
 };
 var u8 ;
 var u9 ;
+
+SmellOpenLog = {
+	debug:function(){
+		this.log('debug',arguments);
+	},
+	info:function(){
+		this.log('info',arguments);
+	},
+	notice:function(){
+		this.log('notice',arguments);
+	},
+	warning:function(){
+		this.log('warning',arguments);
+	},
+	error:function(){
+		this.log('error',arguments);
+	},
+	levelCompare:function(maxLevel,nowLevel){
+		var level = {
+			'debug' : 1,
+			'info' : 2,
+			'notice' : 3,
+			'warning' : 4,
+			'error' : 5,
+		};
+		if(!level[nowLevel] || !level[maxLevel]){
+			return false;
+		}
+		return level[nowLevel] >= level[maxLevel];
+	},
+	log:function(level,data){
+		if(data.length > 0 & this.levelCompare(SmellOpen.configs.env,level)){
+			var string = "[" + now() + "] " + level + " : ";
+			if(typeof data[0] == "string"){
+				data[0] = (string += data[0]);
+			}else{
+				
+			}
+			for (var i in data) {
+				console.log(data[i]);
+	        }
+		}
+	}
+};
 SmellOpen.utils = {
 	loadProto: function(filename){
 		var ProtoBuf = dcodeIO.ProtoBuf;
