@@ -46,7 +46,7 @@ class MySubscribeCallback extends MessageHandler
     {
         
         printf(
-            "\e[32mI got a message\e[0m:(msgid=%d, QoS=%d, dup=%d, topic=%s) \e[32m%s\e[0m\n",
+            "\e[32m".now()."\e[0m:(msgid=%d, QoS=%d, dup=%d, topic=%s) \e[32m%s\e[0m\n",
             $publish_object->getMsgID(),
             $publish_object->getQos(),
             $publish_object->getDup(),
@@ -54,9 +54,7 @@ class MySubscribeCallback extends MessageHandler
             $publish_object->getMessage()
         );
         
-        
         $msg = $publish_object->getMessage();
-        
 
         $headerLength = 8 ;
         $headerBytes = [];
@@ -74,7 +72,7 @@ class MySubscribeCallback extends MessageHandler
         if($headerBytes[0] == 0xfe){
             $class = new \Proto2\Scentrealm\Simple\PlaySmell();
             $ret = $this->decodeProtoData($msg, $class,$headerLength);
-            dump($obj);
+            dump($ret);
             $class->dump();
         }
         
