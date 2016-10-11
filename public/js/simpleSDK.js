@@ -30,7 +30,6 @@ SmellOpen = {
 				this.configs[i] = configs[i] + '';
 			}
 		}
-		;
 	},
 	loadProto : function() {
 		var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
@@ -74,7 +73,6 @@ SmellOpen = {
 		
 		simpleData = sData;
 		
-		
 		SmellOpenLog.debug('sData', sData);
 	},
 	initialize : function() {
@@ -84,7 +82,7 @@ SmellOpen = {
 		this.loadProto();
 		this.initFlag = true;
 	},
-	client : {},
+	client : null,
 	connect : function() {
 		this.initialize();
 
