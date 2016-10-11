@@ -1,5 +1,5 @@
 
-var arrivesMsg ,byteBody;
+var arrivesMsg ;
 //http://120.26.109.169:18083/
 var Simple ;
 var simpleData ;
@@ -232,9 +232,6 @@ SmellOpen = {
         return true;
     },
 };
-var u8 ;
-var u9 ;
-
 SmellOpenLog = {
 	debug:function(){
 		this.log('debug',arguments);
@@ -266,14 +263,21 @@ SmellOpenLog = {
 	},
 	log:function(level,data){
 		if(data.length > 0 & this.levelCompare(SmellOpen.configs.env,level)){
-			var string = "[" + now() + "] " + level + " : ";
+			var dateStr = "[" + now() + "] " + level + " : ";
+			var output ;
 			if(typeof data[0] == "string"){
-				data[0] = (string += data[0]);
+				data[0] = (dateStr += data[0]);
+				output = data;
 			}else{
-				
+				output = new Array();
+				output.push(dateStr);
+				for (var i in data) {
+					output.push(data[i]);
+		        }
 			}
-			for (var i in data) {
-				console.log(data[i]);
+			return console.log.apply(console,output);
+			for (var i in output) {
+				console.log(output[i]);
 	        }
 		}
 	}
@@ -347,7 +351,8 @@ SmellOpen.utils = {
         var res = this.AESDecrypt(ecp.toString(), key, iv);
         console.log(res.toString(CryptoJS.enc.Utf8));
         return;
-        
+        var u8 ;// make it global
+        var u9 ;
         console.log('============Test Proto & AES============');
         console.log('Uint8Array',new Uint8Array(car.encodeAB()));// Proto data ArrayBuffer
         var u8data = CryptoJS.enc.Hex.parse(car.encodeHex());// Convert 2 word array
