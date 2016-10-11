@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 10:35:21
+ * Auto generated from Simple.proto.js at 2016-10-11 16:11:22
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -15,7 +15,7 @@ class PlayAction extends \ProtobufMessage
     const BOTTLE = 1;
     const BEFORESTART = 2;
     const DURATION = 3;
-    const CIRCULATION = 4;
+    const CYCLEMODE = 4;
     const POWER = 5;
     const INTERVAL = 6;
     const CYCLETIME = 7;
@@ -37,10 +37,10 @@ class PlayAction extends \ProtobufMessage
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
-        self::CIRCULATION => array(
-            'name' => 'circulation',
+        self::CYCLEMODE => array(
+            'name' => 'cycleMode',
             'required' => true,
-            'type' => \ProtobufMessage::PB_TYPE_STRING,
+            'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
         self::POWER => array(
             'name' => 'power',
@@ -77,7 +77,7 @@ class PlayAction extends \ProtobufMessage
         $this->values[self::BOTTLE] = null;
         $this->values[self::BEFORESTART] = null;
         $this->values[self::DURATION] = null;
-        $this->values[self::CIRCULATION] = null;
+        $this->values[self::CYCLEMODE] = null;
         $this->values[self::POWER] = null;
         $this->values[self::INTERVAL] = null;
         $this->values[self::CYCLETIME] = null;
@@ -163,26 +163,26 @@ class PlayAction extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'circulation' property
+     * Sets value of 'cycleMode' property
      *
-     * @param string $value Property value
+     * @param integer $value Property value
      *
      * @return null
      */
-    public function setCirculation($value)
+    public function setCycleMode($value)
     {
-        return $this->set(self::CIRCULATION, $value);
+        return $this->set(self::CYCLEMODE, $value);
     }
 
     /**
-     * Returns value of 'circulation' property
+     * Returns value of 'cycleMode' property
      *
-     * @return string
+     * @return integer
      */
-    public function getCirculation()
+    public function getCycleMode()
     {
-        $value = $this->get(self::CIRCULATION);
-        return $value === null ? (string)$value : $value;
+        $value = $this->get(self::CYCLEMODE);
+        return $value === null ? (integer)$value : $value;
     }
 
     /**

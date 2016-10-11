@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 10:35:21
+ * Auto generated from Simple.proto.js at 2016-10-11 16:11:22
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -30,7 +30,7 @@ class TimePoint extends \ProtobufMessage
         ),
         self::ENDVALUE => array(
             'name' => 'endValue',
-            'required' => false,
+            'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
     );

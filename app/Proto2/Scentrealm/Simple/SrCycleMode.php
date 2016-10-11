@@ -7,12 +7,13 @@
 
 namespace Proto2\Scentrealm\Simple {
 /**
- * SrErrorCode enum
+ * SrCycleMode enum
  */
-final class SrErrorCode
+final class SrCycleMode
 {
-    const SEC_success = 0;
-    const SEC_error = -1;
+    const SCM_cycle_no = 1;
+    const SCM_cycle_yes = 2;
+    const SCM_cycle_infinite = 3;
 
     /**
      * Returns defined enum values
@@ -22,8 +23,9 @@ final class SrErrorCode
     public function getEnumValues()
     {
         return array(
-            'SEC_success' => self::SEC_success,
-            'SEC_error' => self::SEC_error,
+            'SCM_cycle_no' => self::SCM_cycle_no,
+            'SCM_cycle_yes' => self::SCM_cycle_yes,
+            'SCM_cycle_infinite' => self::SCM_cycle_infinite,
         );
     }
 }
