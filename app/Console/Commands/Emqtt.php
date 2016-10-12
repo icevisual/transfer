@@ -278,6 +278,55 @@ class Emqtt extends Command
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
+    
+    public function publishPersonAction()
+    {
+        $this->template(function ($mqtt) {
+            
+            $AddressBook = new \Proto2\Tutorial\AddressBook();
+            $Person = new \Proto2\Tutorial\Person();
+            
+            $Person->setEmail('person@qq.com');
+            $Person->setId(123);
+            $Person->setName('person name');
+            
+            $Phone = new \Proto2\Tutorial\Person_PhoneNumber();
+            $Phone->setNumber('18764548772');
+            $Phone->setType(\Proto2\Tutorial\Person_PhoneType::MOBILE);
+            
+            $Person->appendPhone($Phone);
+            
+            $AddressBook->appendPerson($Person);
+            
+    
+            $content = $AddressBook->serializeToString();
+    
+            file_put_contents(public_path('Person.mqtt.data'), $content);
+    
+            $bodyLength = strlen($content);
+            $cmdId = 2222;
+            $seq = 1;
+            $header = [
+                0xfe,
+                0x01,
+                $bodyLength >> 8,
+                $bodyLength & 0xff,
+                $cmdId >> 8 ,
+                $cmdId & 0xff,
+                $seq >> 8 ,
+                $seq & 0xff
+            ];
+            $hStr = '';
+            foreach ($header as $v){
+                $hStr .= chr($v);
+            }
+            $sss = $hStr.$content;
+            MqttUtil::dumpByte($content);
+            MqttUtil::dumpByte($sss);
+            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
+        });
+    }
+    
 }
 
 

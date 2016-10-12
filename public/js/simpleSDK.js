@@ -1,6 +1,7 @@
 var arrivesMsg;
 // http://120.26.109.169:18083/
 var Simple;
+var AddressBook;
 var simpleData;
 SmellOpen = {
 	initFlag : false,
@@ -34,7 +35,9 @@ SmellOpen = {
 	loadProto : function() {
 		var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
 		Simple = simpleRoot.Proto2.Scentrealm.Simple;
-
+		
+		var personRoot = SmellOpen.utils.loadProto('test/Person.pro');
+		AddressBook = personRoot.Proto2.Tutorial.AddressBook;
 		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30--  ===   ## (9s) 循环
 		// 
 		var sData = new Simple.PlaySmell();
@@ -170,7 +173,13 @@ SmellOpen = {
 			SmellOpenLog.debug('payloadBytes', message.payloadBytes);
 		} else {
 			SmellOpenLog.debug('Header Found', headerInfo);
-			SmellOpen.decodeData(message.payloadBytes, Simple.PlaySmell, 8)
+			
+			if(headerInfo.cmdId == 2222){
+				SmellOpen.decodeData(message.payloadBytes, AddressBook, 8)
+			}
+			if(headerInfo.cmdId == Simple.SrCmdId.SCI_req_playSmell){
+				SmellOpen.decodeData(message.payloadBytes, Simple.PlaySmell, 8)
+			}
 			// analyze header
 		}
 	},
