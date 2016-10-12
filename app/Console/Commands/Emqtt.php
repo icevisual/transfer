@@ -261,12 +261,12 @@ class Emqtt extends Command
             $header = [
                 0xfe,
                 0x01,
-                $bodyLength >> 4,
-                $bodyLength & 0x0f,
-                $cmdId >> 4 ,
-                $cmdId & 0x0f,
-                $seq >> 4 ,
-                $seq & 0x0f
+                $bodyLength >> 8,
+                $bodyLength & 0xff,
+                $cmdId >> 8 ,
+                $cmdId & 0xff,
+                $seq >> 8 ,
+                $seq & 0xff
             ];
             $hStr = '';
             foreach ($header as $v){
