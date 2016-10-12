@@ -55,15 +55,13 @@ class MqttUtil
         $packed = $msg;
         if($headerLength > 0 ){
             $packed = substr($msg, $headerLength);
-            dump("Received Body Bytes");
-            MqttUtil::dumpByte($packed);
+            MqttUtil::dumpByte($packed,"Received Body Bytes");
         }
         
         try {
             if($aes){
                 $decryptedPack = MqttUtil::aesDecrypt($packed,$key,$iv,false);
-                dump("aesDecrypt Body Bytes");
-                MqttUtil::dumpByte($decryptedPack);
+                MqttUtil::dumpByte($decryptedPack,"aesDecrypt Body Bytes");
                 $obj = $class->parseFromString($decryptedPack);
                 return $obj;
             }else{

@@ -34,11 +34,10 @@ class MySubscribeCallback extends MessageHandler
 //                 \Proto2\Scentrealm::class
             }
         }
-        dump("Received Bytes");
-        MqttUtil::dumpByte($msg);
+        MqttUtil::dumpByte($msg,"Received Bytes");
         if($headerBytes[0] == 0xfe){
             $class = new \Proto2\Scentrealm\Simple\PlaySmell();
-            $ret = $this->decodeProtoData($msg, $class,$headerLength);
+            $ret = MqttUtil::decodeProtoData($msg, $class,$headerLength);
             dump($ret);
             $class->dump();
         }
