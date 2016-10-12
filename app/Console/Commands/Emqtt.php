@@ -150,7 +150,7 @@ class Emqtt extends Command
     public function pubfileAction()
     {
         $this->template(function ($mqtt) {
-            $content = file_get_contents(public_path('PlayAction.mqtt.data'));
+            $content = file_get_contents(public_path('proto/PlayAction.mqtt.data'));
             $bodyLength = strlen($content);
             $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
             $seq = 1;
@@ -251,7 +251,7 @@ class Emqtt extends Command
             
             $content = $PlaySmell->serializeToString();
             
-            file_put_contents(public_path('PlayAction.mqtt.data'), $content);
+            file_put_contents(public_path('proto/PlayAction.mqtt.data'), $content);
             
             $bodyLength = strlen($content);
             $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
@@ -299,7 +299,7 @@ class Emqtt extends Command
     
             $content = $AddressBook->serializeToString();
     
-            file_put_contents(public_path('Person.mqtt.data'), $content);
+            file_put_contents(public_path('proto/Person.mqtt.data'), $content);
     
             $bodyLength = strlen($content);
             $cmdId = 2222;

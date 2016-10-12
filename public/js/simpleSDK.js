@@ -33,10 +33,10 @@ SmellOpen = {
 		}
 	},
 	loadProto : function() {
-		var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
+		var simpleRoot = SmellOpen.utils.loadProto('proto/Simple.proto.js');
 		Simple = simpleRoot.Proto2.Scentrealm.Simple;
 		
-		var personRoot = SmellOpen.utils.loadProto('test/Person.pro');
+		var personRoot = SmellOpen.utils.loadProto('proto/Person.pro');
 		AddressBook = personRoot.Proto2.Tutorial.AddressBook;
 		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30--  ===   ## (9s) 循环
 		// 
