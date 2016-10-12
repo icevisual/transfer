@@ -34,44 +34,64 @@ SmellOpen = {
 	loadProto : function() {
 		var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
 		Simple = simpleRoot.Proto2.Scentrealm.Simple;
+
+		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30-- --- --(12s) 循环
 		var sData = new Simple.PlaySmell();
 		// Generate A test PlaySmell Data
 		sData.when = new Simple.PlayStartTime();
 		sData.when.startAt = new Array();
 		sData.when.startAt[0] = new Simple.TimePoint(
-				Simple.SrTimeMode.STM_relative, 42, 42);
+				Simple.SrTimeMode.STM_daytime, 41400, 45000);
+		// 11:30 - 12:30  41400 45000
+		// 17:30 - 18:30  63000 66600
 		sData.when.cycleMode = Simple.SrCycleMode.SCM_cycle_no;
 		sData.when.cycleTime = 0;
 
 		sData.when = new Simple.PlayStartTime({
 			'startAt' : [ {
-				'mode' : Simple.SrTimeMode.STM_relative,
-				'value' : 62,
-				'endValue' : 63
+				'mode' : Simple.SrTimeMode.STM_weekday,
+				'value' : 1,
+				'endValue' : 5
+			}, {
+				'mode' : Simple.SrTimeMode.STM_daytime,
+				'value' : 41400,
+				'endValue' : 45000
+			}, {
+				'mode' : Simple.SrTimeMode.STM_daytime,
+				'value' : 63000,
+				'endValue' : 66600
 			} ],
-			'cycleMode' : Simple.SrCycleMode.SCM_cycle_no,
+			'cycleMode' : Simple.SrCycleMode.SCM_cycle_infinite,
 			'cycleTime' : 0
 		});
 
 		sData.play = new Array(1);
-		sData.play[0] = new Simple.PlayAction();
-		sData.play[0].bottle = "0000000001";
-		sData.play[0].beforeStart = 3600;
-		sData.play[0].duration = 72;
-		sData.play[0].power = 73;
-		sData.play[0].cycleMode = Simple.SrCycleMode.SCM_cycle_no;
-		sData.play[0].interval = 2;
-		sData.play[0].cycleTime = 15;
-		sData.play[1] = new Simple.PlayAction({
+//		sData.play[0] = new Simple.PlayAction();
+//		sData.play[0].bottle = "0000000001";
+//		sData.play[0].beforeStart = 3600;
+//		sData.play[0].duration = 72;
+//		sData.play[0].power = 73;
+//		sData.play[0].cycleMode = Simple.SrCycleMode.SCM_cycle_no;
+//		sData.play[0].interval = 2;
+//		sData.play[0].cycleTime = 15;
+		sData.play[0] = new Simple.PlayAction({
 			'bottle' : '0000000001',
-			'beforeStart' : 3600,
-			'duration' : 68,
-			'power' : 70,
+			'beforeStart' : 0,
+			'duration' : 2,
+			'power' : 5,
 			'cycleMode' : Simple.SrCycleMode.SCM_cycle_no,
 			'interval' : 0,
 			'cycleTime' : 0
 		});
-
+		sData.play[1] = new Simple.PlayAction({
+			'bottle' : '0000000001',
+			'beforeStart' : 0,
+			'duration' : 2,
+			'power' : 5,
+			'cycleMode' : Simple.SrCycleMode.SCM_cycle_no,
+			'interval' : 0,
+			'cycleTime' : 0
+		});
 		simpleData = sData;
 
 		SmellOpenLog.debug('sData', sData);
@@ -203,7 +223,8 @@ SmellOpen = {
 		var b = new Uint8Array(payloadLength + headerLength);
 		b.set(msgData, headerLength);
 		var len = SmellOpen.utils.ten2sixteen(payloadByteLength + headerLength);
-		SmellOpenLog.debug('protoDataPackage len', payloadByteLength + headerLength);
+		SmellOpenLog.debug('protoDataPackage len', payloadByteLength
+				+ headerLength);
 		var cmd = SmellOpen.utils.ten2sixteen(cmdId);
 		var seq = SmellOpen.utils.ten2sixteen(seqId);
 		var header = [ 0xfe, 0x01, len[0], len[1], cmd[0], cmd[1], seq[0],
@@ -308,7 +329,7 @@ SmellOpen.utils = {
 		}
 	},
 	ten2sixteen : function(d) {// 256 => [01,00]
-//		return [ d >> 8, d > 256 ? d - 256 : d ];
+		// return [ d >> 8, d > 256 ? d - 256 : d ];
 		return [ d >> 8, d & 0xff ];
 	},
 	hex2IntArray : function(hexStr) {
@@ -389,8 +410,8 @@ SmellOpen.utils = {
 		var hexEncryptedStr = CryptoJS.enc.Hex.stringify(base64Words);
 		console.log('AESEncrypt.toHex', hexEncryptedStr);
 		console.log('AESEncrypt.length', hexEncryptedStr.length);
-		// Convert 2 int Array 
-		// ...transfer 
+		// Convert 2 int Array
+		// ...transfer
 		// ...receive ArrayBuffer
 		var intArray = SmellOpen.utils.hex2IntArray(hexEncryptedStr);
 		// Convert 2 hex string
