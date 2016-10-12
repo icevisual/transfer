@@ -35,11 +35,26 @@ class MqttUtil
     {
         $output = '';
         if($msg){
-            $output .= "[ ".MqttUtil::colorString($msg,MqttUtil::COLOR_GREEN)." ] ";
+            $output .= "[ ".MqttUtil::colorString($msg,MqttUtil::COLOR_GREEN)." ] ".PHP_EOL;
         }
+//         for ($i = 0; $i < strlen($data); $i ++) {
+//             $output .= ' ' . ord($data[$i]);
+//         }
+//         echo $output . PHP_EOL;
+        
         for ($i = 0; $i < strlen($data); $i ++) {
-            $output .= ' ' . ord($data[$i]);
+//             sprintf('%02x',ord($data[$i]))
+//             $output .= ' ' . dechex(ord($data[$i]));
+            $output .= ' ' . sprintf('%02x',ord($data[$i]));
+            if(($i + 1) % 10 == 0){
+                $output .= "\t";
+            }
+            if(($i + 1) % 20 == 0){
+                $output .= PHP_EOL;
+            }
         }
+        
+        
         echo $output . PHP_EOL;
     }
     
