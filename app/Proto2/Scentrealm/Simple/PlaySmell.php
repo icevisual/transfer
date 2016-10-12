@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-12 14:22:47
+ * Auto generated from Simple.proto.js at 2016-10-12 15:41:05
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -12,16 +12,28 @@ namespace Proto2\Scentrealm\Simple {
 class PlaySmell extends \ProtobufMessage
 {
     /* Field index constants */
-    const WHEN = 1;
-    const PLAY = 2;
-    const TRACE = 3;
+    const CYCLEMODE = 1;
+    const STARTAT = 2;
+    const CYCLETIME = 3;
+    const PLAY = 4;
+    const TRACE = 5;
 
     /* @var array Field descriptors */
     protected static $fields = array(
-        self::WHEN => array(
-            'name' => 'when',
+        self::CYCLEMODE => array(
+            'name' => 'cycleMode',
             'required' => true,
-            'type' => '\Proto2\Scentrealm\Simple\PlayStartTime'
+            'type' => \ProtobufMessage::PB_TYPE_INT,
+        ),
+        self::STARTAT => array(
+            'name' => 'startAt',
+            'repeated' => true,
+            'type' => '\Proto2\Scentrealm\Simple\TimePoint'
+        ),
+        self::CYCLETIME => array(
+            'name' => 'cycleTime',
+            'required' => false,
+            'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
         self::PLAY => array(
             'name' => 'play',
@@ -50,7 +62,9 @@ class PlaySmell extends \ProtobufMessage
      */
     public function reset()
     {
-        $this->values[self::WHEN] = null;
+        $this->values[self::CYCLEMODE] = null;
+        $this->values[self::STARTAT] = array();
+        $this->values[self::CYCLETIME] = null;
         $this->values[self::PLAY] = array();
         $this->values[self::TRACE] = array();
     }
@@ -66,25 +80,113 @@ class PlaySmell extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'when' property
+     * Sets value of 'cycleMode' property
      *
-     * @param \Proto2\Scentrealm\Simple\PlayStartTime $value Property value
+     * @param integer $value Property value
      *
      * @return null
      */
-    public function setWhen(\Proto2\Scentrealm\Simple\PlayStartTime $value=null)
+    public function setCycleMode($value)
     {
-        return $this->set(self::WHEN, $value);
+        return $this->set(self::CYCLEMODE, $value);
     }
 
     /**
-     * Returns value of 'when' property
+     * Returns value of 'cycleMode' property
      *
-     * @return \Proto2\Scentrealm\Simple\PlayStartTime
+     * @return integer
      */
-    public function getWhen()
+    public function getCycleMode()
     {
-        return $this->get(self::WHEN);
+        $value = $this->get(self::CYCLEMODE);
+        return $value === null ? (integer)$value : $value;
+    }
+
+    /**
+     * Appends value to 'startAt' list
+     *
+     * @param \Proto2\Scentrealm\Simple\TimePoint $value Value to append
+     *
+     * @return null
+     */
+    public function appendStartAt(\Proto2\Scentrealm\Simple\TimePoint $value)
+    {
+        return $this->append(self::STARTAT, $value);
+    }
+
+    /**
+     * Clears 'startAt' list
+     *
+     * @return null
+     */
+    public function clearStartAt()
+    {
+        return $this->clear(self::STARTAT);
+    }
+
+    /**
+     * Returns 'startAt' list
+     *
+     * @return \Proto2\Scentrealm\Simple\TimePoint[]
+     */
+    public function getStartAt()
+    {
+        return $this->get(self::STARTAT);
+    }
+
+    /**
+     * Returns 'startAt' iterator
+     *
+     * @return \ArrayIterator
+     */
+    public function getStartAtIterator()
+    {
+        return new \ArrayIterator($this->get(self::STARTAT));
+    }
+
+    /**
+     * Returns element from 'startAt' list at given offset
+     *
+     * @param int $offset Position in list
+     *
+     * @return \Proto2\Scentrealm\Simple\TimePoint
+     */
+    public function getStartAtAt($offset)
+    {
+        return $this->get(self::STARTAT, $offset);
+    }
+
+    /**
+     * Returns count of 'startAt' list
+     *
+     * @return int
+     */
+    public function getStartAtCount()
+    {
+        return $this->count(self::STARTAT);
+    }
+
+    /**
+     * Sets value of 'cycleTime' property
+     *
+     * @param integer $value Property value
+     *
+     * @return null
+     */
+    public function setCycleTime($value)
+    {
+        return $this->set(self::CYCLETIME, $value);
+    }
+
+    /**
+     * Returns value of 'cycleTime' property
+     *
+     * @return integer
+     */
+    public function getCycleTime()
+    {
+        $value = $this->get(self::CYCLETIME);
+        return $value === null ? (integer)$value : $value;
     }
 
     /**

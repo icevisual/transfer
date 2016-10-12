@@ -42,32 +42,18 @@ SmellOpen = {
 		// 
 		var sData = new Simple.PlaySmell();
 		// Generate A test PlaySmell Data
-		sData.when = new Simple.PlayStartTime();
-		sData.when.startAt = new Array();
-		sData.when.startAt[0] = new Simple.TimePoint(
+		sData.startAt = new Array();
+		sData.cycleMode = Simple.SrCycleMode.SCM_cycle_infinite;
+		sData.cycleTime = 0;
+		
+		sData.startAt[0] = new Simple.TimePoint(
+				Simple.SrTimeMode.STM_weekday, 1, 5);
+		sData.startAt[1] = new Simple.TimePoint(
 				Simple.SrTimeMode.STM_daytime, 41400, 45000);
+		sData.startAt[2] = new Simple.TimePoint(
+				Simple.SrTimeMode.STM_daytime, 63000, 66600);
 		// 11:30 - 12:30  41400 45000
 		// 17:30 - 18:30  63000 66600
-		sData.when.cycleMode = Simple.SrCycleMode.SCM_cycle_no;
-		sData.when.cycleTime = 0;
-
-		sData.when = new Simple.PlayStartTime({
-			'startAt' : [ {
-				'mode' : Simple.SrTimeMode.STM_weekday,
-				'value' : 1,
-				'endValue' : 5
-			}, {
-				'mode' : Simple.SrTimeMode.STM_daytime,
-				'value' : 41400,
-				'endValue' : 45000
-			}, {
-				'mode' : Simple.SrTimeMode.STM_daytime,
-				'value' : 63000,
-				'endValue' : 66600
-			} ],
-			'cycleMode' : Simple.SrCycleMode.SCM_cycle_infinite,
-			'cycleTime' : 0
-		});
 
 		sData.play = new Array();
 		sData.play[0] = new Simple.PlayAction({
@@ -272,7 +258,7 @@ SmellOpen = {
 	sendProtoTest : function() {
 		SmellOpenLog.debug('simpleData', simpleData);
 		var b = this.protoDataPackage(simpleData.encode().toArrayBuffer(),
-				10001, 1);
+				Simple.SrCmdId.SCI_req_playSmell, 1);
 		SmellOpenLog.debug('protoDataPackage', b);
 		this.publish("/" + this.configs.deviceId, b);
 		return true;

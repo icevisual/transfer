@@ -201,13 +201,11 @@ class Emqtt extends Command
             $startAt2->setValue(63000);
             $startAt2->setEndValue(66600);
             
-            $when->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_no);
-            $when->setCycleTime(0);
-            $when->appendStartAt($startAt);
-            $when->appendStartAt($startAt1);
-            $when->appendStartAt($startAt2);
-            
-            $PlaySmell->setWhen($when);
+            $PlaySmell->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_no);
+            $PlaySmell->setCycleTime(0);
+            $PlaySmell->appendStartAt($startAt);
+            $PlaySmell->appendStartAt($startAt1);
+            $PlaySmell->appendStartAt($startAt2);
             
             $PlayTrace = new \Proto2\Scentrealm\Simple\PlayTrace();
             
