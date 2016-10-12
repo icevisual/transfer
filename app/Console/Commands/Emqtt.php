@@ -273,6 +273,9 @@ class Emqtt extends Command
             $sss = $hStr.$content;
             MqttUtil::dumpByte($content,'Playload Body');
             MqttUtil::dumpByte($sss,'With Header');
+            
+            file_put_contents(public_path('proto/PlayAction.mqtt.payload'), $content);
+            
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
