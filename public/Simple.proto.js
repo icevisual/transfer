@@ -83,12 +83,6 @@ message TimePoint {
 	required int32 value = 2;// 粗略时间
 	required int32 endValue = 3;// 时间范围，结束点，用以描述周一到周五等情况
 }
-// 开始时间
-message PlayStartTime {
-	repeated TimePoint startAt = 1;// 开始时间，整个数组组成一个时间，
-    required SrCycleMode cycleMode = 2;// 是否循环,00不循环,01循环，10无限循环
-    optional int32 cycleTime = 3;// 循环次数
-}
 // 一个播放动作，描述如何播放一个气味
 message PlayAction {
 	required string bottle = 1; // 瓶子ID
@@ -105,9 +99,13 @@ message PlayTrace{
 }
 // 播放气味
 message PlaySmell {
-    required PlayStartTime when = 1 ;// 开始播放气味的时间
-    repeated PlayAction play = 2 ; // 播放动作数组
-    repeated PlayTrace trace = 3 ; // 播放痕迹
+	
+    required SrCycleMode cycleMode = 1;// 循环模式
+    repeated TimePoint startAt = 2;// 开始时间，整个数组组成一个时间，
+    optional int32 cycleTime = 3;// 循环次数
+	
+    repeated PlayAction play = 4 ; // 播放动作数组
+    repeated PlayTrace trace = 5 ; // 播放痕迹
 }
 
 // 设置名称
