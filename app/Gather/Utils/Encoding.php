@@ -1,4 +1,98 @@
 <?php
+
+if (! function_exists('base64Decode')) {
+
+    function base64Decode($encode)
+    {
+        $base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        $segmentsLength = strlen($encode) / 4;
+        $map = array_flip(str_split($base, 1));
+        $ret = "";
+        for ($i = 0; $i < $segmentsLength; $i ++) {
+            $str = substr($encode, $i * 4, 4);
+            if ($i == $segmentsLength - 1) {
+                $str = trim($str, '=');
+                if (strlen($str) == 2) {
+                    $a = chr($map[$str[0]] << 2 | $map[$str[1]] >> 4);
+                } else
+                    if (strlen($str) == 3) {
+                        $a = "12";
+                        $a{0} = chr($map[$str[0]] << 2 | $map[$str[1]] >> 4);
+                        $a{1} = chr(($map[$str[1]] & 0x0f) << 4 | $map[$str[2]] >> 2);
+                    } else {
+                        $a = "123";
+                        $a{0} = chr($map[$str[0]] << 2 | $map[$str[1]] >> 4);
+                        $a{1} = chr(($map[$str[1]] & 0x0f) << 4 | $map[$str[2]] >> 2);
+                        $a{2} = chr(($map[$str[2]] & 0x01) << 6 | $map[$str[3]]);
+                    }
+            } else {
+                $a = "123";
+                $a{0} = chr($map[$str[0]] << 2 | $map[$str[1]] >> 4);
+                $a{1} = chr(($map[$str[1]] & 0x0f) << 4 | $map[$str[2]] >> 2);
+                $a{2} = chr(($map[$str[2]] & 0x01) << 6 | $map[$str[3]]);
+            }
+            $ret .= $a;
+        }
+    
+        return $ret;
+    }
+    
+    function c_base64_encode($src)
+    {
+        static $base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    
+        // //将原始的3个字节转换为4个字节
+        $slen = strlen($src);
+        $smod = ($slen % 3);
+        $snum = floor($slen / 3);
+    
+        $desc = array();
+    
+        for ($i = 0; $i < $snum; $i ++) {
+            // //读取3个字节
+            $_arr = array_map('ord', str_split(substr($src, $i * 3, 3)));
+    
+            // /计算每一个base64值
+            $_dec0 = $_arr[0] >> 2;
+            $_dec1 = (($_arr[0] & 3) << 4) | ($_arr[1] >> 4);
+            $_dec2 = (($_arr[1] & 0xF) << 2) | ($_arr[2] >> 6);
+            $_dec3 = $_arr[2] & 63;
+    
+            $desc = array_merge($desc, array(
+                $base[$_dec0],
+                $base[$_dec1],
+                $base[$_dec2],
+                $base[$_dec3]
+            ));
+        }
+    
+        if ($smod == 0)
+            return implode('', $desc);
+    
+        // /计算非3倍数字节
+        $_arr = array_map('ord', str_split(substr($src, $snum * 3, 3)));
+        $_dec0 = $_arr[0] >> 2;
+        // /只有一个字节
+        if (! isset($_arr[1])) {
+            $_dec1 = (($_arr[0] & 3) << 4);
+            $_dec2 = $_dec3 = "=";
+        } else {
+            // /2个字节
+            $_dec1 = (($_arr[0] & 3) << 4) | ($_arr[1] >> 4);
+            $_dec2 = $base[($_arr[1] & 7) << 2];
+            $_dec3 = "=";
+        }
+        $desc = array_merge($desc, array(
+            $base[$_dec0],
+            $base[$_dec1],
+            $_dec2,
+            $_dec3
+        ));
+        return implode('', $desc);
+    }
+    
+}
+
 if (! function_exists('detect_encoding')) {
 
     /**
