@@ -35,7 +35,8 @@ SmellOpen = {
 		var simpleRoot = SmellOpen.utils.loadProto('Simple.proto.js');
 		Simple = simpleRoot.Proto2.Scentrealm.Simple;
 
-		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30-- --- --(12s) 循环
+		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30--  ===   ## (9s) 循环
+		// 
 		var sData = new Simple.PlaySmell();
 		// Generate A test PlaySmell Data
 		sData.when = new Simple.PlayStartTime();
@@ -65,32 +66,40 @@ SmellOpen = {
 			'cycleTime' : 0
 		});
 
-		sData.play = new Array(1);
-//		sData.play[0] = new Simple.PlayAction();
-//		sData.play[0].bottle = "0000000001";
-//		sData.play[0].beforeStart = 3600;
-//		sData.play[0].duration = 72;
-//		sData.play[0].power = 73;
-//		sData.play[0].cycleMode = Simple.SrCycleMode.SCM_cycle_no;
-//		sData.play[0].interval = 2;
-//		sData.play[0].cycleTime = 15;
+		sData.play = new Array();
 		sData.play[0] = new Simple.PlayAction({
 			'bottle' : '0000000001',
-			'beforeStart' : 0,
 			'duration' : 2,
 			'power' : 5,
-			'cycleMode' : Simple.SrCycleMode.SCM_cycle_no,
-			'interval' : 0,
-			'cycleTime' : 0
 		});
 		sData.play[1] = new Simple.PlayAction({
-			'bottle' : '0000000001',
-			'beforeStart' : 0,
+			'bottle' : '0000000002',
+			'duration' : 3,
+			'power' : 7,
+		});
+		sData.play[2] = new Simple.PlayAction({
+			'bottle' : '0000000003',
 			'duration' : 2,
 			'power' : 5,
-			'cycleMode' : Simple.SrCycleMode.SCM_cycle_no,
+		});
+		sData.play[3] = new Simple.PlayAction({
+			'bottle' : '',
+			'duration' : 2,
+			'power' : 0,
+		});
+		sData.play[4] = new Simple.PlayAction({
+			'bottle' : '',
+			'duration' : 3,
+			'power' : 0,
+		});
+		// 14 
+		sData.trace = new Array();
+		sData.trace[0] = new Simple.PlayTrace({
+			'actionId' : [0,3,1,4,2],
+			'beforeStart' : 0,
+			'cycleMode' : Simple.SrCycleMode.SCM_cycle_yes,
 			'interval' : 0,
-			'cycleTime' : 0
+			'cycleTime' : 278
 		});
 		simpleData = sData;
 

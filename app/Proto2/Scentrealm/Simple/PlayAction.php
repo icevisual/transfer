@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 16:11:22
+ * Auto generated from Simple.proto.js at 2016-10-12 14:22:47
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -13,12 +13,8 @@ class PlayAction extends \ProtobufMessage
 {
     /* Field index constants */
     const BOTTLE = 1;
-    const BEFORESTART = 2;
-    const DURATION = 3;
-    const CYCLEMODE = 4;
-    const POWER = 5;
-    const INTERVAL = 6;
-    const CYCLETIME = 7;
+    const DURATION = 2;
+    const POWER = 3;
 
     /* @var array Field descriptors */
     protected static $fields = array(
@@ -27,33 +23,13 @@ class PlayAction extends \ProtobufMessage
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_STRING,
         ),
-        self::BEFORESTART => array(
-            'name' => 'beforeStart',
-            'required' => true,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
         self::DURATION => array(
             'name' => 'duration',
             'required' => true,
             'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
-        self::CYCLEMODE => array(
-            'name' => 'cycleMode',
-            'required' => true,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
         self::POWER => array(
             'name' => 'power',
-            'required' => false,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
-        self::INTERVAL => array(
-            'name' => 'interval',
-            'required' => false,
-            'type' => \ProtobufMessage::PB_TYPE_INT,
-        ),
-        self::CYCLETIME => array(
-            'name' => 'cycleTime',
             'required' => false,
             'type' => \ProtobufMessage::PB_TYPE_INT,
         ),
@@ -75,12 +51,8 @@ class PlayAction extends \ProtobufMessage
     public function reset()
     {
         $this->values[self::BOTTLE] = null;
-        $this->values[self::BEFORESTART] = null;
         $this->values[self::DURATION] = null;
-        $this->values[self::CYCLEMODE] = null;
         $this->values[self::POWER] = null;
-        $this->values[self::INTERVAL] = null;
-        $this->values[self::CYCLETIME] = null;
     }
 
     /**
@@ -117,29 +89,6 @@ class PlayAction extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'beforeStart' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setBeforeStart($value)
-    {
-        return $this->set(self::BEFORESTART, $value);
-    }
-
-    /**
-     * Returns value of 'beforeStart' property
-     *
-     * @return integer
-     */
-    public function getBeforeStart()
-    {
-        $value = $this->get(self::BEFORESTART);
-        return $value === null ? (integer)$value : $value;
-    }
-
-    /**
      * Sets value of 'duration' property
      *
      * @param integer $value Property value
@@ -163,29 +112,6 @@ class PlayAction extends \ProtobufMessage
     }
 
     /**
-     * Sets value of 'cycleMode' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setCycleMode($value)
-    {
-        return $this->set(self::CYCLEMODE, $value);
-    }
-
-    /**
-     * Returns value of 'cycleMode' property
-     *
-     * @return integer
-     */
-    public function getCycleMode()
-    {
-        $value = $this->get(self::CYCLEMODE);
-        return $value === null ? (integer)$value : $value;
-    }
-
-    /**
      * Sets value of 'power' property
      *
      * @param integer $value Property value
@@ -205,52 +131,6 @@ class PlayAction extends \ProtobufMessage
     public function getPower()
     {
         $value = $this->get(self::POWER);
-        return $value === null ? (integer)$value : $value;
-    }
-
-    /**
-     * Sets value of 'interval' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setInterval($value)
-    {
-        return $this->set(self::INTERVAL, $value);
-    }
-
-    /**
-     * Returns value of 'interval' property
-     *
-     * @return integer
-     */
-    public function getInterval()
-    {
-        $value = $this->get(self::INTERVAL);
-        return $value === null ? (integer)$value : $value;
-    }
-
-    /**
-     * Sets value of 'cycleTime' property
-     *
-     * @param integer $value Property value
-     *
-     * @return null
-     */
-    public function setCycleTime($value)
-    {
-        return $this->set(self::CYCLETIME, $value);
-    }
-
-    /**
-     * Returns value of 'cycleTime' property
-     *
-     * @return integer
-     */
-    public function getCycleTime()
-    {
-        $value = $this->get(self::CYCLETIME);
         return $value === null ? (integer)$value : $value;
     }
 }

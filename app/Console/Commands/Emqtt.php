@@ -187,36 +187,71 @@ class Emqtt extends Command
             $when = new \Proto2\Scentrealm\Simple\PlayStartTime();
             
             $startAt = new \Proto2\Scentrealm\Simple\TimePoint();
-            $startAt->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_absolute);
-            $startAt->setValue(295);
-            $startAt->setEndValue(296);
+            $startAt->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_weekday);
+            $startAt->setValue(1);
+            $startAt->setEndValue(5);
             
             $startAt1 = new \Proto2\Scentrealm\Simple\TimePoint();
-            $startAt1->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_monthday);
-            $startAt1->setValue(11);
-            $startAt1->setEndValue(12);
+            $startAt1->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_daytime);
+            $startAt1->setValue(41400);
+            $startAt1->setEndValue(45000);
+            
+            $startAt2 = new \Proto2\Scentrealm\Simple\TimePoint();
+            $startAt2->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_daytime);
+            $startAt2->setValue(63000);
+            $startAt2->setEndValue(66600);
             
             $when->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_no);
             $when->setCycleTime(0);
             $when->appendStartAt($startAt);
             $when->appendStartAt($startAt1);
+            $when->appendStartAt($startAt2);
             
             $PlaySmell->setWhen($when);
             
-            $PlayAction = new \Proto2\Scentrealm\Simple\PlayAction();
+            $PlayTrace = new \Proto2\Scentrealm\Simple\PlayTrace();
             
-            $PlayAction->setBottle("0000000b1");
-            $PlayAction->setBeforeStart(222);
-            $PlayAction->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_no);
-            $PlayAction->setCycleTime(0);
-            $PlayAction->setDuration(2222);
-            $PlayAction->setInterval(0);
+            $PlayAction = new \Proto2\Scentrealm\Simple\PlayAction();
+            $PlayAction->setBottle("0000000001");
+            $PlayAction->setDuration(2);
             $PlayAction->setPower(5);
+            $PlayAction1 = new \Proto2\Scentrealm\Simple\PlayAction();
+            $PlayAction1->setBottle("0000000002");
+            $PlayAction1->setDuration(3);
+            $PlayAction1->setPower(5);
+            $PlayAction2 = new \Proto2\Scentrealm\Simple\PlayAction();
+            $PlayAction2->setBottle("0000000003");
+            $PlayAction2->setDuration(2);
+            $PlayAction2->setPower(7);
+            $PlayAction3 = new \Proto2\Scentrealm\Simple\PlayAction();
+            $PlayAction3->setBottle("");
+            $PlayAction3->setDuration(2);
+            $PlayAction3->setPower(0);
+            $PlayAction4 = new \Proto2\Scentrealm\Simple\PlayAction();
+            $PlayAction4->setBottle("");
+            $PlayAction4->setDuration(3);
+            $PlayAction4->setPower(0);
+            
+            $PlayTrace->appendActionId(0);
+            $PlayTrace->appendActionId(3);
+            $PlayTrace->appendActionId(1);
+            $PlayTrace->appendActionId(4);
+            $PlayTrace->appendActionId(2);
+            
+            $PlayTrace->setBeforeStart(0);
+            $PlayTrace->setCycleMode(\Proto2\Scentrealm\Simple\SrCycleMode::SCM_cycle_yes);
+            $PlayTrace->setCycleTime(278);
+            $PlayTrace->setInterval(0);
             
             $PlaySmell->appendPlay($PlayAction);
+            $PlaySmell->appendPlay($PlayAction1);
+            $PlaySmell->appendPlay($PlayAction2);
+            $PlaySmell->appendPlay($PlayAction3);
+            $PlaySmell->appendPlay($PlayAction4);
+            
+            $PlaySmell->appendTrace($PlayTrace);
             
             $content = $PlaySmell->serializeToString();
-
             
             file_put_contents(public_path('PlayAction.mqtt.data'), $content);
             

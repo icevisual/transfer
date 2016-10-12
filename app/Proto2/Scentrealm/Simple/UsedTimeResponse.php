@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 16:11:22
+ * Auto generated from Simple.proto.js at 2016-10-12 14:22:47
  *
  * Proto2.Scentrealm.Simple package
  */

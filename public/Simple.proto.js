@@ -89,20 +89,25 @@ message PlayStartTime {
     required SrCycleMode cycleMode = 2;// 是否循环,00不循环,01循环，10无限循环
     optional int32 cycleTime = 3;// 循环次数
 }
-// 一个播放动作
+// 一个播放动作，描述如何播放一个气味
 message PlayAction {
 	required string bottle = 1; // 瓶子ID
-    required int32 beforeStart = 2; // 几秒后开始
-    required int32 duration = 3; // 播放时间，单位秒
-    required SrCycleMode cycleMode = 4; // 是否循环,00不循环,01循环，10无限循环
-    optional int32 power = 5; // 播放功率
-    optional int32 interval = 6; // 循环间歇时间 ，-- --
-    optional int32 cycleTime = 7; // 循环次数
+    required int32 duration = 2; // 播放时间，单位秒
+    optional int32 power = 3; // 播放功率
+}
+// 播放痕迹，描述如何组合播放动作
+message PlayTrace{
+	repeated int32 actionId = 1; // 动作ID，对应PlayAction的数组下标
+	required int32 beforeStart = 2; // 几秒后开始
+    required SrCycleMode cycleMode = 3; // 循环模式
+    optional int32 interval = 4; // 循环间歇时间
+    optional int32 cycleTime = 5; // 循环次数
 }
 // 播放气味
 message PlaySmell {
     required PlayStartTime when = 1 ;// 开始播放气味的时间
-    repeated PlayAction play = 2 ; // 如何播放气味
+    repeated PlayAction play = 2 ; // 播放动作数组
+    repeated PlayTrace trace = 3 ; // 播放痕迹
 }
 
 // 设置名称

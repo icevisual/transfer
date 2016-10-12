@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto generated from Simple.proto.js at 2016-10-11 16:11:22
+ * Auto generated from Simple.proto.js at 2016-10-12 14:22:47
  *
  * Proto2.Scentrealm.Simple package
  */
@@ -14,6 +14,7 @@ class PlaySmell extends \ProtobufMessage
     /* Field index constants */
     const WHEN = 1;
     const PLAY = 2;
+    const TRACE = 3;
 
     /* @var array Field descriptors */
     protected static $fields = array(
@@ -26,6 +27,11 @@ class PlaySmell extends \ProtobufMessage
             'name' => 'play',
             'repeated' => true,
             'type' => '\Proto2\Scentrealm\Simple\PlayAction'
+        ),
+        self::TRACE => array(
+            'name' => 'trace',
+            'repeated' => true,
+            'type' => '\Proto2\Scentrealm\Simple\PlayTrace'
         ),
     );
 
@@ -46,6 +52,7 @@ class PlaySmell extends \ProtobufMessage
     {
         $this->values[self::WHEN] = null;
         $this->values[self::PLAY] = array();
+        $this->values[self::TRACE] = array();
     }
 
     /**
@@ -142,6 +149,70 @@ class PlaySmell extends \ProtobufMessage
     public function getPlayCount()
     {
         return $this->count(self::PLAY);
+    }
+
+    /**
+     * Appends value to 'trace' list
+     *
+     * @param \Proto2\Scentrealm\Simple\PlayTrace $value Value to append
+     *
+     * @return null
+     */
+    public function appendTrace(\Proto2\Scentrealm\Simple\PlayTrace $value)
+    {
+        return $this->append(self::TRACE, $value);
+    }
+
+    /**
+     * Clears 'trace' list
+     *
+     * @return null
+     */
+    public function clearTrace()
+    {
+        return $this->clear(self::TRACE);
+    }
+
+    /**
+     * Returns 'trace' list
+     *
+     * @return \Proto2\Scentrealm\Simple\PlayTrace[]
+     */
+    public function getTrace()
+    {
+        return $this->get(self::TRACE);
+    }
+
+    /**
+     * Returns 'trace' iterator
+     *
+     * @return \ArrayIterator
+     */
+    public function getTraceIterator()
+    {
+        return new \ArrayIterator($this->get(self::TRACE));
+    }
+
+    /**
+     * Returns element from 'trace' list at given offset
+     *
+     * @param int $offset Position in list
+     *
+     * @return \Proto2\Scentrealm\Simple\PlayTrace
+     */
+    public function getTraceAt($offset)
+    {
+        return $this->get(self::TRACE, $offset);
+    }
+
+    /**
+     * Returns count of 'trace' list
+     *
+     * @return int
+     */
+    public function getTraceCount()
+    {
+        return $this->count(self::TRACE);
     }
 }
 }
