@@ -30,7 +30,8 @@
 		"workerman/workerman": "^3.3",
 		"textalk/websocket": "^1.2",
 		"binsoul/net-mqtt": "^0.2.0",
-		"sskaje/mqtt": "dev-v2.0-dev"
+		"sskaje/mqtt": "dev-v2.0-dev",
+		"paquettg/php-html-parser": "^1.7"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

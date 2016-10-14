@@ -86,13 +86,15 @@ class Emqtt extends Command
 
     public function init()
     {
-        $mqtt = new MQTT("tcp://192.168.5.21:1883/");
+        
+        
+//         $mqtt = new MQTT("tcp://192.168.5.21:1883/");
+        $mqtt = new MQTT("tcp://120.26.109.169:1883/",'PHP-client-1');
         
         $context = stream_context_create();
         $mqtt->setSocketContext($context);
         
         // Debug::Enable();
-        
         $mqtt->setAuth('sskaje', '123123');
         $mqtt->setKeepalive(36);
         $connected = $mqtt->connect();
@@ -136,6 +138,7 @@ class Emqtt extends Command
         $this->template(function ($mqtt) {
             
             $topics['/0CRngr3ddpVzUBoeF'] = 2;
+            $topics['/test/conn'] = 2;
             $mqtt->subscribe($topics);
             
             // #$mqtt->unsubscribe(array_keys($topics));

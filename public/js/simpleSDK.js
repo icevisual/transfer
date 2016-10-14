@@ -10,8 +10,8 @@ SmellOpen = {
 		'deviceSecret' : 'XqCEMSzhsdWHfwhm',
 		'env' : 'debug',
 		'mqtt' : {
-			// 'hostname': '120.26.109.169',
-			'hostname' : '192.168.5.21',
+			'hostname' : '120.26.109.169',
+			// 'hostname' : '192.168.5.21',
 			'port' : '8083',
 		},
 		'AES' : {
@@ -117,13 +117,17 @@ SmellOpen = {
 		// connect the client
 		this.client.connect({
 			onSuccess : this.onConnect,
-			userName : mqttConfig.deviceId,
-			password : mqttConfig.deviceSecret,
+			onFailure : function(){
+				console.log(arguments);
+			}
+//			userName : mqttConfig.deviceId,
+//			password : mqttConfig.deviceSecret,
 		});
 	},
 	publish : function(topic, message) {
 		message = new Paho.MQTT.Message(message);
 		message.destinationName = topic;
+		message.qos = 1;
 		this.client.send(message);
 	},
 	subscribe : function(topic) {
@@ -263,6 +267,14 @@ SmellOpen = {
 				Simple.SrCmdId.SCI_req_playSmell, 1);
 		SmellOpenLog.debug('protoDataPackage', b);
 		this.publish("/" + this.configs.deviceId, b);
+		return true;
+	},
+	sendTestConn : function() {
+		SmellOpenLog.debug('simpleData', simpleData);
+		var b = this.protoDataPackage(simpleData.encode().toArrayBuffer(),
+				Simple.SrCmdId.SCI_req_playSmell, 1);
+		SmellOpenLog.debug('protoDataPackage', b);
+		this.publish("/test/conn", b);
 		return true;
 	},
 	sendProtoAesTest : function() {

@@ -8,7 +8,13 @@ if(!function_exists('now')){
     
 }
 
+if(!function_exists('tmp_path')){
 
+    function tmp_path($path = ''){
+        return public_path('tmp/'.$path);
+    }
+
+}
 if (! function_exists('excelDate2Date')) {
 
     /**

@@ -10,3 +10,4 @@ Homestead.json
 .settings
 storage/sqlLog/
 public/log*
+public/tmp/

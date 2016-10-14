@@ -36,10 +36,10 @@ class MySubscribeCallback extends MessageHandler
         }
         MqttUtil::dumpByte($msg,"Received Bytes");
         if($headerBytes[0] == 0xfe){
-            $class = new \Proto2\Scentrealm\Simple\PlaySmell();
-            $ret = MqttUtil::decodeProtoData($msg, $class,$headerLength);
-            dump($ret);
-            $class->dump();
+//             $class = new \Proto2\Scentrealm\Simple\PlaySmell();
+//             $ret = MqttUtil::decodeProtoData($msg, $class,$headerLength);
+//             dump($ret);
+//             $class->dump();
         }
         
     }
