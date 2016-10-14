@@ -110,11 +110,11 @@ class CatchCmd extends Command
             
             $url = 'http://bbs.ubnt.com.cn/home.php?mod=space&uid='.$uid.'&do=profile';
             
-            if(mt_rand(1,100) > 98){
-                // 随机更换代理
-                $this->info("[ Hit Random ]");
-                $proxy = $this->selectProxy();
-            }
+//             if(mt_rand(1,100) > 98){
+//                 // 随机更换代理
+//                 $this->info("[ Hit Random ]");
+//                 $proxy = $this->selectProxy();
+//             }
             
             try {
                 
@@ -182,7 +182,8 @@ class CatchCmd extends Command
     }
     
     public function initProxyList(){
-        $this->info('[ '.__FUNCTION__.' ]');
+        return null;
+//         $this->info('[ '.__FUNCTION__.' ]');
         $proxyArray = [
             '119.6.136.122:80',
             '171.35.36.93:8118',
@@ -203,7 +204,8 @@ class CatchCmd extends Command
     }
     
     public function reloadProxy(){
-        $this->info('[ '.__FUNCTION__.' ]');
+        return null;
+//         $this->info('[ '.__FUNCTION__.' ]');
         $a = 'X-proxy-list-fail';
         $b = 'X-proxy-list';
         while(\LRedis::LLEN($a) > 0 ){
@@ -212,7 +214,8 @@ class CatchCmd extends Command
     }
     
     public function selectProxy(){
-        $this->info('[ '.__FUNCTION__.' ]');
+        return null;
+//         $this->info('[ '.__FUNCTION__.' ]');
         $a = 'X-proxy-list-fail';
         $b = 'X-proxy-list';
         if(\LRedis::LLEN($b) > 0 ){
@@ -281,7 +284,7 @@ class CatchCmd extends Command
 
     public function getPageInformation($content,$uid)
     {
-        $this->info('[ '.__FUNCTION__.' ]');
+//         $this->info('[ '.__FUNCTION__.' ]');
         $dom = new Dom();
         $rr = $dom->loadStr($content, []);
         $infoMap = [];
@@ -323,7 +326,7 @@ class CatchCmd extends Command
 
     public function reloadLogin()
     {
-        $this->info('[ '.__FUNCTION__.' ]');
+//         $this->info('[ '.__FUNCTION__.' ]');
         $cookie_file = tmp_path('cookie.txt');
         $data = '{"user":"samliao","password":"A69v/940"}';
         $url = 'https://api.ubnt.com.cn/login';
@@ -364,7 +367,7 @@ class CatchCmd extends Command
     public function curl($url, $data = '', $opts = [])
     {
         
-        $this->info('[ '.__FUNCTION__.' ]');
+//         $this->info('[ '.__FUNCTION__.' ]');
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url); // url
