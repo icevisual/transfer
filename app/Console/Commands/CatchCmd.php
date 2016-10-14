@@ -5,6 +5,7 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use App\Models\Common\Bill;
 use PHPHtmlParser\Dom;
+use App\Extensions\Mqtt\MqttUtil;
 
 class CatchCmd extends Command
 {
@@ -23,6 +24,11 @@ class CatchCmd extends Command
      */
     protected $description = 'Display an inspiring quote';
 
+    
+    public function error($string,$v=  null){
+        $this->line( MqttUtil::colorString($string,MqttUtil::COLOR_RED) );
+    }
+    
     /**
      * Execute the console command.
      *
@@ -33,7 +39,6 @@ class CatchCmd extends Command
 //         $this->initProxyList();
 //         while ($this->selectProxy());
 //         $this->reloadProxy();
-        
         
         $this->runLoop();
         
@@ -67,14 +72,23 @@ class CatchCmd extends Command
         
         $cookie_file = tmp_path('cookie.txt');
         
-        $fp = fopen(tmp_path("{$start}-{$end}.sql"), "w");
+        $filename  = "{$start}-{$end}.sql";
+        $inputFile = tmp_path($filename);
+        
+        $fp = fopen($inputFile, "w");
         // 初始代理
         $proxy = $this->selectProxy();
+        $num = $end - $start;
+        
+        $uidArray = range($start, $end - 1);
+        usort($uidArray, function ($a,$b){
+            return mt_rand(1,10) > 5 ;
+        });
         
         // 先通过代理 ,出问题（超时|过短），更换代理（设置最大更换次数），失败后取消代理，获取信息后再启用代理
-        for($i = $start ; $i < $end ; $i ++){
+        for($i = 0 ; $i < $num ; $i ++){
             
-            $uid = $i ;
+            $uid = $uidArray[$i] ;
             $url = 'http://bbs.ubnt.com.cn/home.php?mod=space&uid='.$uid.'&do=profile';
             
             if(mt_rand(1,100) > 95){
@@ -109,7 +123,7 @@ class CatchCmd extends Command
                     if(false === $info){
                         // 页面格式错误
                         // Uid Not Exists
-                        $this->warn("[ Uid = {$uid} Not Exists][ Proxy = {$proxy} ]");
+                        $this->warn("[{$i}][ Uid = {$uid} Not Exists][ Proxy = {$proxy} ]");
                         // 记录不存在的UID
                         \LRedis::HSET('X-uid-not-exists',$uid,'000');
                     }else{
@@ -122,7 +136,7 @@ class CatchCmd extends Command
                             continue;
                         }
                         
-                        $this->info("[ Uid = {$uid}][ Proxy = {$proxy} ]");
+                        $this->info("[{$i}][ Uid = {$uid}][ Proxy = {$proxy} ]");
                         // 数据格式化为SQL语句
                         $sql = createInsertSql('chinese_col', $info);
                         fwrite($fp, $sql.';'.PHP_EOL);
@@ -135,13 +149,14 @@ class CatchCmd extends Command
                 }
             }catch (\Exception $e){
                 // Timeout
+                $this->error("[{$i}][ Uid = {$uid}][ Proxy = {$proxy} ][".$e->getCode().']['.$e->getMessage().']');
                 $proxy = $this->selectProxy();
                 $i -- ;
-                $this->error("[ Uid = {$uid} ][ Proxy = {$proxy} ][".$e->getCode().']['.$e->getMessage().']');
             }
-            usleep(mt_rand(500000,1000000));
+            usleep(mt_rand(400000,800000));
         }
         fclose($fp);
+        copy($inputFile, tmp_path('test/'.$filename));
     }
     
     public function initProxyList(){
@@ -257,6 +272,7 @@ class CatchCmd extends Command
         }
         
         $nickname = $dom->find("#uhd")->find(".h")[0]->find(".mt")[0]->text;
+        $nickname = str_replace( "'", "\'", $nickname);
         $infoMap['昵称'] = trim($nickname);
         $infoMap['uid'] = $uid;
         
