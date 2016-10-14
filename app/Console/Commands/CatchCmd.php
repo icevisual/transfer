@@ -91,11 +91,12 @@ class CatchCmd extends Command
             $uid = $uidArray[$i] ;
             $url = 'http://bbs.ubnt.com.cn/home.php?mod=space&uid='.$uid.'&do=profile';
             
-            if(mt_rand(1,100) > 95){
+            if(mt_rand(1,100) > 98){
                 // 随机更换代理
                 $this->info("[ Hit Random ]");
                 $proxy = $this->selectProxy();
             }
+            
             try {
                 
                 $optArray = [
@@ -153,7 +154,7 @@ class CatchCmd extends Command
                 $proxy = $this->selectProxy();
                 $i -- ;
             }
-            usleep(mt_rand(400000,800000));
+            usleep(mt_rand(200000,700000));
         }
         fclose($fp);
         copy($inputFile, tmp_path('test/'.$filename));
