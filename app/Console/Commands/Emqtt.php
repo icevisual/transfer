@@ -93,7 +93,7 @@ class Emqtt extends Command
         
         // Debug::Enable();
         
-        // $mqtt->setAuth('sskaje', '123123');
+        $mqtt->setAuth('sskaje', '123123');
         $mqtt->setKeepalive(36);
         $connected = $mqtt->connect();
         if (! $connected) {
@@ -151,6 +151,8 @@ class Emqtt extends Command
     {
         $this->template(function ($mqtt) {
             $content = file_get_contents(public_path('proto/PlayAction.mqtt.data'));
+            $content = file_get_contents(public_path('proto/PlaySmellBack.data'));
+            
             $bodyLength = strlen($content);
             $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
             $seq = 1;
@@ -184,7 +186,6 @@ class Emqtt extends Command
             // $content = file_get_contents(public_path('test/bin_person.person'));\
             
             $PlaySmell = new \Proto2\Scentrealm\Simple\PlaySmell();
-            $when = new \Proto2\Scentrealm\Simple\PlayStartTime();
             
             $startAt = new \Proto2\Scentrealm\Simple\TimePoint();
             $startAt->setMode(\Proto2\Scentrealm\Simple\SrTimeMode::STM_weekday);

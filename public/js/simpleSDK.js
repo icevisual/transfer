@@ -35,25 +35,25 @@ SmellOpen = {
 	loadProto : function() {
 		var simpleRoot = SmellOpen.utils.loadProto('proto/Simple.proto.js');
 		Simple = simpleRoot.Proto2.Scentrealm.Simple;
-		
+
 		var personRoot = SmellOpen.utils.loadProto('proto/Person.pro');
 		AddressBook = personRoot.Proto2.Tutorial.AddressBook;
-		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30--  ===   ## (9s) 循环
+		// 每周1-5 中午 11:30 - 12:30 和 17:30 - 18:30-- === ## (9s) 循环
 		// 
 		var sData = new Simple.PlaySmell();
 		// Generate A test PlaySmell Data
 		sData.startAt = new Array();
 		sData.cycleMode = Simple.SrCycleMode.SCM_cycle_infinite;
 		sData.cycleTime = 0;
-		
-		sData.startAt[0] = new Simple.TimePoint(
-				Simple.SrTimeMode.STM_weekday, 1, 5);
-		sData.startAt[1] = new Simple.TimePoint(
-				Simple.SrTimeMode.STM_daytime, 41400, 45000);
-		sData.startAt[2] = new Simple.TimePoint(
-				Simple.SrTimeMode.STM_daytime, 63000, 66600);
-		// 11:30 - 12:30  41400 45000
-		// 17:30 - 18:30  63000 66600
+
+		sData.startAt[0] = new Simple.TimePoint(Simple.SrTimeMode.STM_weekday,
+				1, 5);
+		sData.startAt[1] = new Simple.TimePoint(Simple.SrTimeMode.STM_daytime,
+				41400, 45000);
+		sData.startAt[2] = new Simple.TimePoint(Simple.SrTimeMode.STM_daytime,
+				63000, 66600);
+		// 11:30 - 12:30 41400 45000
+		// 17:30 - 18:30 63000 66600
 
 		sData.play = new Array();
 		sData.play[0] = new Simple.PlayAction({
@@ -81,10 +81,10 @@ SmellOpen = {
 			'duration' : 3,
 			'power' : 0,
 		});
-		// 14 
+		// 14
 		sData.trace = new Array();
 		sData.trace[0] = new Simple.PlayTrace({
-			'actionId' : [0,3,1,4,2],
+			'actionId' : [ 0, 3, 1, 4, 2 ],
 			'beforeStart' : 0,
 			'cycleMode' : Simple.SrCycleMode.SCM_cycle_yes,
 			'interval' : 0,
@@ -116,7 +116,9 @@ SmellOpen = {
 		this.client.onMessageDelivered = this.onMessageDelivered;
 		// connect the client
 		this.client.connect({
-			onSuccess : this.onConnect
+			onSuccess : this.onConnect,
+			userName : mqttConfig.deviceId,
+			password : mqttConfig.deviceSecret,
 		});
 	},
 	publish : function(topic, message) {
@@ -159,11 +161,11 @@ SmellOpen = {
 			SmellOpenLog.debug('payloadBytes', message.payloadBytes);
 		} else {
 			SmellOpenLog.debug('Header Found', headerInfo);
-			
-			if(headerInfo.cmdId == 2222){
+
+			if (headerInfo.cmdId == 2222) {
 				SmellOpen.decodeData(message.payloadBytes, AddressBook, 8)
 			}
-			if(headerInfo.cmdId == Simple.SrCmdId.SCI_req_playSmell){
+			if (headerInfo.cmdId == Simple.SrCmdId.SCI_req_playSmell) {
 				SmellOpen.decodeData(message.payloadBytes, Simple.PlaySmell, 8)
 			}
 			// analyze header

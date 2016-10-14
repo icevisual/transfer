@@ -19,7 +19,9 @@
 });
 
 
-
+Route::match(['get','post'],'/mqtt/superuser','Common\CommonController@superuser' );
+Route::match(['get','post'],'/mqtt/auth','Common\CommonController@auth' );
+Route::match(['get','post'],'/mqtt/acl','Common\CommonController@acl' );
 
 
 Route::match(['get','post'],'kindEditor/upload_json.aspx', 'Common\KindEditor@upload_json');
