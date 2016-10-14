@@ -39,7 +39,6 @@ class CatchCmd extends Command
 //         $this->initProxyList();
 //         while ($this->selectProxy());
 //         $this->reloadProxy();
-        
         $this->runLoop();
         
         exit;
@@ -60,6 +59,18 @@ class CatchCmd extends Command
         $sql = createInsertSql('chinese_col', $ret);
         echo($sql);
         $this->comment(PHP_EOL . Inspiring::quote() . PHP_EOL);
+    }
+    
+    public function getIgnoreUids(){
+        $dt = file_get_contents(tmp_path('catchde.list'));
+        $arr = explode("\n", $dt);
+        $catchedUids = [];
+        foreach ($arr as $v){
+            $d = explode(" ", $v);
+            $iiid = substr($d[3],0, strpos($d[3], "[") - 1);
+            $catchedUids[$iiid] = 1;
+        }
+        return $catchedUids;
     }
     
     
@@ -85,10 +96,18 @@ class CatchCmd extends Command
             return mt_rand(1,10) > 5 ;
         });
         
+        $ignoreUids = $this->getIgnoreUids();
+        
         // 先通过代理 ,出问题（超时|过短），更换代理（设置最大更换次数），失败后取消代理，获取信息后再启用代理
         for($i = 0 ; $i < $num ; $i ++){
             
             $uid = $uidArray[$i] ;
+            
+            if(isset($ignoreUids[$uid])){
+                $this->info("[ Ignore Uid {$uid} ]");
+                continue;
+            }
+            
             $url = 'http://bbs.ubnt.com.cn/home.php?mod=space&uid='.$uid.'&do=profile';
             
             if(mt_rand(1,100) > 98){
@@ -100,7 +119,7 @@ class CatchCmd extends Command
             try {
                 
                 $optArray = [
-                    CURLOPT_PROXY => $proxy,
+//                     CURLOPT_PROXY => $proxy,
                     CURLOPT_COOKIEFILE => $cookie_file,
                     CURLOPT_CUSTOMREQUEST => 'GET'
                 ];
@@ -141,6 +160,8 @@ class CatchCmd extends Command
                         // 数据格式化为SQL语句
                         $sql = createInsertSql('chinese_col', $info);
                         fwrite($fp, $sql.';'.PHP_EOL);
+                        
+                        \LRedis::HSET('X-uid-catched',$uid,'000');
                     }
                 }
                 // 不用代理，重新载入代理数据
@@ -154,13 +175,14 @@ class CatchCmd extends Command
                 $proxy = $this->selectProxy();
                 $i -- ;
             }
-            usleep(mt_rand(200000,700000));
+            usleep(mt_rand(100000,400000));
         }
         fclose($fp);
         copy($inputFile, tmp_path('test/'.$filename));
     }
     
     public function initProxyList(){
+        $this->info('[ '.__FUNCTION__.' ]');
         $proxyArray = [
             '119.6.136.122:80',
             '171.35.36.93:8118',
@@ -181,6 +203,7 @@ class CatchCmd extends Command
     }
     
     public function reloadProxy(){
+        $this->info('[ '.__FUNCTION__.' ]');
         $a = 'X-proxy-list-fail';
         $b = 'X-proxy-list';
         while(\LRedis::LLEN($a) > 0 ){
@@ -189,6 +212,7 @@ class CatchCmd extends Command
     }
     
     public function selectProxy(){
+        $this->info('[ '.__FUNCTION__.' ]');
         $a = 'X-proxy-list-fail';
         $b = 'X-proxy-list';
         if(\LRedis::LLEN($b) > 0 ){
@@ -257,6 +281,7 @@ class CatchCmd extends Command
 
     public function getPageInformation($content,$uid)
     {
+        $this->info('[ '.__FUNCTION__.' ]');
         $dom = new Dom();
         $rr = $dom->loadStr($content, []);
         $infoMap = [];
@@ -298,6 +323,7 @@ class CatchCmd extends Command
 
     public function reloadLogin()
     {
+        $this->info('[ '.__FUNCTION__.' ]');
         $cookie_file = tmp_path('cookie.txt');
         $data = '{"user":"samliao","password":"A69v/940"}';
         $url = 'https://api.ubnt.com.cn/login';
@@ -337,6 +363,9 @@ class CatchCmd extends Command
 
     public function curl($url, $data = '', $opts = [])
     {
+        
+        $this->info('[ '.__FUNCTION__.' ]');
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url); // url
                                              // curl_setopt($ch, CURLOPT_PROXY, "122.0.74.166:3389");
