@@ -68,10 +68,14 @@ class Emqtt extends Command
             'wakeup' => '唤醒主机',
             'usedSeconds' => '获取瓶子使用总时间（秒）',
             // 'enableSmell' => '开启某个气味',
-            'playSmell' => '播放气味'
-        ]
-        // 'setPower' => '设置播放功率',
-        ;
+            'playSmell' => '播放气味',
+            
+            'netConnect' => '链接Wifi',
+            'setName' => '设置设备名字',
+            'logSetting' => '日志相关设定',
+            'featureReport' => '设备特性上报，可控组件上报',
+            'realTimeState ' => '设备实时状态上报',
+        ];
         $prefix = [
             'SCI_req_',
             'SCI_resp_'

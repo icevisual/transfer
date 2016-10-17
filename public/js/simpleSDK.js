@@ -119,9 +119,9 @@ SmellOpen = {
 			onSuccess : this.onConnect,
 			onFailure : function(){
 				console.log(arguments);
-			}
-//			userName : mqttConfig.deviceId,
-//			password : mqttConfig.deviceSecret,
+			},
+			userName : 'admin',
+			password : '9e0c8b8ab28ffa88f0e03e1fa934ba8af7af66857f7d15b8a5bc8bd5745daeb8',
 		});
 	},
 	publish : function(topic, message) {

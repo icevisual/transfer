@@ -136,6 +136,17 @@ class MqttUtil
         }
         echo $output . PHP_EOL;
     }
+    
+    public static function info($msg){
+        
+        $prefix = "[ ".now()." ] info : ";
+        
+        echo $prefix.self::colorString($msg, self::COLOR_GREEN).PHP_EOL;
+    }
+    
+    public static function dump($msg){
+        dump($msg);
+    }
 
     /**
      * decode ProtoData
@@ -192,4 +203,39 @@ class MqttUtil
         MqttUtil::dumpByte($payload, 'Payload With Header');
         return $payload;
     }
+    
+    /**
+     * Analyze header , Return Header Information If it matches The Protobuf syntax
+     * , false otherwise
+     * @param unknown $msg
+     * @return boolean
+     */
+    public static function analyzeHeader($msg){
+        $headerLength = MqttUtil::PROTO_HEADER_LENGRH ;
+        $headerBytes = [];
+        $packed = '';
+        for($i = 0 ; $i < strlen($msg) ; $i ++){
+            if($i < $headerLength){
+                $headerBytes[] = ord($msg[$i]);
+            }
+        }
+        if(count($headerBytes) == MqttUtil::PROTO_HEADER_LENGRH){
+            if($headerBytes[0] == MqttUtil::PROTO_HEADER_MAGIC_NUMBER){
+                $ret = [
+                    'version' => $headerBytes[1],
+                    'length' => $headerBytes[2] << 8 | $headerBytes[3],
+                    'cmdId' => $headerBytes[4] << 8 | $headerBytes[5],
+                    'seqId' => $headerBytes[6] << 8 | $headerBytes[7],
+                ];
+                return $ret;
+            }
+        }
+        return false;
+    }
+    
+    public static function isProtoAvaliable(){
+        return class_exists('\ProtobufMessage');
+    }
+    
+    
 }

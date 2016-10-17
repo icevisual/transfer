@@ -32,6 +32,16 @@ enum SrCmdId
 	SCI_resp_usedSeconds = 12;      // 获取瓶子使用总时间（秒） response;
 	SCI_req_playSmell = 13; // 播放气味 request;
 	SCI_resp_playSmell = 14;        // 播放气味 response;
+	SCI_req_netConnect = 15;        // 链接Wifi request;
+	SCI_resp_netConnect = 16;       // 链接Wifi response;
+	SCI_req_setName = 17;   // 设置设备名字 request;
+	SCI_resp_setName = 18;  // 设置设备名字 response;
+	SCI_req_logSetting = 19;       // 日志相关设定 request;
+	SCI_resp_logSetting = 20;      // 日志相关设定 response;
+	SCI_req_featureReport = 21;     // 设备特性上报，可控组件上报 request;
+	SCI_resp_featureReport = 22;    // 设备特性上报，可控组件上报 response;
+	SCI_req_realTimeState  = 23;    // 设备实时状态上报 request;
+	SCI_resp_realTimeState  = 24;   // 设备实时状态上报 response;
 }
 // 返回码
 enum SrErrorCode
@@ -99,13 +109,54 @@ message PlayTrace{
 }
 // 播放气味
 message PlaySmell {
-	
     required SrCycleMode cycleMode = 1;// 循环模式
     repeated TimePoint startAt = 2;// 开始时间，整个数组组成一个时间，
     optional int32 cycleTime = 3;// 循环次数
-	
+    
     repeated PlayAction play = 4 ; // 播放动作数组
     repeated PlayTrace trace = 5 ; // 播放痕迹
+}
+
+// 链接wifi
+message NetConnect {
+    required string wifiSid = 1;// wifi sid
+    required string wifiPwd = 2;// wifi 密码
+}
+
+// 设置设备名字
+message SetName {
+    required string name = 1;// 名字
+}
+
+// 日志设置
+enum SrLogSettings
+{
+	SLS_open = 1; // 开启日志
+	SLS_close = 2; // 关闭日执
+}
+
+// 设置日志
+message LogSetting {
+    required SrLogSettings setting = 1;// 名字
+}
+
+// 实时上报信息Response
+message RealTimeStateResponse {
+	required bool netConnect = 1 ; // 网络连接状态
+}
+
+// 设备组件类别
+enum SrFeatureType
+{
+	SFT_wifi = 1; // wifi模块
+	SFT_rotator = 2;
+	SFT_switch = 3;
+	SFT_knob = 4;// min max step
+}
+
+// 设备组件信息上报Response
+message FeatureReportResponse {
+	
 }
 
 // 设置名称
