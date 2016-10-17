@@ -86,8 +86,6 @@ class Emqtt extends Command
 
     public function init()
     {
-        
-        
 //         $mqtt = new MQTT("tcp://192.168.5.21:1883/");
         $mqtt = new MQTT("tcp://120.26.109.169:1883/",'PHP-client-1');
         
@@ -108,7 +106,6 @@ class Emqtt extends Command
     public function template(callable $function)
     {
         $this->init();
-        
         call_user_func_array($function, [
             $this->connection
         ]);
@@ -130,10 +127,6 @@ class Emqtt extends Command
     
     public function printAction()
     {
-        
-        dump(class_exists('\ProtobufMessage'));
-        
-        
         MqttUtil::dumpByte('sadasdasd','I got a message');
     }
 
@@ -154,44 +147,17 @@ class Emqtt extends Command
         });
     }
     
-    public function testconnAction()
-    {
-        
-    }
-    
-    
-    
     public function pubfileAction()
     {
         $this->template(function ($mqtt) {
             $content = file_get_contents(public_path('proto/PlayAction.mqtt.data'));
             $content = file_get_contents(public_path('proto/PlaySmellBack.data'));
             
-            $bodyLength = strlen($content);
-            $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
-            $seq = 1;
-            $header = [
-                MqttUtil::PROTO_HEADER_MAGIC_NUMBER,
-                MqttUtil::PROTO_HEADER_VERSION,
-                $bodyLength >> 8,
-                $bodyLength & 0xff,
-                $cmdId >> 8 ,
-                $cmdId & 0xff,
-                $seq >> 8 ,
-                $seq & 0xff
-            ];
-            dump($bodyLength);
-            $hStr = '';
-            foreach ($header as $v){
-                $hStr .= chr($v);
-            }
-            $sss = $hStr.$content;
-            MqttUtil::dumpByte($content,'Playload Body');
-            MqttUtil::dumpByte($sss,'With Header');
+            $sss = MqttUtil::assemblePayload($content, \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell, 1);
+            
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
-    
     
     public function publishAction()
     {
@@ -268,77 +234,10 @@ class Emqtt extends Command
             
             file_put_contents(public_path('proto/PlayAction.mqtt.data'), $content);
             
-            $bodyLength = strlen($content);
-            $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
-            $seq = 1;
-            $header = [
-                MqttUtil::PROTO_HEADER_MAGIC_NUMBER,
-                MqttUtil::PROTO_HEADER_VERSION,
-                $bodyLength >> 8,
-                $bodyLength & 0xff,
-                $cmdId >> 8 ,
-                $cmdId & 0xff,
-                $seq >> 8 ,
-                $seq & 0xff
-            ];
-            $hStr = '';
-            foreach ($header as $v){
-                $hStr .= chr($v);
-            }
-            $sss = $hStr.$content;
-            MqttUtil::dumpByte($content,'Playload Body');
-            MqttUtil::dumpByte($sss,'With Header');
+            $sss = MqttUtil::assemblePayload($content, \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell, 1);
             
             file_put_contents(public_path('proto/PlayAction.mqtt.payload'), $sss);
             
-            $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
-        });
-    }
-    
-    public function publishPersonAction()
-    {
-        $this->template(function ($mqtt) {
-            
-            $AddressBook = new \Proto2\Tutorial\AddressBook();
-            $Person = new \Proto2\Tutorial\Person();
-            
-            $Person->setEmail('person@qq.com');
-            $Person->setId(123);
-            $Person->setName('person name');
-            
-            $Phone = new \Proto2\Tutorial\Person_PhoneNumber();
-            $Phone->setNumber('18764548772');
-            $Phone->setType(\Proto2\Tutorial\Person_PhoneType::MOBILE);
-            
-            $Person->appendPhone($Phone);
-            
-            $AddressBook->appendPerson($Person);
-            
-    
-            $content = $AddressBook->serializeToString();
-    
-            file_put_contents(public_path('proto/Person.mqtt.data'), $content);
-    
-            $bodyLength = strlen($content);
-            $cmdId = 2222;
-            $seq = 1;
-            $header = [
-                0xfe,
-                0x01,
-                $bodyLength >> 8,
-                $bodyLength & 0xff,
-                $cmdId >> 8 ,
-                $cmdId & 0xff,
-                $seq >> 8 ,
-                $seq & 0xff
-            ];
-            $hStr = '';
-            foreach ($header as $v){
-                $hStr .= chr($v);
-            }
-            $sss = $hStr.$content;
-            MqttUtil::dumpByte($content);
-            MqttUtil::dumpByte($sss);
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
