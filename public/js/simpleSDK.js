@@ -172,6 +172,9 @@ SmellOpen = {
 			if (headerInfo.cmdId == Simple.SrCmdId.SCI_req_playSmell) {
 				SmellOpen.decodeData(message.payloadBytes, Simple.PlaySmell, 8)
 			}
+			if (headerInfo.cmdId == 9999) {
+				SmellOpen.sendTestConn()
+			}
 			// analyze header
 		}
 	},
@@ -232,7 +235,7 @@ SmellOpen = {
 		var headerLength = 8; // 包头字节长度
 		var b = new Uint8Array(payloadLength + headerLength);
 		b.set(msgData, headerLength);
-		var len = SmellOpen.utils.ten2sixteen(payloadByteLength + headerLength);
+		var len = SmellOpen.utils.ten2sixteen(payloadByteLength);
 		SmellOpenLog.debug('protoDataPackage len', payloadByteLength
 				+ headerLength);
 		var cmd = SmellOpen.utils.ten2sixteen(cmdId);

@@ -130,6 +130,10 @@ class Emqtt extends Command
     
     public function printAction()
     {
+        
+        dump(class_exists('\ProtobufMessage'));
+        
+        
         MqttUtil::dumpByte('sadasdasd','I got a message');
     }
 
@@ -150,6 +154,13 @@ class Emqtt extends Command
         });
     }
     
+    public function testconnAction()
+    {
+        
+    }
+    
+    
+    
     public function pubfileAction()
     {
         $this->template(function ($mqtt) {
@@ -160,8 +171,8 @@ class Emqtt extends Command
             $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
             $seq = 1;
             $header = [
-                0xfe,
-                0x01,
+                MqttUtil::PROTO_HEADER_MAGIC_NUMBER,
+                MqttUtil::PROTO_HEADER_VERSION,
                 $bodyLength >> 8,
                 $bodyLength & 0xff,
                 $cmdId >> 8 ,
@@ -261,8 +272,8 @@ class Emqtt extends Command
             $cmdId = \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell;
             $seq = 1;
             $header = [
-                0xfe,
-                0x01,
+                MqttUtil::PROTO_HEADER_MAGIC_NUMBER,
+                MqttUtil::PROTO_HEADER_VERSION,
                 $bodyLength >> 8,
                 $bodyLength & 0xff,
                 $cmdId >> 8 ,

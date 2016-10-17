@@ -1,8 +1,14 @@
 <?php
 namespace App\Extensions\Mqtt;
 
+use Proto2\Scentrealm\Simple\SrCmdId;
+
 class MqttUtil
 {
+    /**
+     * Console.color
+     * @var unknown
+     */
     const COLOR_BLACK = 30;
     const COLOR_RED = 31;
     const COLOR_GREEN = 32;
@@ -10,6 +16,47 @@ class MqttUtil
     const COLOR_BLUE = 34;
     const COLOR_LIGHT_PURPLE = 35;
     const COLOR_LIGHT_BLUE = 36;
+    
+    /**
+     * Header.const
+     * @var unknown
+     */
+    const PROTO_HEADER_LENGRH = 8;
+    const PROTO_HEADER_MAGIC_NUMBER = 0xfe;
+    const PROTO_HEADER_VERSION = 0x01;
+    
+    /**
+     * CmdID & Class Map
+     * @var unknown
+     */
+    public static $CmdIDMap = [
+        SrCmdId::SCI_req_mac => '',
+        SrCmdId::SCI_resp_mac => '',
+        SrCmdId::SCI_req_uptime => '',
+        SrCmdId::SCI_resp_uptime => '',
+        SrCmdId::SCI_req_downtime => '',
+        SrCmdId::SCI_resp_downtime => '',
+        SrCmdId::SCI_req_sleep => '',
+        SrCmdId::SCI_resp_sleep => '',
+        SrCmdId::SCI_req_wakeup => '',
+        SrCmdId::SCI_resp_wakeup => '',
+        SrCmdId::SCI_req_usedSeconds => '',
+        SrCmdId::SCI_resp_usedSeconds => '',
+        SrCmdId::SCI_req_playSmell => \Proto2\Scentrealm\Simple\PlaySmell::class,
+        SrCmdId::SCI_resp_playSmell => '',
+    ];
+    
+    
+    /**
+     * CmdID & Class Map
+     * @param unknown $cmdID
+     */
+    public static function getDecodeClass($cmdID){
+        
+        $map = self::$CmdIDMap;
+        return isset($map[$cmdID]) ? $map[$cmdID] : false;
+    }
+    
 
     public static function aesDecrypt($content, $key, $iv = '00000000000Pkcs7',$base64decode = true)
     {
@@ -31,20 +78,41 @@ class MqttUtil
         return "\e[{$color}m{$msg}\e[0m";
     }
     
+    /**
+     * Output data Bytes in Dec Syntax
+     * @param unknown $data
+     * @param string $msg
+     */
+    public static function dumpHexDec($data,$msg = '')
+    {
+        $output = '';
+        if($msg){
+            $output .= "[ ".MqttUtil::colorString($msg,MqttUtil::COLOR_GREEN)." ] ".PHP_EOL;
+        }
+        for ($i = 0; $i < strlen($data); $i ++) {
+            $output .= ' ' . sprintf('%3d',ord($data[$i]));
+            if(($i + 1) % 10 == 0){
+                $output .= "\t";
+            }
+            if(($i + 1) % 20 == 0){
+                $output .= PHP_EOL;
+            }
+        }
+        echo $output . PHP_EOL;
+    }
+    
+    /**
+     * Output data Bytes in Hex Syntax 
+     * @param unknown $data
+     * @param string $msg
+     */
     public static function dumpByte($data,$msg = '')
     {
         $output = '';
         if($msg){
             $output .= "[ ".MqttUtil::colorString($msg,MqttUtil::COLOR_GREEN)." ] ".PHP_EOL;
         }
-//         for ($i = 0; $i < strlen($data); $i ++) {
-//             $output .= ' ' . ord($data[$i]);
-//         }
-//         echo $output . PHP_EOL;
-        
         for ($i = 0; $i < strlen($data); $i ++) {
-//             sprintf('%02x',ord($data[$i]))
-//             $output .= ' ' . dechex(ord($data[$i]));
             $output .= ' ' . sprintf('%02x',ord($data[$i]));
             if(($i + 1) % 10 == 0){
                 $output .= "\t";
@@ -53,8 +121,6 @@ class MqttUtil
                 $output .= PHP_EOL;
             }
         }
-        
-        
         echo $output . PHP_EOL;
     }
     
@@ -88,5 +154,10 @@ class MqttUtil
         }
         return false;
     }
+    
+    
+    
+    
+    
     
 }

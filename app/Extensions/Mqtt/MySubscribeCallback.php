@@ -23,7 +23,7 @@ class MySubscribeCallback extends MessageHandler
         
         $msg = $publish_object->getMessage();
 
-        $headerLength = 8 ;
+        $headerLength = MqttUtil::PROTO_HEADER_LENGRH ;
         $headerBytes = [];
         $packed = '';
 //         $bytes[] = ord($msg[$i]);
@@ -34,13 +34,29 @@ class MySubscribeCallback extends MessageHandler
 //                 \Proto2\Scentrealm::class
             }
         }
-        MqttUtil::dumpByte($msg,"Received Bytes");
-        if($headerBytes[0] == 0xfe){
-//             $class = new \Proto2\Scentrealm\Simple\PlaySmell();
-//             $ret = MqttUtil::decodeProtoData($msg, $class,$headerLength);
-//             dump($ret);
-//             $class->dump();
-        }
         
+        MqttUtil::dumpHexDec($msg,"Received Bytes Dec");
+        MqttUtil::dumpByte($msg,"Received Bytes");
+        MqttUtil::dumpByte(substr($msg, 0,8),"HeaderBytes Bytes");
+        if($headerBytes[0] == MqttUtil::PROTO_HEADER_MAGIC_NUMBER){
+            $cmdID = $headerBytes[4] << 8 | $headerBytes[5];
+            dump($cmdID);
+            if($this->isProtoAvaliable()){
+                
+                if($cmdID == \Proto2\Scentrealm\Simple\SrCmdId::SCI_req_playSmell){
+                    $class = new \Proto2\Scentrealm\Simple\PlaySmell();
+                }
+                $ret = MqttUtil::decodeProtoData($msg, $class,$headerLength);
+                dump($ret);
+                $class->dump();
+            }
+        }
+            
     }
+    
+    public function isProtoAvaliable(){
+        return class_exists('\ProtobufMessage');
+    }
+    
+    
 }
