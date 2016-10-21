@@ -198,6 +198,7 @@ CREATE TABLE `x_bill` (
             echo "$name 应付  $shouldPay $nrl $nrl";
             $shouldPayAll += $shouldPay;
         }
+        echo "总计支付   $shouldPayAll  $nrl $nrl";
         return $shouldPayAll;
     }
     
