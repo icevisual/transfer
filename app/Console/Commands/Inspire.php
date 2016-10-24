@@ -77,29 +77,47 @@ class Inspire extends Command
                 'desc' => '房租 [每月 1430 / 4600 * 5300 = 1648]',
                 'amount' => 1648 * 3
             ],
-            [
-                'name' => '顾云翔',
-                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
-                'desc' => '押金差额 [1630 / 4600 * 1400 = 496]',
-                'amount' => 496
-            ],
-            [
-                'name' => '李蒙',
-                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
-                'desc' => '押金差额 [1540 / 4600 * 1400 = 469]',
-                'amount' => 469
-            ],
-            [
-                'name' => '金燕林',
-                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
-                'desc' => '押金差额 [1430 / 4600 * 1400 = 435]',
-                'amount' => 435
-            ],
+            // [
+            // 'name' => '顾云翔',
+            // 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+            // 'desc' => '押金差额 [1630 / 4600 * 1400 = 496]',
+            // 'amount' => 496
+            // ],
+            // [
+            // 'name' => '李蒙',
+            // 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+            // 'desc' => '押金差额 [1540 / 4600 * 1400 = 469]',
+            // 'amount' => 469
+            // ],
+            // [
+            // 'name' => '金燕林',
+            // 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+            // 'desc' => '押金差额 [1430 / 4600 * 1400 = 435]',
+            // 'amount' => 435
+            // ],
             [
                 'name' => '',
                 'type' => Bill::TYPE_SHOULD_PAY_ALL,
-                'desc' => '物业费',
-                'amount' => 79 * 3
+                'desc' => '服务费',
+                'amount' => 636
+            ],
+            [
+                'name' => '李蒙',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '电费',
+                'amount' => 89.31
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2016年9月水费',
+                'amount' => 64.03
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_SHOULD_PAY_ALL,
+                'desc' => '计算补正',
+                'amount' => 0.02
             ]
         ];
         
