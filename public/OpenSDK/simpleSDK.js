@@ -118,7 +118,7 @@ SmellOpen = {
 		this.client.connect({
 			onSuccess : this.onConnect,
 			onFailure : function(){
-				console.log(arguments);
+				console.log('Error',arguments);
 			},
 			userName : 'admin',
 			password : '9e0c8b8ab28ffa88f0e03e1fa934ba8af7af66857f7d15b8a5bc8bd5745daeb8',
