@@ -1,18 +1,18 @@
 define([ 'protocolStruct' ], function(Simple) {
 	var obj = {
 		attrs : {
-			'deviceID' : 'TCeOp0gzzrWhAMoOa3Mm',// 设备唯一标识
-			'deviceName' : '测试设备0001',// 设备名字
-			'deviceType' : 'T1000',// 设备类别
-			'mac' : 'f8-a9-63-57-0f-ce',// MAC
-			'wifiSsid' : 'renrenwifi',// wifissid
-			'wifiPwd' : 'renren2016',// wifi密码
-			'netConnectState' : 'off',// 网络连接状态
-			'bleConnectState' : 'off',// 蓝牙连接状态
-			'logState' : 'off',// 日志开启状态
-			'datetime' : '2016-10-25 12:12:12',// 时间
-			'uptime' : '2016-10-25 12:12:12',// 设备上次开机时间
-			'downtime' : '2016-10-25 12:12:12',// 设备上次关机时间
+			'DEVICEID' : 'TCEOP0GZZRWHAMOOA3MM',// 设备唯一标识
+			'DEVICENAME' : '测试设备0001',// 设备名字
+			'DEVICETYPE' : 'T1000',// 设备类别
+			'MAC' : 'F8-A9-63-57-0F-CE',// MAC
+			'WIFISSID' : 'RENRENWIFI',// WIFISSID
+			'WIFIPWD' : 'RENREN2016',// WIFI密码
+			'NETCONNECTSTATE' : 'OFF',// 网络连接状态
+			'BLECONNECTSTATE' : 'OFF',// 蓝牙连接状态
+			'LOGSTATE' : 'OFF',// 日志开启状态
+			'DATETIME' : '2016-10-25 12:12:12',// 时间
+			'UPTIME' : '2016-10-25 12:12:12',// 设备上次开机时间
+			'DOWNTIME' : '2016-10-25 12:12:12',// 设备上次关机时间
 		},
 
 		// // 设备组件类别

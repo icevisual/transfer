@@ -45,6 +45,8 @@ define([ 'protocolStruct' ], function(protocolStruct) {
 	});
 //	console.log(sData);
 	// Logger.debug('sData', sData);
-
+	
+//	console.log(typeof sData,sData instanceof Simple.PlaySmell);
+	
 	return sData;
 });

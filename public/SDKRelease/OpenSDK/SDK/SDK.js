@@ -1,5 +1,6 @@
 require.config({
 	baseUrl : 'OpenSDK',
+	urlArgs: "bust=" + (new Date()).getTime(),
 	paths : {
 		'bytebuffer' : 'Third/bytebuffer.min',
 		'long' : 'Third/long.min',
@@ -10,9 +11,9 @@ require.config({
 		'cryptojs.pad-zeropadding' : 'CryptoJS/components/pad-zeropadding-min',
 		'cryptojs.md5' : "CryptoJS/rollups/md5",
 		'cryptojs.aes' : 'CryptoJS/rollups/aes',
+		
 		'Utils' : 'SDK/Utils',
 		'logger' : 'SDK/Logger',
-		'protoDemo' : 'SDK/ProtoDemo',
 		'protocolStruct' : 'SDK/ProtocolStruct',
 		'Core' : 'SDK/Core',
 		'CmdApi' : 'SDK/CmdApi',
@@ -35,12 +36,15 @@ require.config({
 		},
 		'cryptojs.aes' : {
 			deps : [ 'cryptojs.core' ],
-			exports : "CryptoJS" // You can also use "CryptoJS.MD5"
+			exports : "CryptoJS" 
 		},
 		'cryptojs.pad-zeropadding' : {
 			deps : [ 'cryptojs.aes' ],
-			exports : "CryptoJS" // You can also use "CryptoJS.MD5"
-		}
+			exports : "CryptoJS"
+		},
+		'pako' : {
+			exports : 'pako'
+		},
 	}
 });
 

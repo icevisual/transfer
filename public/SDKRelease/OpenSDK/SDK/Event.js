@@ -17,6 +17,7 @@ define(['Utils'],function(Utils) {
 			if (this.handlers[type] instanceof Array) {
 				var handlers = this.handlers[type], ret = null;
 				var handlersObj ;
+				handlers.reverse();
 				while(handlersObj = handlers.pop()){
 					ret = handlersObj['handler'].apply(null, params);
 					if (false === ret) {
@@ -24,15 +25,6 @@ define(['Utils'],function(Utils) {
 					}
 				}
 				this.evtRet[type] = ret;
-//				
-//				for (var i = 0, len = handlers.length; i < len; i++) {
-//					var hdl = handlers[i].pop();
-//					ret = hdl.apply(null, params);
-//					if (false === ret) {
-//						break;
-//					}
-//					// handlers[i](event);
-//				}
 			}
 		},
 		clearHandler : function(type) {

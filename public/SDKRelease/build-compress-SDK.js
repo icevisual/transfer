@@ -44,6 +44,6 @@
 			exports : "CryptoJS" // You can also use "CryptoJS.MD5"
 		}
 	},
-	out: "main-built.js",
-	name : '../OpenSDK/main-compress'
+	out: "OpenSDK.min.js",
+	name : '../OpenSDK/SDK-compress'
 })

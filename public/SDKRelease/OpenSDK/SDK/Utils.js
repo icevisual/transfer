@@ -42,10 +42,9 @@ define(
 				str = str.replace(/ss|SS/, this.getSeconds() > 9 ? this
 						.getSeconds().toString() : '0' + this.getSeconds());
 				str = str.replace(/s|S/g, this.getSeconds());
-
+				str = str.replace(/u|U/g, (this.getMilliseconds()/1000 + "00000").substring(2,5) );
 				return str;
 			}
-
 			// in Simple {'prefix_name':int_value}
 			// Get id by name 
 			// Get name by id
@@ -69,10 +68,11 @@ define(
 					return ret.replace(prefix,'');
 				},
 				EnumGetValue : function(prefix, key) {
-					return this.enumMap[prefix]['collection'][prefix + key];
+					return this.enumMap[prefix]['collection'][(prefix + key).toUpperCase()];
 				},
 				now : function() {
-					return (new Date()).Format('yyyy-MM-dd HH:mm:ss');
+//					return (new Date()).Format('yyyy-MM-dd HH:mm:ss');
+					return (new Date()).Format('HH:mm:ss.u');
 				},
 				containGetKey : function(collection, value) {
 					for ( var key in collection) {
@@ -90,11 +90,22 @@ define(
 					Child.prototype.constructor = Child;
 					Child.uber = Parent.prototype;
 				},
+				getSequence : function(){
+					var rnd = '' + Math.floor(Math.random() * 1000);
+					while(rnd.length < 3) rnd = '0' + rnd ;
+					var st = this.timestamp() + '';
+//					console.log(st);
+					return st.substring(0,3) + st.substring(6) + rnd;
+				},
 				timestamp : function() {
 					return parseInt((new Date()).valueOf() / 1000);
 				},
-				loadProto : function(filename) {
+				loadProtoFile : function(filename) {
 					var builder = ProtoBuf.loadProtoFile(filename);
+					return builder.build();
+				},
+				loadProtoString : function(string) {
+					var builder = ProtoBuf.loadProto(string);
 					return builder.build();
 				},
 				ten2sixteen : function(d) {
@@ -121,6 +132,17 @@ define(
 						sss += s;
 					}
 					return sss;
+				},
+				base64decode2ArrayBuffer : function(encodeData){
+					var base64Words = CryptoJS.enc.Base64.parse(encodeData);
+					// Convert 2 hex String
+					var hexEncryptedStr = CryptoJS.enc.Hex
+							.stringify(base64Words);
+					// Convert 2 int Array
+					var intArray = this.hex2IntArray(hexEncryptedStr);
+					// Convert 2 ArrayBuffer
+					var u8ArrayBuffer = new Uint8Array(intArray);//.buffer;
+					return u8ArrayBuffer;
 				},
 				AESEncrypt : function(data, key, iv) { // 加密
 					var key_hash = CryptoJS.MD5(key);
@@ -257,6 +279,9 @@ define(
 			        }
 			        arr.push(("v=" + Math.random()).replace(".",""));
 			        return arr.join("&");
+			    },
+			    validateCallback:function(func){
+			    	return (undefined !== func && typeof func == 'function') ;
 			    }
 			};
 		});

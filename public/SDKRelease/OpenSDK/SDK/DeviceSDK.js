@@ -36,11 +36,11 @@ require.config({
 		},
 		'cryptojs.aes' : {
 			deps : [ 'cryptojs.core' ],
-			exports : "CryptoJS" // You can also use "CryptoJS.MD5"
+			exports : "CryptoJS" 
 		},
 		'cryptojs.pad-zeropadding' : {
 			deps : [ 'cryptojs.aes' ],
-			exports : "CryptoJS" // You can also use "CryptoJS.MD5"
+			exports : "CryptoJS"
 		}
 	}
 });

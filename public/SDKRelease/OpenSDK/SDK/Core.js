@@ -1,16 +1,15 @@
 define(
 		[ 'Paho', 'Utils', 'logger', 'event', 'msgHandler', 'protocolStruct',
-				'protoDemo', 'CmdApi' ],
-		function(Paho, Utils, Logger, Event, Handlers, Simple, simpleData,
+				 'CmdApi' ],
+		function(Paho, Utils, Logger, Event, Handlers, Simple,
 				CmdApi) {
 			var SmellOpen = {
 				defaults : {
-					'accessKey' : 'IAzDhpyc0z9yGFajKp2P',
-					'accessSecret' : 'HNKGRV2O2oeK7W2jtmFC',
-					'logLevel' : 'debug',
+					'accessKey' : 'accessKey',
+					'accessSecret' : 'accessSecret',
+					'logLevel' : 'error',
 					'mqtt' : {
-						// 'hostname' : '120.26.109.169',
-						'hostname' : '192.168.5.21',
+						'hostname' : '120.26.109.169',
 						'port' : '8083',
 					},
 					'AES' : {
@@ -29,7 +28,9 @@ define(
 						'headerData' : {
 							'MAGIC_NUMBER' : 0xfe,
 							'VERSION' : 0x01,
-						}
+						},
+						'decodeClassMap' : {},
+						'listenCmdMap' : {},
 					}
 				},
 				getEssentialConfig : function(key, defaultValue) {
@@ -77,8 +78,33 @@ define(
 				logger : null,
 				protoRoot : null,
 				serverConnected : false,
+				subscribeArray : {},
+				
+				initProtocolConfig : function(){
+					// init decodeClassMap
+					var dcm = {}, lcm = {},SrCmdId = Simple.SrCmdId;
+					dcm[SrCmdId.SCI_RESP_USEDSECONDS] = Simple.UsedTimeResponse;
+					dcm[SrCmdId.SCI_REQ_PLAYSMELL] = Simple.PlayRequest;
+					dcm[SrCmdId.SCI_REQ_GETDEVATTR] = Simple.GetDevAttrsRequest;
+					dcm[SrCmdId.SCI_RESP_GETDEVATTR] = Simple.DevAttrs;
+					dcm[SrCmdId.SCI_REQ_SETDEVATTR] = Simple.DevAttrs;
+					dcm[SrCmdId.SCI_RESP_FEATUREREPORT] = Simple.FeatureReportResponse;
+					this.configs.protobuf.decodeClassMap = dcm;
+					// init listenCmdMap
+					
+					lcm[SrCmdId.SCI_REQ_SLEEP] = SrCmdId.SCI_RESP_SLEEP;
+					lcm[SrCmdId.SCI_REQ_WAKEUP] = SrCmdId.SCI_RESP_WAKEUP;
+					lcm[SrCmdId.SCI_REQ_USEDSECONDS] = SrCmdId.SCI_RESP_USEDSECONDS;
+					lcm[SrCmdId.SCI_REQ_PLAYSMELL] = SrCmdId.SCI_RESP_PLAYSMELL;
+					lcm[SrCmdId.SCI_REQ_GETDEVATTR] = SrCmdId.SCI_RESP_GETDEVATTR;
+					lcm[SrCmdId.SCI_REQ_SETDEVATTR] = SrCmdId.SCI_RESP_SETDEVATTR;
+					lcm[SrCmdId.SCI_REQ_FEATUREREPORT] = SrCmdId.SCI_RESP_FEATUREREPORT;
+					this.configs.protobuf.listenCmdMap = lcm;
+				},
+				
 				initialize : function(cfg) {
 					this.loadConfigs(cfg);
+					this.initProtocolConfig();
 					this.evt = Event;
 					this.utils = Utils;
 					this.logger = Logger;
@@ -111,6 +137,7 @@ define(
 					this.client.onMessageDelivered = hdls.onMessageDelivered;
 					// connect the client
 					this.client.connect({
+						cleanSession : true,
 						onSuccess : hdls.onConnect,
 						onFailure : function() {
 							Logger.error('onConnectFailure', arguments);
@@ -121,14 +148,18 @@ define(
 					});
 					return this;
 				},
-				appendOnconnectEvent : function(callback){
-					this.evt.addHandler('onServerConnect',callback);
-				},
 				run : function(callback){
 					if(this.isConnected()){
 						callback(this);
 					}else{
-						this.appendOnconnectEvent(callback);
+						this.evt.addHandler('onServerConnect',callback);
+					}
+				},
+				connectedThen : function(callback){
+					if(this.isConnected()){
+						callback(this);
+					}else{
+						this.evt.addHandler('onServerConnect',callback);
 					}
 				},
 				disconnect : function() {
@@ -138,57 +169,84 @@ define(
 					this.serverConnected = true;
 				},
 				isConnected : function(){
-					return this.serverConnected
+					return this.serverConnected;
 				},
-				usingDevice : function(deviceID) {
+				usingDevice : function(deviceID,opt) {
 					// TODO : check the device is avaliable
-					return new CmdApi(this, deviceID);
+					return new CmdApi(this, deviceID,opt);
 				},
 				publish : function(topic, message,options) {
 					var MqttMessage = new Paho.MQTT.Message(message);
 					MqttMessage.destinationName = topic;
 					MqttMessage.qos = Utils.getOptionOrDefault(options,'qos',1);
 					MqttMessage.retained = Utils.getOptionOrDefault(options,'retained',false);
-//					this.client.send(MqttMessage);
-					this.run(function(app){
-						app.client.send(MqttMessage);
-					});
+					
+					this.logger.debug('publish ' + topic);
+					this.client.send(MqttMessage);
+//					this.run(function(app){
+//						app.logger.debug('publish ' + topic);
+//						app.client.send(MqttMessage);
+//					});
 				},
 				subscribe : function(topic) {
-					this.run(function(app){
-						app.client.subscribe(topic, {
-							qos : 1
-						});
+					var _this = this;
+					this.logger.debug('subscribe ' + topic);
+					this.client.subscribe(topic, {
+						qos : 1,
+						invocationContext : {'topic':topic},
+						onSuccess : function(obj){
+							_this.logger.debug('subscribe onSuccess ' + obj.invocationContext.topic);
+							_this.setSubscribed(obj.invocationContext.topic);
+							_this.evt.fire('onSubscribed-' + obj.invocationContext.topic,[_this]);
+						},
+						onFailure : function(){
+							_this.logger.error('subscribe onFailure ' + obj.invocationContext.topic);
+						}
 					});
-//					this.client.subscribe(topic, {
-//						qos : 2
-//					});
+				},
+				setSubscribed : function(topic){
+					this.subscribeArray[topic] = 1;
+				},
+				setUnsubscribed : function(topic){
+					this.subscribeArray[topic] = 0;
+				},
+				isSubscribed : function(topic){
+					if(1 == this.subscribeArray[topic]){
+						return true;
+					}
+					return false;
+				},
+				subscribedThen : function(topic,callback){
+					if(this.isSubscribed(topic)){
+						callback(this);
+					}else{
+						this.evt.addHandler('onSubscribed-' + topic ,callback);
+					}
+				},
+				unsubscribe : function(topic) {
+					this.run(function(app){
+						app.setUnsubscribed(topic);
+						app.client.unsubscribe(topic);
+					});
 				},
 				clearRetainedMsg : function(topic) {
 					this.publish(topic,'',{
 						'retained' : true,
 					});
 				},
-				unsubscribe : function(topic) {
-					this.client.unsubscribe(topic);
-				},
 				decodePayload : function(headerOrCmdID, payloadBytes, options) {
 					try {
 						var decodeClass, isAES, removeHeaderLength = this
 								.getEssentialConfig('protobuf.headerLength'), cmdID = typeof headerOrCmdID == 'object' ? headerOrCmdID.COMMAND_ID
 								: headerOrCmdID;
-
-						var decodeClassMap = [];
-						decodeClassMap[Simple.SrCmdId.SCI_resp_usedSeconds] = Simple.UsedTimeResponse;
-						decodeClassMap[Simple.SrCmdId.SCI_req_playSmell] = Simple.PlaySmell;
-						decodeClassMap[Simple.SrCmdId.SCI_req_getDevAttr] = Simple.GetDevAttrsRequest;
-						decodeClassMap[Simple.SrCmdId.SCI_resp_getDevAttr] = Simple.DevAttrs;
-						decodeClassMap[Simple.SrCmdId.SCI_req_setDevAttr] = Simple.DevAttrs;
-						decodeClassMap[Simple.SrCmdId.SCI_resp_featureReport] = Simple.FeatureReportResponse;
-
+						
+						var decodeClassMap = this.getEssentialConfig('protobuf.decodeClassMap');
 						decodeClass = decodeClassMap[cmdID] === undefined ? Simple.BaseResponse
 								: decodeClassMap[cmdID];
 
+						this.logger.debug('The cmdID is ',cmdID);
+						
+						
 						if (undefined !== options) {
 							decodeClass = options['options'] || decodeClass;
 							removeHeaderLength = options['removeHeaderLength']
@@ -327,19 +385,17 @@ define(
 					return this.protoDataPackage(u8ArrayBuffer, cmdId, seqId);
 				},
 				sendCmd2Dev : function(deviceId, cmdId, protoDataArrayBuffer,options) {
-					var seq = Utils.timestamp();
-					var b = this.protoDataPackage(protoDataArrayBuffer, cmdId,
-							seq);
+					var seq = Utils.getSequence();
+					this.logger.debug('sendCmd2Dev Seq',seq);
+					var b = this.protoDataPackage(protoDataArrayBuffer, cmdId,seq);
 					Logger.info('sendCmd2Dev Header', this.analyzeHeader(b));
 					this.publish("/" + deviceId, b);
 					return seq;
 				},
 				sendCmdResp : function(seq, cmdId, protoDataArrayBuffer,options) {
-					var b = this.protoDataPackage(protoDataArrayBuffer, cmdId,
-							seq);
+					var b = this.protoDataPackage(protoDataArrayBuffer, cmdId,seq);
 					Logger.info('sendCmdResp Header', this.analyzeHeader(b));
-					this.publish("/" + this.getEssentialConfig('accessKey')
-							+ '/resp', b,options);
+					this.publish("/" + this.getEssentialConfig('accessKey') + '/resp', b,options);
 					return true;
 				}
 			};

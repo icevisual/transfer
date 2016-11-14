@@ -6,26 +6,28 @@ define(
 				var map = Utils.array_reverse(Simple.SrCmdId);
 
 				var MsgHandler = {
-					SCI_req_sleep : function(header, message) {
+					SCI_REQ_SLEEP : function(header, message) {
 						Logger.debug('Got SCI_req_sleep');
 						var resp = new Simple.BaseResponse(
-								Simple.SrErrorCode.SEC_success,
+								Simple.SrErrorCode.SEC_SUCCESS,
 								[ 'SCI_req_sleep' ]);
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_sleep, resp,{'retained' : true});
+								Simple.SrCmdId.SCI_RESP_SLEEP, resp
+//								,{'retained' : true}
+						);
 					},
-					SCI_req_wakeup : function(header, message) {
+					SCI_REQ_WAKEUP : function(header, message) {
 						Logger.debug('Got SCI_req_wakeup');
 						var resp = new Simple.BaseResponse(
-								Simple.SrErrorCode.SEC_success,
+								Simple.SrErrorCode.SEC_SUCCESS,
 								[ 'SCI_req_wakeup' ]);
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_wakeup, resp);
+								Simple.SrCmdId.SCI_RESP_WAKEUP, resp);
 					},
-					SCI_req_usedSeconds : function(header, message) {
+					SCI_REQ_USEDSECONDS : function(header, message) {
 						var resp = new Simple.UsedTimeResponse({
 							'response' : {
-								'code' : Simple.SrErrorCode.SEC_success,
+								'code' : Simple.SrErrorCode.SEC_SUCCESS,
 								'data' : [ 'SCI_req_usedSeconds' ]
 							},
 							'usedTime' : [ {
@@ -40,46 +42,22 @@ define(
 							} ]
 						});
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_usedSeconds, resp);
+								Simple.SrCmdId.SCI_RESP_USEDSECONDS, resp);
 					},
-					SCI_req_playSmell : function(header, message, app) {
+					SCI_REQ_PLAYSMELL : function(header, message, app) {
 						var decode = app.decodePayload(header,
 								message.payloadBytes);
 						app.logger.info('SCI_req_playSmell', decode);
 
 						var resp = new Simple.BaseResponse({
-							'code' : Simple.SrErrorCode.SEC_accept,
+							'code' : Simple.SrErrorCode.SEC_ACCEPT,
 							'data' : [ 'SCI_req_playSmell' ]
 						});
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_playSmell, resp);
-
-						// run smell play
-						// resp = new Simple.BaseResponse({
-						// 'code' : Simple.SrErrorCode.SEC_success,
-						// 'data' : [ 'SCI_req_playSmell' ]
-						// });
-						// SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-						// Simple.SrCmdId.SCI_resp_playSmell, resp);
-
+								Simple.SrCmdId.SCI_RESP_PLAYSMELL, resp);
 					},
-					SCI_req_getDevAttr : function(header, message, app) {
+					SCI_REQ_GETDEVATTR : function(header, message, app) {
 						// // 设备属性类型
-						// enum SrDevAttrType
-						// {
-						// SDST_deviceID = 1; // 设备唯一标识
-						// SDST_deviceName = 2;// 设备名字
-						// SDST_deviceType = 3;// 设备类别
-						// SDST_mac = 4; // MAC
-						// SDST_wifiSsid = 5; // wifi ssid
-						// SDST_wifiPwd = 6;// wifi 密码
-						// SDST_netConnectState = 7;// 网络连接状态
-						// SDST_bleConnectState = 8;// 蓝牙连接状态
-						// SDST_logState = 9;// 日志开启状态
-						// SDST_datetime = 10;// 时间
-						// SDST_uptime = 11;// 设备上次开机时间
-						// SDST_downtime = 12;// 设备上次关机时间
-						// }
 						var decode = app.decodePayload(header,
 								message.payloadBytes);
 						var attrs = [];
@@ -92,20 +70,17 @@ define(
 								'value' : Dev.getAttr(attrName)
 							});
 						}
-
 						// in Simple {'prefix_name':int_value}
 						// Get id by name
 						// Get name by id
 						// Type , Prefix ,Map
-
 						var resp = new Simple.DevAttrs({
 							'attrs' : attrs
 						});
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_getDevAttr, resp);
-
+								Simple.SrCmdId.SCI_RESP_GETDEVATTR, resp);
 					},
-					SCI_req_setDevAttr : function(header, message, app) {
+					SCI_REQ_SETDEVATTR : function(header, message, app) {
 						var decode = app.decodePayload(header,
 								message.payloadBytes);
 						app.logger.info('decode Obj', decode);
@@ -118,28 +93,27 @@ define(
 							app.logger.info('decode attrName,ret', attrName,
 									ret);
 						}
-
 						var resp = new Simple.BaseResponse({
-							'code' : Simple.SrErrorCode.SEC_success,
+							'code' : Simple.SrErrorCode.SEC_SUCCESS,
 							'data' : [ 'SCI_req_setDevAttr' ]
 						});
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_setDevAttr, resp);
+								Simple.SrCmdId.SCI_RESP_SETDEVATTR, resp);
 					},
-					SCI_req_featureReport : function(header, message, app) {
+					SCI_REQ_FEATUREREPORT : function(header, message, app) {
 						var SrFeatureType = Simple.SrFeatureType;
 						var SrFeatureAttrType = Simple.SrFeatureAttrType;
 						var FeatureReportResponse = new Simple.FeatureReportResponse(
 								{
 									'feature' : [ {
-										'type' : SrFeatureType.SFT_switch,
+										'type' : SrFeatureType.SFT_SWITCH,
 										'attrs' : [
 												{
-													'attr' : SrFeatureAttrType.SFAT_name,
+													'attr' : SrFeatureAttrType.SFAT_NAME,
 													'value' : '测试开关0001'
 												},
 												{
-													'attr' : SrFeatureAttrType.SFAT_name,
+													'attr' : SrFeatureAttrType.SFAT_NAME,
 													'value' : '测试开关0002'
 												} ]
 									} ]
@@ -168,7 +142,7 @@ define(
 						var FeatureReportResponse = new Simple.FeatureReportResponse(
 								obj);
 						SmellOpen.sendCmdResp(header.SEQUENCE_NUMBER,
-								Simple.SrCmdId.SCI_resp_featureReport,
+								Simple.SrCmdId.SCI_RESP_FEATUREREPORT,
 								FeatureReportResponse);
 					}
 				};
@@ -216,8 +190,8 @@ define(
 						} else {
 							Logger.debug('Header Found', headerInfo);
 							Logger.debug('Dev EVENT');
-
 							var handleFunctionName = map[headerInfo.COMMAND_ID];
+							Logger.debug('handleFunctionName',handleFunctionName);
 							if (undefined != handleFunctionName
 									&& undefined != MsgHandler[map[headerInfo.COMMAND_ID]]) {
 								MsgHandler[map[headerInfo.COMMAND_ID]].apply(

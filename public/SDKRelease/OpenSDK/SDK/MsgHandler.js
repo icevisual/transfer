@@ -1,15 +1,20 @@
 define(function() {
-	var handlers = function(SmellOpen) {
-		var Utils = SmellOpen.utils, Logger = SmellOpen.logger, Simple = SmellOpen.protoRoot;
+	var handlers = function(app) {
+		var Utils = app.utils, Logger = app.logger, Simple = app.protoRoot;
 		return {
 			onConnect : function() {
-				var accessKey = SmellOpen.getEssentialConfig('accessKey');
+				var accessKey = app.getEssentialConfig('accessKey');
 				Logger.info("onConnect,clientId = " + accessKey);
-				SmellOpen.subscribe("/" + accessKey);
 				
-				SmellOpen.setConnected();
-				
-				SmellOpen.evt.fire('onServerConnect',[SmellOpen]);
+				var selfTopic = "/" + accessKey;
+				app.subscribe(selfTopic);
+				app.subscribedThen(selfTopic,function(){
+					// check self subscribe status
+					// set Connected
+					// fire events
+				});
+				app.setConnected();
+				app.evt.fire('onServerConnect',[app]);
 			},
 			onConnectionLost : function(responseObject) {
 				Logger.info('onConnectionLost', responseObject);
@@ -32,19 +37,19 @@ define(function() {
 
 				Logger.info("onMessageArrived From Topic "
 						+ message.destinationName);
-				var headerInfo = SmellOpen.analyzeHeader(message.payloadBytes);
+				var headerInfo = app.analyzeHeader(message.payloadBytes);
 				if (false === headerInfo) {
 					Logger.info('Header Not Match');
-					Logger.info('payloadString', message.payloadString);
-					Logger.info('payloadBytes', message.payloadBytes);
+					Logger.info('PayloadString', message.payloadString);
+					Logger.info('PayloadBytes', message.payloadBytes);
 				} else {
 					Logger.info('Header Found', headerInfo);
-					var SrCmdId = Utils.EnumGetKey('SCI_',
-							headerInfo.COMMAND_ID);
+					var SrCmdId = Utils.EnumGetKey('SCI_',headerInfo.COMMAND_ID);
 					if (SrCmdId !== undefined) {
 						Logger.info('Got SrCmdId ', SrCmdId);
-						SmellOpen.evt.fire(headerInfo.COMMAND_ID + '/' + headerInfo.SEQUENCE_NUMBER, [ headerInfo,
-								message, SmellOpen ]);
+						Logger.info('Message payloadBytes', message.payloadBytes);
+						app.evt.fire(headerInfo.COMMAND_ID + '/' + headerInfo.SEQUENCE_NUMBER, [ headerInfo,
+								message, app ]);
 					} else {
 						Logger.warning('SrCmdId Not Match', SrCmdId);
 					}

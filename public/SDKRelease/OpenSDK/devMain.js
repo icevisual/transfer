@@ -9,5 +9,10 @@ require([ 'SDK/DeviceSDK' ], function(SDK) {
 		'accessKey' : 'TCeOp0gzzrWhAMoOa3Mm',
 		'accessSecret' : 'POVX1lgIvo8q1KHYpoD9',
 		'logLevel' : 'debug',
+		'mqtt' : {
+			 'hostname' : '120.26.109.169',
+//			'hostname' : '192.168.5.21',
+			'port' : '8083',
+		},
 	});
 })

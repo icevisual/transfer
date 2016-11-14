@@ -27,3 +27,21 @@ if (! function_exists('getRows')) {
     }
 }
 
+if (! function_exists('reverseScandir')) {
+
+    function reverseScandir($basePath,$prefix = ''){
+        $DS = DIRECTORY_SEPARATOR;
+        $basePath = trim($basePath,'/\\');
+        $scan = scandir($basePath);
+        $ret = [];
+        for ($i = 2 ; $i < count($scan) ; $i ++){
+            $filename = $basePath.$DS.$scan[$i];
+            if(is_dir($filename)){
+                $ret = array_merge($ret,reverseScandir($filename,$prefix.$scan[$i].$DS));
+            }else{
+                $ret[] = $prefix.$scan[$i];
+            }
+        }
+        return $ret;
+    }
+}
