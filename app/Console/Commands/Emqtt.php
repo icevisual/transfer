@@ -2,13 +2,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Extensions\Mqtt\BluerhinosMqtt;
-use BinSoul\Net\Mqtt\Flow\OutgoingConnectFlow;
-use BinSoul\Net\Mqtt\Packet\ConnectRequestPacket;
 use sskaje\mqtt\MQTT;
 use sskaje\mqtt\Debug;
 use sskaje\mqtt\MessageHandler;
 use App\Extensions\Mqtt\MqttUtil;
+use App\Services\Common\TOTPService;
 
 class Emqtt extends Command
 {
@@ -61,24 +59,17 @@ class Emqtt extends Command
     public function generAction()
     {
         $cmd = [
-            'mac' => '获取设备MAC地址',
-            'uptime' => '获取设备开机时间',
-            'downtime' => '获取上次关机时间',
-            'sleep' => '主机休眠',
-            'wakeup' => '唤醒主机',
-            'usedSeconds' => '获取瓶子使用总时间（秒）',
-            // 'enableSmell' => '开启某个气味',
-            'playSmell' => '播放气味',
-            
-            'netConnect' => '链接Wifi',
-            'setName' => '设置设备名字',
-            'logSetting' => '日志相关设定',
-            'featureReport' => '设备特性上报，可控组件上报',
-            'realTimeState ' => '设备实时状态上报',
+            'SLEEP' => '主机休眠',
+            'WAKEUP' => '唤醒主机',
+            'USEDSECONDS' => '获取瓶子使用总时间（秒）',
+            'PLAYSMELL' => '播放气味',
+            'GETDEVATTR' => '获取设置',
+            'SETDEVATTR' => '修改设置',
+            'FEATUREREPORT' => '设备特性上报，可控组件上报'
         ];
         $prefix = [
-            'SCI_req_',
-            'SCI_resp_'
+            'SCI_REQ_',
+            'SCI_RESP_'
         ];
         $i = 0;
         foreach ($cmd as $k => $v) {
@@ -87,17 +78,41 @@ class Emqtt extends Command
             $i ++;
         }
     }
+    
+    public function gCmdMapAction()
+    {
+        $cmd = [
+            'SLEEP' => '主机休眠',
+            'WAKEUP' => '唤醒主机',
+            'USEDSECONDS' => '获取瓶子使用总时间（秒）',
+            'PLAYSMELL' => '播放气味',
+            'GETDEVATTR' => '获取设置',
+            'SETDEVATTR' => '修改设置',
+            'FEATUREREPORT' => '设备特性上报，可控组件上报'
+        ];
+        $prefix = [
+            'SCI_REQ_',
+            'SCI_RESP_'
+        ];
+        $i = 0;
+        foreach ($cmd as $k => $v) {
+            // dcm[SrCmdId.{$prefix[0]}{$k}] = SrCmdId.{$prefix[1]}{$k};
+            echo "lcm[SrCmdId.{$prefix[0]}{$k}] = SrCmdId.{$prefix[1]}{$k};" . PHP_EOL;
+            $i ++;
+        }
+        // lcm
+    }
 
     public function init()
     {
-//         $mqtt = new MQTT("tcp://192.168.5.21:1883/");
-        $mqtt = new MQTT("tcp://120.26.109.169:1883/",'PHP-client-1');
+        // $mqtt = new MQTT("tcp://192.168.5.21:1883/",'PHP-client-1');
+        $mqtt = new MQTT("tcp://120.26.109.169:1883/", 'PHP-client-1');
         
         $context = stream_context_create();
         $mqtt->setSocketContext($context);
         
         // Debug::Enable();
-        $mqtt->setAuth('sskaje', '123123');
+        $mqtt->setAuth('test123', '123132');
         $mqtt->setKeepalive(36);
         $connected = $mqtt->connect();
         if (! $connected) {
@@ -122,24 +137,157 @@ class Emqtt extends Command
         $iv = '00000000000Pkcs7';
         $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv);
         $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $crypttext, MCRYPT_MODE_CBC, $iv);
-        dump(MqttUtil::aesEncrypt($text,'XqCEMSzhsdWHfwhm','00000000000Pkcs7'));
+        dump(MqttUtil::aesEncrypt($text, 'XqCEMSzhsdWHfwhm', '00000000000Pkcs7'));
         dump(base64_encode($crypttext));
         dump(trim($decode));
         dump(MqttUtil::dumpByte($crypttext));
         // dump(base64_encode(openssl_encrypt($text, 'aes-128-cbc', $key, OPENSSL_ZERO_PADDING, $iv)));
     }
     
+    
+    public function tes5t($str){
+        return $str == TOTPService::base32_decode(MqttUtil::base32_encode($str));
+    }
+
     public function printAction()
     {
-        MqttUtil::dumpByte('sadasdasd','I got a message');
+//         edump($this->tes5t('aaaaaaaaaa'));
+
+        $initkey = 'aaaaaaaaaa';
+        
+        $k =  TOTPService::get_otp(MqttUtil::base32_encode($initkey));
+        dump($k);
+//         $ret =  TOTPService::verify_key(MqttUtil::base32_encode('HNKGRV2O2oeK7W2jtmFC'), $k);
+//         dump($ret);
+//         $initkey = 'HNKGRV2O2oeK7W2jtmFC1';
+//         $k =  TOTPService::get_otp(MqttUtil::base32_encode($initkey));
+        
+//         dump($k);
+//         $ret =  TOTPService::verify_key(MqttUtil::base32_encode('HNKGRV2O2oeK7W2jtmFC'), $k);
+//         dump($ret);
+        exit;
+        
+//         $Logger = new \SmellOpen\Core\Logger();
+//         $msg = 'this is a test message ';
+//         \SmellOpen\Core\Logger::info($msg);
+//         \SmellOpen\Core\Logger::debug($msg);
+//         \SmellOpen\Core\Logger::warning($msg);
+//         \SmellOpen\Core\Logger::error($msg);
+//         exit;
+        
+        $Core = new \SmellOpen\Core\Core([]);
+//         SDK.connect({
+//             'accessKey' : 'IAzDhpyc0z9yGFajKp2P',
+//             'accessSecret' : 'HNKGRV2O2oeK7W2jtmFC',
+//             'logLevel' : 'info',
+//         });
+//         SMSDK = SDK;
+        
+        $dev = $Core->usingDevice('TCeOp0gzzrWhAMoOa3Mm');
+        
+        $dev->sleep();
+        
+        exit;
+        
+        
+        
+        
+        
+        dump( toFix(pow(2.25 /2 ,1/2) ) );
+        
+        exit;
+        
+        
+        $str =<<<EOL
+        SDST_deviceID = 1; // 设备唯一标识
+        SDST_deviceName = 2;// 设备名字
+        SDST_deviceType = 3;// 设备类别
+        SDST_mac = 4; // MAC
+        SDST_wifiSsid = 5; // wifi ssid
+        SDST_wifiPwd = 6;// wifi 密码
+        SDST_netConnectState = 7;// 网络连接状态
+        SDST_bleConnectState = 8;// 蓝牙连接状态
+        SDST_logState = 9;// 日志开启状态
+        SDST_datetime = 10;// 时间
+        SDST_uptime = 11;// 设备上次开机时间
+        SDST_downtime = 12;// 设备上次关机时间
+EOL;
+        
+        $data = explode("\r\n", $str);
+        foreach($data as $k => $v){
+            $match = preg_replace('/(SDST_)|( = \d+;\s*)|(\s)/', '', $v);
+            $match  = explode("//", $match);
+//             dump($match);
+            
+            echo "'{$match[0]}' : '',//{$match[1]}".PHP_EOL;
+            
+        }
+        dump($data);
+        
+        exit;
+        
+        
+        dump(dechex(time()));
+        
+        
+        dump(MqttUtil::base32_encode('Mangdk2222'));
+        
+//         JVQW4Z3ENM
+        dump(TOTPService::base32_decode('JVQW4Z3ENMZDEMRS'));
+        exit;
+        $K =  (str_random(18));
+        dump( $K);
+        dump( strlen($K));
+        $InitalizationKey = "LFLFMU2SGVCUIUCZKBMEKRKLIQ"; // Set the inital key
+//         $InitalizationKey = "sdfsdfdsfsdfs"; // Set the inital key
+        
+        $TimeStamp = TOTPService::get_timestamp();
+        $secretkey = TOTPService::base32_decode($InitalizationKey); // Decode it into binary
+        $otp = TOTPService::oath_hotp($secretkey, $TimeStamp); // Get current token
+        echo ("secretkey: $secretkey\n");
+        echo ("Init key: $InitalizationKey\n");
+        echo ("Timestamp: $TimeStamp\n");
+        echo ("One time password: $otp\n");
+        
+        // Use this to verify a key as it allows for some time drift.
+        
+        $result = TOTPService::verify_key($InitalizationKey, "123456");
+        
+        dump($result);
+        $result = TOTPService::verify_key($InitalizationKey, $otp);
+        
+        dump($result);
+        
+        exit();
+        
+        $ctx = hash_init('sha256', HASH_HMAC, 'key');
+        hash_update($ctx, 'Message');
+        $result = hash_final($ctx);
+        dump($result);
+        dump(base64_encode($result));
+        
+        dump(hash_hmac('sha1', 'Message', 'key'));
+        dump(base64_encode(hash_hmac('sha512', 'Message', 'key')));
+        // $ret = MqttUtil::assemblePayload('123123', \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell);
+        
+        return;
+        dump($ret);
+        dump((time()));
+        dump(dechex(time()));
+        MqttUtil::dumpByte('sadasdasd', 'I got a message');
     }
 
     public function testAction()
     {
         $this->template(function ($mqtt) {
             
-            $topics['/0CRngr3ddpVzUBoeF'] = 2;
-            $topics['/test/conn'] = 2;
+            $topics['/TCeOp0gzzrWhAMoOa3Mm'] = 1;
+            $topics['/TCeOp0gzzrWhAMoOa3Mm/resp'] = 1;
+            $topics['/testIAzDhpyc0z9yGFajKp2P'] = 1;
+            
+            //
+            // $mqtt->unsubscribe(array_keys($topics));
+            
             $mqtt->subscribe($topics);
             
             // #$mqtt->unsubscribe(array_keys($topics));
@@ -150,19 +298,19 @@ class Emqtt extends Command
             $mqtt->loop();
         });
     }
-    
+
     public function pubfileAction()
     {
         $this->template(function ($mqtt) {
             $content = file_get_contents(public_path('proto/PlayAction.mqtt.data'));
             $content = file_get_contents(public_path('proto/PlaySmellBack.data'));
             
-            $sss = MqttUtil::assemblePayload($content, \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell, 1);
+            $sss = MqttUtil::assemblePayload($content, \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell);
             
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
-    
+
     public function publishAction()
     {
         $this->template(function ($mqtt) {
@@ -238,14 +386,13 @@ class Emqtt extends Command
             
             file_put_contents(public_path('proto/PlayAction.mqtt.data'), $content);
             
-            $sss = MqttUtil::assemblePayload($content, \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell, 1);
+            $sss = MqttUtil::assemblePayload($content, \Proto2\Scentrealm\Simple\SrCmdId::SCI_resp_playSmell);
             
             file_put_contents(public_path('proto/PlayAction.mqtt.payload'), $sss);
             
             $mqtt->publish_async('/0CRngr3ddpVzUBoeF', $sss, 0, 0);
         });
     }
-    
 }
 
 

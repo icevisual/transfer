@@ -38,6 +38,7 @@
 		       <a onclick="StrFormat('table2ArrayData')" class="btn  btn-primary">TABLE2ARRAY</a>
 		       <a onclick="$('#result-field').val(CSSencode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-HORIZONTAL </a>
 		       <a onclick="$('#result-field').val(CSSdecode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-VERTICAL</a>
+		       <a onclick="$('#result-field').val(js_beautify($('#result-field').val(), 4, ' '));" class="btn  btn-primary">JS_BEAUTIFY</a>
 		
 			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>
@@ -55,7 +56,7 @@
 	<script src="flatUI/js/jquery.tagsinput.js"></script>
 	<script src="flatUI/js/jquery.placeholder.js"></script>
 	<script src="flatUI/js/jquery.format.js"></script>
-	
+	<script src="js/jsbeautify.js"></script>
 	<script>
     var StrFormat = function(type){
 

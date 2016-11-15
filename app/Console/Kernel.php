@@ -24,6 +24,8 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\ProtoBuf::class,
         \App\Console\Commands\Emqtt::class,
         \App\Console\Commands\CatchCmd::class,
+        
+        \App\Console\Commands\JsBeautify::class,
     ];
 
     /**
