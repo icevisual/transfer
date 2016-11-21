@@ -2,8 +2,47 @@
 <html>
 <head>
     <title>Demo</title>
+    <meta charset="utf-8"/>
+    <style>
+    input[name=t]{
+        width:50px;
+    }
+    .hide{
+        display:none;
+    }
+    table {
+        padding-left: 400px;
+        padding-top: 30px;
+        text-align:left;
+    }
+    </style>
 </head>
 <body>
+    <table class="the-table">
+        <tr>
+            <td>设备ID</td>
+            <td> 
+                <input type="text" name="deviceID" value="TCeOp0gzzrWhAMoOa3Mm"/> 
+            </td>
+            <td width="150px">
+                <button class="connect">连接</button> 
+                <button class="disconnect hide">断开连接</button> 
+                <span class="connecting hide">连接中 ......</span>
+            </td>
+            <td  width="220px">播放进度</td>
+        </tr>
+<!--         <tr> -->
+<!--             <td>气味1</td> -->
+<!--             <td> -->
+<!--                 <input type="text" name="t" value="3"/> -->
+<!--             </td> -->
+<!--             <td> -->
+<!--                 <button data-sid="1" class="play-btn">播放</button>   -->
+<!--             </td> -->
+<!--             <td><div class="process-1"><div>&nbsp;</div></div></td> -->
+<!--         </tr> -->
+    </table>
+
     <script data-main="main" src="../dist/require.js"></script>
 </body>
 </html>

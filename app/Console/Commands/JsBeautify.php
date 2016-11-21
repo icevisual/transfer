@@ -37,9 +37,7 @@ class JsBeautify extends Command
         
         $c =  $JsBeautify->js_beautify($content);
         
-        
         file_put_contents(public_path('DevMsghandler1.js'),$c);
-        
 //         dump($c);
     }
     
