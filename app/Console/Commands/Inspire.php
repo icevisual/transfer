@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use App\Models\Common\Bill;
+use GuzzleHttp;
 
 class Inspire extends Command
 {
@@ -29,6 +30,35 @@ class Inspire extends Command
      */
     public function handle()
     {
+        $url = 'http://192.168.5.61:18083/api/clients';
+        $uname = 'admin';
+        $upass = 'public';
+        $param = [
+        ];
+        
+        $Authorization = 'Basic '.base64_encode($uname.':'.$upass);
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', $url,[
+            'headers' => [
+                'Authorization' => $Authorization
+            ]
+        ]);
+
+        echo $res->getStatusCode();
+        // 200
+        echo $res->getHeaderLine('content-type');
+        // 'application/json; charset=utf8'
+        echo $res->getBody();
+        // '{"id": 1420053, "name": "guzzle", ...}'
+        exit; 
+        // Send an asynchronous request.
+//         $request = new \GuzzleHttp\Psr7\Request('GET', 'http://httpbin.org');
+//         $promise = $client->sendAsync($request)->then(function ($response) {
+//             echo 'I completed! ' . $response->getBody();
+//         });
+//         $promise->wait();
+        
         
         // 1430 1630 1540
         

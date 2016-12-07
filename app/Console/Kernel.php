@@ -26,6 +26,11 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\CatchCmd::class,
         
         \App\Console\Commands\JsBeautify::class,
+        
+        \App\Console\Commands\ScanDir::class,
+        
+        
+        
     ];
 
     /**
