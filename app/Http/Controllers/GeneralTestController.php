@@ -1243,7 +1243,7 @@ define('ORDER_PAY_STATUS_RESULT', 4);";
         $data = [
             'tn' => 'resultjsonavatarnew',
             'ie' => 'utf-8',
-            'word' => '动漫少女头像',
+            'word' => '苹果',
             'cg' => 'wallpaper',
             'pn' => '0',
             'rn' => '60',

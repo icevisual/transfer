@@ -54,7 +54,7 @@ return [
             'password'  => env('DB_PASSWORD', ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_general_ci',
-            'prefix'   => env('DB_PREFIX', 'xb_'),
+            'prefix'   => 'sm_',//env('DB_PREFIX', 'xb_'),
             'strict'    => false,
         ],
 

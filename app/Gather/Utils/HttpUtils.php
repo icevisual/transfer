@@ -92,7 +92,8 @@ class HttpUtils
                 return false;
             }
         } else {
-            edump(curl_errno($ch));
+            dump(curl_errno($ch));
+            dump(curl_error($ch));
             curl_close($ch);
             return false;
         }

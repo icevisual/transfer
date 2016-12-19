@@ -28,6 +28,12 @@ Route::match(['get','post'],'kindEditor/upload_json.aspx', 'Common\KindEditor@up
 Route::match(['get','post'],'kindEditor/file_manager_json','Common\KindEditor@file_manager_json' );
 
 
+Route::match(['get','post'],'/removeUnwanted','Common\CommonController@removeUnwanted' );
+
+Route::match(['get','post'],'/listUndecidedSmell','Common\CommonController@listUndecidedSmell' );
+
+
+Route::match(['get','post'],'/smellSearch','Common\CommonController@smellSearch' );
 
 
 

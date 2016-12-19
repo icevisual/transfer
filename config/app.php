@@ -150,6 +150,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         'Maatwebsite\Excel\ExcelServiceProvider',
 //         Xtwoend\Workbench\WorkbenchServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -199,6 +201,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Excel'     => 'Maatwebsite\Excel\Facades\Excel',  
+        
+        'Image'     => Intervention\Image\Facades\Image::class
     ],
 
 ];
