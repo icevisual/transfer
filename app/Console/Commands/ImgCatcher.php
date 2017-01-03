@@ -169,6 +169,29 @@ WHERE
         return true;
     }
     
+    function curl_get($url, array $data = [], $json = true)
+    {
+        // $api = 'http://v.showji.com/Locating/showji.com20150416273007.aspx?output=json&m='.$phone;
+        $ch = curl_init();
+        if (! empty($data)) {
+            $url = $url . '?' . http_build_query($data);
+        }
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $User_Agen = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36';
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5); // 设置超时
+        // curl_setopt($ch, CURLOPT_USERAGENT, $User_Agen); //用户访问代理 User-Agent
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 跟踪301
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果
+        $info = curl_exec($ch);
+        // echo curl_errno($ch);
+        // echo curl_error($ch);
+        curl_close($ch);
+        return $json ? json_decode($info, 1) : $info;
+    }
+    
+    
     public function baiduAvatar($word,$num = 10,$offset = 0){
         $url = 'http://image.baidu.com/search/avatarjson';
         $data = [
@@ -585,6 +608,65 @@ gsm:d2
                     "image/gif" => 'gif',
                 ];
                 
+                $dest .= '.'.$extMap[$aa['mime']];
+                if(!file_exists($dest)){
+                    \DB::update("UPDATE sm_smell_pc SET thumb = ? where thumb = ? ",[
+                        $file.'.'.$extMap[$aa['mime']],
+                        $file
+                    ]);
+                    copy($filename, $dest);
+                }
+            }
+        }
+    }
+    
+    
+
+    public function whAction(){
+    
+        ini_set('memory_limit', '1024M');
+        $i = 1;
+        do{
+            $list = SmellPc::where('width',0)->limit(100)->get();
+            \DB::beginTransaction();
+            $list = $list ? $list->toArray():[];
+            $this->clog($i ++ );
+            foreach ($list as $v){
+                $fname = str_replace('upload/scent/', '', $v['thumb']);
+                if(file_exists(public_path('thumbext/'.$fname))){
+                    $aa = getimagesize(public_path('thumbext/'.$fname));
+                    
+                    $aa[1];// 1
+                    SmellPc::where('id',$v['id'])->update([
+                        'width' => $aa[0],
+                        'height' => $aa[1],
+                    ]);
+                }
+            }
+            \DB::commit();
+        }while($list);
+        
+        exit;
+        
+        $scandir = scandir(public_path('thumb'));
+    
+        $maxAttrmpt = 100000;
+    
+        $mines = [];
+    
+        while ( ( $file = array_pop($scandir) ) && $maxAttrmpt -- ){
+            $filename = public_path('thumb/'.$file);
+            if(is_file($filename)){
+                $aa = getimagesize($filename);
+    
+                $dest = str_replace('thumb', 'thumbext', $filename);
+    
+                $extMap = [
+                    "image/jpeg" => 'jpg',
+                    "image/png" => 'png',
+                    "image/gif" => 'gif',
+                ];
+    
                 $dest .= '.'.$extMap[$aa['mime']];
                 if(!file_exists($dest)){
                     \DB::update("UPDATE sm_smell_pc SET thumb = ? where thumb = ? ",[

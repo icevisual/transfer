@@ -39,6 +39,9 @@
 		       <a onclick="$('#result-field').val(CSSencode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-HORIZONTAL </a>
 		       <a onclick="$('#result-field').val(CSSdecode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-VERTICAL</a>
 		       <a onclick="$('#result-field').val(js_beautify($('#result-field').val(), 4, ' '));" class="btn  btn-primary">JS_BEAUTIFY</a>
+		       <a onclick="StrFormat1('json2Array')" class="btn  btn-primary">JSON2ARRAY</a>
+		
+		
 		
 			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>
@@ -59,7 +62,6 @@
 	<script src="js/jsbeautify.js"></script>
 	<script>
     var StrFormat = function(type){
-
         var content = $('#result-field').val();
         $.post('/format',{
             'content' : content,
@@ -69,7 +71,17 @@
         	$('#result-field').val(d);
         },'text');
     }
-
+    var StrFormat1 = function(type){
+        eval('var a = ' + $('#result-field').val());
+        var content = JSON.stringify(a);
+        $.post('/format',{
+            'content' : content,
+            'type' : type,
+            '_token' :'{{ csrf_token() }}'
+        },function(d){
+        	$('#result-field').val(d);
+        },'text');
+    }
     function CSSencode(code) 
     { 
      code = code.replace(/\r\n/ig,''); 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Route;
 use View;
+use function GuzzleHttp\json_decode;
 
 class LocalTestController extends  Controller
 {
@@ -177,6 +178,14 @@ class LocalTestController extends  Controller
                  
             }
         }
+    }
+    
+    
+    public function json2Array(){
+        $str = \Input::get('content');
+        $str = str_replace('\'', '"', $str);
+        $arr = json_decode($str,1);
+        echoArrayKV($arr);
     }
 	
     public function table2Array(){
