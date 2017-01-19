@@ -30,35 +30,34 @@ class Inspire extends Command
      */
     public function handle()
     {
-        $url = 'http://192.168.5.61:18083/api/clients';
-        $uname = 'admin';
-        $upass = 'public';
-        $param = [
-        ];
+        // $url = 'http://192.168.5.61:18083/api/clients';
+        // $uname = 'admin';
+        // $upass = 'public';
+        // $param = [
+        // ];
         
-        $Authorization = 'Basic '.base64_encode($uname.':'.$upass);
-
-        $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', $url,[
-            'headers' => [
-                'Authorization' => $Authorization
-            ]
-        ]);
-
-        echo $res->getStatusCode();
-        // 200
-        echo $res->getHeaderLine('content-type');
-        // 'application/json; charset=utf8'
-        echo $res->getBody();
-        // '{"id": 1420053, "name": "guzzle", ...}'
-        exit; 
+        // $Authorization = 'Basic '.base64_encode($uname.':'.$upass);
+        
+        // $client = new \GuzzleHttp\Client();
+        // $res = $client->request('GET', $url,[
+        // 'headers' => [
+        // 'Authorization' => $Authorization
+        // ]
+        // ]);
+        
+        // echo $res->getStatusCode();
+        // // 200
+        // echo $res->getHeaderLine('content-type');
+        // // 'application/json; charset=utf8'
+        // echo $res->getBody();
+        // // '{"id": 1420053, "name": "guzzle", ...}'
+        // exit;
         // Send an asynchronous request.
-//         $request = new \GuzzleHttp\Psr7\Request('GET', 'http://httpbin.org');
-//         $promise = $client->sendAsync($request)->then(function ($response) {
-//             echo 'I completed! ' . $response->getBody();
-//         });
-//         $promise->wait();
-        
+        // $request = new \GuzzleHttp\Psr7\Request('GET', 'http://httpbin.org');
+        // $promise = $client->sendAsync($request)->then(function ($response) {
+        // echo 'I completed! ' . $response->getBody();
+        // });
+        // $promise->wait();
         
         // 1430 1630 1540
         
@@ -83,10 +82,10 @@ class Inspire extends Command
         // dump(1540 / 4600 * 1400); // 469
         // dump(1430 / 4600 * 1400); // 435
         
-//                 四舍五入
-//         顾云翔 1630 / 4600 * 1400 = 496
-//         李蒙     1540 / 4600 * 1400 = 469
-//         金燕林  1430 / 4600 * 1400 = 435
+        // 四舍五入
+        // 顾云翔 1630 / 4600 * 1400 = 496
+        // 李蒙 1540 / 4600 * 1400 = 469
+        // 金燕林 1430 / 4600 * 1400 = 435
         
         // 496.08695652174
         // 468.69565217391
@@ -112,42 +111,66 @@ class Inspire extends Command
                 'desc' => '房租 [每月 1430 / 4600 * 5300 = 1648]',
                 'amount' => 1648 * 3
             ],
-            // [
-            // 'name' => '顾云翔',
-            // 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
-            // 'desc' => '押金差额 [1630 / 4600 * 1400 = 496]',
-            // 'amount' => 496
-            // ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2016.11.13 电费',
+                'amount' => 66.71
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.01.04 电费',
+                'amount' => 71.02
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '长城宽带',
+                'amount' => 360
+            ],
             // [
             // 'name' => '李蒙',
             // 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
             // 'desc' => '押金差额 [1540 / 4600 * 1400 = 469]',
             // 'amount' => 469
             // ],
-            // [
-            // 'name' => '金燕林',
-            // 'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
-            // 'desc' => '押金差额 [1430 / 4600 * 1400 = 435]',
-            // 'amount' => 435
-            // ],
             [
-                'name' => '',
-                'type' => Bill::TYPE_SHOULD_PAY_ALL,
-                'desc' => '服务费',
-                'amount' => 636
-            ],
-            [
-                'name' => '李蒙',
+                'name' => '金燕林',
                 'type' => Bill::TYPE_PAYED,
-                'desc' => '电费',
-                'amount' => 89.31
+                'desc' => '2016.11.16 水费',
+                'amount' => 55.10
             ],
             [
                 'name' => '金燕林',
                 'type' => Bill::TYPE_PAYED,
-                'desc' => '2016年9月水费',
-                'amount' => 64.03
+                'desc' => '2016.11.19 燃气费',
+                'amount' => 111.60
             ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2016.12.10 电费',
+                'amount' => 90.92
+            ],
+//             [
+//                 'name' => '',
+//                 'type' => Bill::TYPE_SHOULD_PAY_ALL,
+//                 'desc' => '服务费',
+//                 'amount' => 636
+//             ],
+//             [
+//                 'name' => '李蒙',
+//                 'type' => Bill::TYPE_PAYED,
+//                 'desc' => '电费',
+//                 'amount' => 89.31
+//             ],
+//             [
+//                 'name' => '金燕林',
+//                 'type' => Bill::TYPE_PAYED,
+//                 'desc' => '2016年9月水费',
+//                 'amount' => 64.03
+//             ],
             [
                 'name' => '金燕林',
                 'type' => Bill::TYPE_SHOULD_PAY_ALL,

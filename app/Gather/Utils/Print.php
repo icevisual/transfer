@@ -102,8 +102,24 @@ if (! function_exists('echoArray')) {
         echo '[' . PHP_EOL;
         $padding = str_pad('', $lv, $paddingLeft);
         $padding1 = str_pad('', $lv - 1, $paddingLeft);
+        
+        $keys = array_keys($arr);
+        $i = 0;
+        $isArray = true;
+        foreach ($keys as $v){
+            if($v !== $i ++){
+                $isArray = false;
+                break;
+            }
+        }
+        
         foreach ($arr as $k => $v) {
-            echo "$padding'$k' => ";
+            
+            if($isArray){
+                echo "$padding ";
+            }else{
+                echo "$padding'$k' => ";
+            }
             if (is_array($v)) {
                 echoArrayKV($v, $lv + 1);
             } else {
