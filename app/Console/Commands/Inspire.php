@@ -30,6 +30,51 @@ class Inspire extends Command
      */
     public function handle()
     {
+        
+        dd("0.00" > "0");
+        $data = [
+            'b21CZTVzMzRwazE4dk42V2ZOaVFTeXdzdGNwQQ==',
+            'b21CZTVzM3AxalZVb18xYzJoU1lTN0lrRjNhUQ==',
+            'b21CZTVzODhpOElHVjhDaVlKclVOZ1ptUkhzUQ=='
+        ];
+        
+//         object_name($name);
+        foreach ($data as $v){
+            echo $v . "\t" .base64_decode($v) .PHP_EOL;
+        }
+        exit;
+        dd(base64_decode('b21CZTVzODhpOElHVjhDaVlKclVOZ1ptUkhzUQ=='));
+        
+//         createInsertSql($tbname, $data)
+
+        $pwd = '123456';
+//         $pwd = null;
+        dump(md5($pwd));
+        dd(md5(md5($pwd)));
+        if(1){
+            $a = 0;
+        }
+        
+        dd($a);
+        
+        
+        $file = 'D:\desktop\header-logo.png';
+        $dest = 'D:\desktop\header-logo1.png';
+        // open an image file
+        $img = \Image::make($file);
+        // now you are able to resize the instance
+//         $img->resize($targetWidth, $newHeight);
+        //         and insert a watermark for example
+        //         $img->insert('public/watermark.png');
+        
+        
+        $img->crop(460, 410,0,0);
+        
+        // finally we save the image as a new file
+        $img->save($dest);
+        
+        exit;
+        
         // $url = 'http://192.168.5.61:18083/api/clients';
         // $uname = 'admin';
         // $upass = 'public';

@@ -40,8 +40,7 @@
 		       <a onclick="$('#result-field').val(CSSdecode($('#result-field').val()));" class="btn  btn-primary">CSS-FORMAT-VERTICAL</a>
 		       <a onclick="$('#result-field').val(js_beautify($('#result-field').val(), 4, ' '));" class="btn  btn-primary">JS_BEAUTIFY</a>
 		       <a onclick="StrFormat1('json2Array')" class="btn  btn-primary">JSON2ARRAY</a>
-		
-		
+		       <a onclick="StrFormat('strUnserialize')" class="btn  btn-primary">strUnserialize</a>
 		
 			   <textarea rows="33" result=1  spellcheck="false"  id="result-field"  name="content"  placeholder="" class="form-control">{{$result}}</textarea>
 		</form>

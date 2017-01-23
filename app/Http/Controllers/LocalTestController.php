@@ -180,6 +180,13 @@ class LocalTestController extends  Controller
         }
     }
     
+    public function strUnserialize(){
+        $str = \Input::get('content');
+        $str = str_replace('\'', '"', $str);
+        $arr = unserialize($str);
+        echoArrayKV($arr);
+    }
+    
     
     public function json2Array(){
         $str = \Input::get('content');

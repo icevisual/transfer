@@ -36,6 +36,8 @@ class CatchCmd extends Command
      */
     public function handle()
     {
+        
+        
 //         $this->initProxyList();
 //         while ($this->selectProxy());
 //         $this->reloadProxy();
