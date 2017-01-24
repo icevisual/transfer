@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\ScanDir::class,
         
         \App\Console\Commands\ImgCatcher::class,
-        
+        \App\Console\Commands\DumpStructs::class,
     ];
 
     /**

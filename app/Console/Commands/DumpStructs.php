@@ -31,13 +31,18 @@ class DumpStructs extends Command
         $this->dumpStructs();
         
         
-        $this->comment(PHP_EOL.'---END---'.Inspiring::quote().PHP_EOL);
+        $this->comment(PHP_EOL.'---END---'.PHP_EOL);
     }
     
     protected function dumpStructs(){
         $tables = $this->getTableNames();
         
-        $filename = base_path('sqls').DIRECTORY_SEPARATOR.'DumpStructs-'.date('Y-m-d-H-i-s').'.sql';
+        $filename = base_path('sqls').DIRECTORY_SEPARATOR.'Auto-Dump-Structs.sql';
+        $backup_filename = base_path('sqls').DIRECTORY_SEPARATOR.'Auto-Dump-Structs.bak.sql';
+        
+        if(file_exists($filename)){
+            @copy($filename, $backup_filename);
+        }
         
         $fp = fopen($filename,'w');
         
