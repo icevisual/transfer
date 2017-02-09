@@ -7,8 +7,8 @@
     <!-- 2.引入highcharts的核心文件 --> 
     <script src="/Highcharts/highcharts.js" type="text/javascript"></script> 
     <!-- 3.引入导出需要的js库文件 --> 
-    <script src="/Highcharts/modules/exporting.js" type="text/javascript"></script> 
-	<script language="javascript" type="text/javascript"> 
+<!--     <script src="/Highcharts/modules/exporting.js" type="text/javascript"></script>  -->
+	  <script language="javascript" type="text/javascript"> 
     var chart; 
     $(document).ready(function () { 
         chart = new Highcharts.Chart({ 
@@ -70,10 +70,8 @@
     </script> 
    </head> 
 <body> 
-    <form id="form1" runat="server"> 
     <!--5.导入容器用于显示图表--> 
     <div id="container" style="width: 100%;"> 
     </div> 
-    </form> 
 </body> 
 </html>

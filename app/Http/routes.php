@@ -76,6 +76,9 @@ Route::match(['get','post'],'/smellSearch','Common\CommonController@smellSearch'
 ], function () {
     \Route::get('bill', 'Common\CommonController@bill');
     \Route::get('websocket', 'Common\CommonController@websocket');
+    
+    \Route::get('chart', 'Common\CommonController@chart');
+    
 });
 
 
