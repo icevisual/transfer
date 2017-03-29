@@ -1,46 +1,49 @@
 {
-	"repositories": [
-		{
-			"packagist": false
-		},
-		{
-			"type": "composer",
-			"url": "http://packagist.cn"
-		}
-	],
+    "repositories": [
+        {
+            "packagist": false
+        },
+        {
+            "type": "composer",
+            "url": "http://packagist.cn"
+        }
+    ],
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.38",
         "predis/predis": "^1.0",
-	    "maatwebsite/excel": "~2.1.0",
+        "maatwebsite/excel": "~2.1.0",
         "guzzlehttp/guzzle": "^6.1",
         "zf-commons/zfc-rbac": "~2.4",
         "barryvdh/laravel-ide-helper": "^2.2",
         "dcn/rbac": "~1.1.0",
-	    "ixudra/curl": "5.*",
-		"bosnadev/repositories": "^0.12.0",
-		"anlutro/l4-repository": "^0.7.9",
-		"league/pipeline": "^0.2.2",
-		"php-amqplib/php-amqplib": "^2.6",
-		"workerman/workerman": "^3.3",
-		"textalk/websocket": "^1.2",
-		"binsoul/net-mqtt": "^0.2.0",
-		"sskaje/mqtt": "dev-v2.0-dev",
-		"paquettg/php-html-parser": "^1.7",
-		"intervention/image": "^2.3"
+        "ixudra/curl": "5.*",
+        "bosnadev/repositories": "^0.12.0",
+        "anlutro/l4-repository": "^0.7.9",
+        "league/pipeline": "^0.2.2",
+        "php-amqplib/php-amqplib": "^2.6",
+        "workerman/workerman": "^3.3",
+        "textalk/websocket": "^1.2",
+        "binsoul/net-mqtt": "^0.2.0",
+        "sskaje/mqtt": "dev-v2.0-dev",
+        "paquettg/php-html-parser": "^1.7",
+        "intervention/image": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1",
-	    "symfony/dom-crawler":"~3.0",
-	    "symfony/css-selector":"~3.0"
+        "symfony/dom-crawler": "~3.0",
+        "symfony/css-selector": "~3.0"
     },
     "autoload": {
         "classmap": [
@@ -82,6 +85,6 @@
     },
     "config": {
         "preferred-install": "dist",
-	 	"secure-http": false
+        "secure-http": false
     }
 }

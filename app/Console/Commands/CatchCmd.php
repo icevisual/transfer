@@ -37,6 +37,25 @@ class CatchCmd extends Command
     public function handle()
     {
         
+        $expected  = crypt('12345', '$2a$07$usesomesillystringforsalt$');
+        $correct   = crypt('12345', '$2a$07$usesomesillystringforsalt$');
+        $incorrect = crypt('apple',  '$2a$07$usesomesillystringforsalt$');
+        dump($expected,$correct,$incorrect);
+        dump(hash_equals($expected, $correct));
+        dump(hash_equals($expected, $incorrect));
+        
+        
+        
+        // IBoUoSfrqJ5g05PvEVL5NMeKotyGeoa4rJUEAn4C|t25IUzPmzpEvdcSKXoOHcQaCbA8a3cu7wpEfOTJO|NM  
+        // pBeE0wl9eDQsvuJZBnUUpJBhrEOwmiZN8IbEHyud|ynvZ4gAzh50XFAKFTYCRreM8DClTACNyANgJozia|NM  
+        // rQ3bPWeweWLuyqHia8XGvMUgqtuzwZHOgw9DksSp|RRFfJbVewZ0NAFnvk3QJRFGwwKpJzdgcjCnGJIYn|NM  
+        $known_string = 'pBeE0wl9eDQsvuJZBnUUpJBhrEOwmiZN8IbEHyud';
+        $user_string = 'ynvZ4gAzh50XFAKFTYCRreM8DClTACNyANgJozia';
+        dd(hash_equals($known_string, $user_string));
+        
+        $this->cacheOpen();
+        
+        exit;
         
 //         $this->initProxyList();
 //         while ($this->selectProxy());
@@ -73,6 +92,45 @@ class CatchCmd extends Command
             $catchedUids[$iiid] = 1;
         }
         return $catchedUids;
+    }
+    
+    
+    public function cacheOpen(){
+        
+        $cookie_file = tmp_path('cookie.txt');
+        // var _CsrfToken = 'dIwpLH3aqEN6dWdRHaG3BdwolZoThq9Tg1VBD9VV';
+        $optArray = [
+            CURLOPT_COOKIEFILE => $cookie_file,
+            CURLOPT_CUSTOMREQUEST => 'GET'
+        ];
+        
+        $base = 'open.smell.com';
+        
+        $url = '/developer';
+        
+        $html = $this->curl($base.$url, '',$optArray);
+        
+        $pattern = '/_CsrfToken = \'(.*)\'/';
+        
+        preg_match($pattern, $html,$matches);
+
+        $apiUrl = '/api/login';
+        
+        $Data = [
+            'account' => 'jinyanlin@renrenfenqi.com',
+            'password' => '123456',
+            'remember' => '1',
+            '_token' => $matches[1]
+        ];
+        
+        $optArray = [
+            CURLOPT_COOKIEFILE => $cookie_file,
+            CURLOPT_CUSTOMREQUEST => 'POST'
+        ];
+        
+        $html = $this->curl($base.$apiUrl, $Data,$optArray);
+        
+        dd($html);
     }
     
     

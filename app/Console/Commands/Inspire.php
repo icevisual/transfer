@@ -30,6 +30,19 @@ class Inspire extends Command
      */
     public function handle()
     {
+        $content = curl_get('https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf',[],0);
+        
+        dd($content);
+        
+        $url = 'https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf';
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', $url, [
+            'stream' => true,
+            'timeout' => 10
+        ]);
+        $data = $response->getBody();
+        
+        file_put_contents(public_path('asd'), $data);
         
         dd("0.00" > "0");
         $data = [
