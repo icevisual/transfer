@@ -31,6 +31,8 @@ class Kernel extends ConsoleKernel
         
         \App\Console\Commands\ImgCatcher::class,
         \App\Console\Commands\DumpStructs::class,
+        
+        \App\Console\Commands\WordVideo::class,
     ];
 
     /**
