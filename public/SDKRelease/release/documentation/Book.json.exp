@@ -1,0 +1,16 @@
+{
+    "title" : "OpenSDK",
+    "language": "zh-hans",
+    "styles": {
+        "website": "styles/website.css",
+        "ebook": "styles/ebook.css",
+        "pdf": "styles/pdf.css",
+        "mobi": "styles/mobi.css",
+        "epub": "styles/epub.css"
+    },
+    "links": {
+        "sidebar": {
+            "Home": "http://zhangjikai.com"
+        }
+    }
+}

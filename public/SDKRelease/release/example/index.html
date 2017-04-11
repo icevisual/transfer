@@ -1,48 +1,262 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Demo</title>
-    <meta charset="utf-8"/>
-    <style>
-    input[name=t]{
-        width:50px;
-    }
-    .hide{
-        display:none;
-    }
-    table {
-        padding-left: 400px;
-        padding-top: 30px;
-        text-align:left;
-    }
+    <title>气味开放平台 - 实例</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <style type="text/css">
+        .dev-container {
+            width:100%;
+            display: inline-flex;
+            height: 400px;
+            background:#ccc;
+        }
+        .dev-init {
+            //margin-left: 30%;
+        }
+        .dev-console {
+            width:100%;
+            height: 200px;
+            background:#ffcccc;
+        }
+        .dev-tab {
+            margin-left:20px;
+        }
+        .dev-attrs {
+            width:30%;
+            background:#fcffff;
+        }
+        .dev-controls {
+            width:30%;
+            background:#dcdcff;
+        }
+        .dev-playzone {
+            width:30%;
+            background:#9bff9b;
+        }
+        
+        .span-attr-value {
+            left: 204px;
+            position: absolute;
+        }
+        .hide {
+            display : none;
+        }
+        .dev-cnt-tb{
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            box-shadow: 10px 10px 5px #888888;
+            padding-bottom:10px;
+        }
+        .dev-cnt-tb tr{
+/*            line-height: 30px; */
+        }
+        .dev-cnt-tb tr td{
+            padding: 10px 10px 0 10px;
+        }
+        table.dev-cnt-tb caption{
+            padding-bottom: 10px;
+        }
+        li {
+            margin-top:5px;
+        }
+        .usl {
+            margin-top:20px;
+        }
+        .usl input {
+            width:40px;
+            padding: 4px;
+            border-radius: 3px;
+        }
+        .code-container  {
+           position: absolute;
+	         left: 65%;
+	         top: 0;
+        }
+        .error-container{
+              padding-top: 10px;
+          font-size: 10px;
+        }
+        .error-list{
+          color:red;
+          list-style: none;
+			    margin: 0;
+			    padding: 0;
+        }
+        pre.code {
+            width: 358px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 10px 10px 5px #888888;
+            padding:10px;
+            
+            display : none;
+        }
     </style>
 </head>
 <body>
-    <table class="the-table">
-        <tr>
-            <td>设备ID</td>
-            <td> 
-                <input type="text" name="deviceID" value="TCeOp0gzzrWhAMoOa3Mm"/> 
-            </td>
-            <td width="150px">
-                <button class="connect">连接</button> 
-                <button class="disconnect hide">断开连接</button> 
-                <span class="connecting hide">连接中 ......</span>
-            </td>
-            <td  width="220px">播放进度</td>
-        </tr>
-<!--         <tr> -->
-<!--             <td>气味1</td> -->
-<!--             <td> -->
-<!--                 <input type="text" name="t" value="3"/> -->
-<!--             </td> -->
-<!--             <td> -->
-<!--                 <button data-sid="1" class="play-btn">播放</button>   -->
-<!--             </td> -->
-<!--             <td><div class="process-1"><div>&nbsp;</div></div></td> -->
-<!--         </tr> -->
-    </table>
+    <div class="dev-init hide" id="connect-container">
+        
+        <common-form v-show="logic.showConnect"    :caption="'开发者连接'" :data-selector="'server-connect'"        v-on:btnclick="btnClicked"></common-form>
+        <common-form v-show="logic.showBindDevice" :caption="'设备绑定'" :data-selector="'bind-dev'" v-on:btnclick="bindDeviceBtnClick"></common-form>
+        <div v-show="logic.showReconnect">
+            <div>
+<!--                 <button v-on:click="logic.showReconnect = false;logic.showConnect = true;" >重新连接</button><br/> -->
+                <button v-on:click="listBindDevice" >已绑定设备</button>
+                <button v-on:click="showBindDeviceFrom">绑定设备</button>
+            </div>
+            <div style="margin-top:20px" >
+                <span  v-if="bindedDevice.length">已绑定设备列表：</span>
+                <ol>
+                    <li v-for="(device,key) in bindedDevice">
+                        {{device.device_name}}({{device.device_access}}) 
+                        <span v-show="device.online == 1" style="color:green">ONLINE</span>
+                        <span v-show="device.online == 0" style="color:red">OFFLINE</span>
+                        
+                        <span v-show="device.connected" style="color:green">CONNECTED</span>
+                        <span v-show="device.connected !== true " style="color:red">LOST</span>
+                        
+                        <button v-on:click="deviceConnect(device.device_access)" >连接设备</button>
+                        <button v-on:click="unbindDevice(device.device_access)" >取消绑定</button>
+<!--                         <span v-if="key == 0">SDK.usingDevice('设备 AccessKey');</span> -->
+                    </li>
+                </ol>
+                <span>当前连接设备：{{currentDevice}}</span>
+                <button v-on:click="showDeviceSmellList">设备气味列表</button>
+                <p>
+                  气味编号 <input name="manual-smell-id"><br>
+           播放时长       <input name="manual-play-time" value="10">
+                  <button v-on:click="playSmellManual">手动播放气味</button>
+                </p>
+            </div>
+            <div class="usl">
+                <span v-if="deviceInstance.apicache.smellList.length">设备气味列表：</span>
+                <ol>
+                  <li v-for="item in deviceInstance['apicache']['smellList']">
+                      <input type="checkbox" v-model:value="item['isLoopPlay']" >
+                      <span>气味：{{item['bottle']}}，播放</span>
+                      
+                      <input type="text" v-bind:name="'time-' + item['bottle']" v-model:value="item['playSeconds']"> 秒 
+                      <button v-show="!item['isPlaying']" style="color:green"  v-on:click="playSmell(item['bottle'])" >开始播放</button>
+                      <button v-show="item['isPlaying']"  style="color:red" v-on:click="stopPlay(item['bottle'])" >停止播放</button>
+                      <span>{{item['processor']}}</span>
+                    </li>
+                </ol>
+                <p v-show="logic.showLoopPlay">需循环次数 <input type="text" v-model="loopPlayList.loopTime" > 次 </p>
+                <p v-show="logic.showLoopPlay">气味间循环间隔 <input type="text" v-model="loopPlayList.interval" > 秒 </p>
+                <p v-show="logic.showLoopPlay"><input type="checkbox" v-model="loopPlayList.cacheLoopData" :value="loopPlayList.cacheLoopData" >缓存批量循环运行 
+                
+                <button v-show="logic.showLoopPlay" style="color:#ff9800"  v-on:click="clearCachedLoopData()" >清除缓存</button>
+                
+                </p>
+                <button v-show="logic.showLoopPlay" style="color:green"  v-on:click="loopPlay()" >所有气味循环播放</button>
+                <button v-show="logic.showLoopPlay" style="color:red" v-on:click="stopLoopPlay()" >停止循环播放</button>
+                
+                <button v-show="logic.showLoopPlay" v-on:click="stopAll()" >停止播放所有</button>
+                <button v-show="logic.showLoopPlay" v-on:click="getCurrentPlay()" >获取当前播放</button>
+            </div>
+            
+            <div class="error-container">
+              错误信息：
+              <ul v-for="(item,key) in errorLogList" class="error-list">
+                <li>{{item}}</li>
+              </ul>
+            </div>
+        </div>
+        
+        <div class="code-container">
+<pre v-show="logic.showConnect"  class="code">
+// SDK 初始化
+SDK.connect({
+    'accessKey' : ret.accessKey,
+    'accessSecret' : ret.accessSecret,
+    'logLevel' : ret.logLevel,
+    'mqtt' : this.connectConfig[ret.env],
+    'event' : {
+        'onSuccess' : function(){
+        },
+        'onFailure' :function(){
+            alert('连接失败');
+        },
+        'onConnectionLost' : function(){
+            alert('失去连接');
+        }
+    }
+});
+</pre>
+<pre v-show="logic.showBindDevice" class="code">
+// 绑定设备
+SDK.bindDevice(deviceName,deviceSecret,{
+     'onSuccess' : function(resp,app){
+     
+     },
+     'onFailure' : function(resp,app){
+     
+     }
+});
+</pre>
+<pre v-if="bindedDevice.length" class="code">
+// 连接设备
+SDK.usingDevice(deviceAccess,{
+   'onSuccess' : function(app){
+        // Code 
+    },
+    'onFailure' : function(app){
+        alert('设备连接失败');
+    }
+})
+</pre>
+<pre v-show="logic.showReconnect" class="code">
+// 获取设备气味
+currentDevice.smellList(function(sequence,decode,app){
+    app.logger.info(decode);
+},function(error,app){
+    app.logger.error(error);
+});
+</pre>
+<pre v-show="logic.showReconnect" class="code">
+// 播放气味
+currentDevice.playSmell({
+    'actions' : [ {
+        'bottle' : bottle + '',
+        'duration' : time,
+        'power' : 5
+    }]
+},function(sequence,decode,app){
+    // Code 
+},function(error,app){
+    // Code 
+});
+</pre>
 
+<pre v-show="logic.showReconnect" class="code">
+// 停止播放气味
+currentDevice.stopPlay([
+    bottle
+],function(sequence,decode,app){
+    // Code 
+},function(error,app){
+    // Code 
+});
+</pre>
+</div>
+
+
+
+    </div>
+    <div class="dev-container hide" id="app" >
+        <div class="dev-tab dev-attrs">
+        </div>
+        <div class="dev-tab dev-controls hide">
+        </div>
+        <div class="dev-tab dev-playzone hide">
+        </div>
+    </div> 
+    <div class="dev-console hide">
+    </div>
     <script data-main="main" src="../dist/require.js"></script>
 </body>
 </html>
