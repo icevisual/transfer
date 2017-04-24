@@ -164,6 +164,7 @@ CREATE TABLE `x_bill` (
         }
         $num = count($bill);
         $shouldPayCount = count($shouldPayDetail);
+//         dd($shouldPayDetail);
         foreach ($shouldPayDetail as $k => $shp){
             if($k == 0){
                 echo '平摊费用 = ('.$nrl;

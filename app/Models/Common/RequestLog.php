@@ -1,38 +1,54 @@
 <?php
+
 namespace App\Models\Common;
 
-class RequestLog extends \Eloquent
+use App\Exceptions\NeedRecordException;
+use App\Models\BaseModel;
+
+class RequestLog extends BaseModel
 {
-
     protected $table = 'request_log';
-
-    protected $primaryKey = 'id';
-
-    protected $guarded = [];
     
-    /**
-     * Custom format for the last login date
-     *
-     * @param $value
-     * @return string
-     */
-    public function getCreatedAtAttribute($value)
-    {
-        return \Carbon\Carbon::parse($value)->format('d.m.Y.');
+    public $timestamps = false;
+    
+    public $guarded = [];
+
+    
+    public static function upgradeSha1(){
+        \DB::beginTransaction();
+        $data = self::all([
+            'id','uri','params','return'
+        ]);
+        foreach ($data as $v){
+            $sha1 = self::calculateSha1($v['uri'],json_decode($v['params'],1),json_decode($v['return'],1));
+            
+            self::where('id',$v['id'])->update([
+                'sha1' => $sha1
+            ]);
+        }
+        \DB::commit();
     }
     
-    public static function getTableCreateStatment(){
-        return $str = "
-CREATE TABLE `x_request_log` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ip` varchar(100) NOT NULL COMMENT 'IP',
-  `uri` varchar(100) DEFAULT NULL COMMENT '路由',
-  `params` text COMMENT '参数',
-  `time_usage` decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT '时间使用量S',
-  `memory_usage` decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT '内存使用量MB',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='请求日志';
-            ";
+    public static function calculateSha1(){
+        $argvs = func_get_args();
+        $data = [];
+        foreach ($argvs as $v){
+            if(!is_array($v)){
+                $v = (array)$v;
+            }
+            ksort($v);
+            $data[] = $v;
+        }
+        return sha1(json_encode($data));
     }
+    
+    
+    public static function addRecord($inputData){
+        $hashKeys = [
+            'uri','params','return'  
+        ];
+        return self::create($inputData);
+    } 
+    
+
 }

@@ -5,6 +5,8 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use App\Models\Common\Bill;
 use GuzzleHttp;
+use function GuzzleHttp\json_decode;
+use function GuzzleHttp\json_encode;
 
 class Inspire extends Command
 {
@@ -30,63 +32,170 @@ class Inspire extends Command
      */
     public function handle()
     {
-        $content = curl_get('https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf',[],0);
         
-        dd($content);
         
-        $url = 'https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf';
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', $url, [
-            'stream' => true,
-            'timeout' => 10
-        ]);
-        $data = $response->getBody();
+        $str=<<<EOL
+{
+    "0": {
+        "topic": "/topic/v1.uuid.",
+        "ip": "120.26.200.128"
+    },
+    "1": {
+        "name": "1-12.mp3",
+        "time": 12,
+        "sn": "00000060"
+    },
+    "2": {
+        "name": "2-10.mp3",
+        "time": 10,
+        "sn": "00000063"
+    },
+    "3": {
+        "name": "4.mp3",
+        "time": 14,
+        "sn": "00000065"
+    },
+    "4": {
+        "name": "3.mp3",
+        "time": 11,
+        "sn": "00000064"
+    },
+    "5": {
+        "name": "16-12.mp3",
+        "time": 12,
+        "sn": "0000005C",
+        "explain": "榴莲"
+    },
+    "6": {
+        "name": "6-14.mp3",
+        "time": 14,
+        "sn": "00000061"
+    },
+    "7": {
+        "name": "7-12.mp3",
+        "time": 12,
+        "sn": "00000059"
+    },
+    "8": {
+        "name": "8.mp3",
+        "time": 15,
+        "sn": "0000005F"
+    },
+    "9": {
+        "name": "9-12.mp3",
+        "time": 12,
+        "sn": "0000005B"
+    },
+    "10": {
+        "name": "10-12.mp3",
+        "time": 12,
+        "sn": "0000005D"
+    },
+    "11": {
+        "name": "11-10.mp3",
+        "time": 10,
+        "sn": "00000058"
+    },
+    "12": {
+        "name": "12-10.mp3",
+        "time": 10,
+        "sn": "0000005E"
+    },
+    "13": {
+        "name": "13-12.mp3",
+        "time": 12,
+        "sn": "0000005A"
+    },
+    "14": {
+        "name": "14-13.mp3",
+        "time": 13,
+        "sn": "00000056"
+    },
+    "15": {
+        "name": "15-12.mp3",
+        "time": 12,
+        "sn": "00000057"
+    },
+    "16": {
+        "name": "5-12.mp3",
+        "time": 12,
+        "sn": "00000062"
+    }
+}        
         
-        file_put_contents(public_path('asd'), $data);
+EOL;
         
-        dd("0.00" > "0");
-        $data = [
-            'b21CZTVzMzRwazE4dk42V2ZOaVFTeXdzdGNwQQ==',
-            'b21CZTVzM3AxalZVb18xYzJoU1lTN0lrRjNhUQ==',
-            'b21CZTVzODhpOElHVjhDaVlKclVOZ1ptUkhzUQ=='
-        ];
-        
-//         object_name($name);
-        foreach ($data as $v){
-            echo $v . "\t" .base64_decode($v) .PHP_EOL;
+        $data = json_decode($str,1);
+        unset($data['0']);
+        $array = [];
+        foreach ($data as $k => $v){
+            $array[] = [
+                'name' => '',
+                'sid' => $v['sn'],
+                'ptime' => $v['time'],
+                'audio' => $v['name'],
+                'listImg' => ($k).'-1.png',
+                'detailImg' =>  ($k).'.png',
+            ];
         }
-        exit;
-        dd(base64_decode('b21CZTVzODhpOElHVjhDaVlKclVOZ1ptUkhzUQ=='));
+        dd(json_encode($array));
+        dd($array);
         
-//         createInsertSql($tbname, $data)
-
-        $pwd = '123456';
-//         $pwd = null;
-        dump(md5($pwd));
-        dd(md5(md5($pwd)));
-        if(1){
-            $a = 0;
-        }
+        // $content = curl_get('https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf',[],0);
         
-        dd($a);
+        // dd($content);
         
+        // $url = 'https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf';
+        // $client = new \GuzzleHttp\Client();
+        // $response = $client->request('GET', $url, [
+        // 'stream' => true,
+        // 'timeout' => 10
+        // ]);
+        // $data = $response->getBody();
         
-        $file = 'D:\desktop\header-logo.png';
-        $dest = 'D:\desktop\header-logo1.png';
-        // open an image file
-        $img = \Image::make($file);
-        // now you are able to resize the instance
-//         $img->resize($targetWidth, $newHeight);
-        //         and insert a watermark for example
-        //         $img->insert('public/watermark.png');
+        // file_put_contents(public_path('asd'), $data);
         
+        // dd("0.00" > "0");
+        // $data = [
+        // 'b21CZTVzMzRwazE4dk42V2ZOaVFTeXdzdGNwQQ==',
+        // 'b21CZTVzM3AxalZVb18xYzJoU1lTN0lrRjNhUQ==',
+        // 'b21CZTVzODhpOElHVjhDaVlKclVOZ1ptUkhzUQ=='
+        // ];
         
-        $img->crop(460, 410,0,0);
+        // // object_name($name);
+        // foreach ($data as $v){
+        // echo $v . "\t" .base64_decode($v) .PHP_EOL;
+        // }
+        // exit;
+        // dd(base64_decode('b21CZTVzODhpOElHVjhDaVlKclVOZ1ptUkhzUQ=='));
         
-        // finally we save the image as a new file
-        $img->save($dest);
+        // // createInsertSql($tbname, $data)
         
-        exit;
+        // $pwd = '123456';
+        // // $pwd = null;
+        // dump(md5($pwd));
+        // dd(md5(md5($pwd)));
+        // if(1){
+        // $a = 0;
+        // }
+        
+        // dd($a);
+        
+        // $file = 'D:\desktop\header-logo.png';
+        // $dest = 'D:\desktop\header-logo1.png';
+        // // open an image file
+        // $img = \Image::make($file);
+        // // now you are able to resize the instance
+        // // $img->resize($targetWidth, $newHeight);
+        // // and insert a watermark for example
+        // // $img->insert('public/watermark.png');
+        
+        // $img->crop(460, 410,0,0);
+        
+        // // finally we save the image as a new file
+        // $img->save($dest);
+        
+        // exit;
         
         // $url = 'http://192.168.5.61:18083/api/clients';
         // $uname = 'admin';
@@ -172,6 +281,85 @@ class Inspire extends Command
             [
                 'name' => '顾云翔',
                 'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.02.15 缴纳水费',
+                'amount' => 49.42
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.02.15 缴纳燃气费',
+                'amount' => 146.30
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.02.15 缴纳电费',
+                'amount' => 63.48
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.03.01 缴纳电费',
+                'amount' => 52.72
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.03.18 缴纳水费',
+                'amount' => 46.40
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.03.18 缴纳燃气费',
+                'amount' => 49.60
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.04.02 缴纳电费',
+                'amount' => 47.88
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_SHOULD_PAY_ALL,
+                'desc' => '计算补正',
+                'amount' => 0.02
+            ]
+        ];
+        
+        $actual = 0;
+        foreach ($data as $v) {
+            if ($v['type'] != Bill::TYPE_PAYED)
+                $actual += $v['amount'];
+        }
+        
+        $payAll = Bill::run($data, PHP_EOL);
+        dump($payAll, $actual);
+        exit();
+        // 2017-01-19
+        $data = [
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '房租 [每月 1630 / 4600 * 5300 = 1878]',
+                'amount' => 1878 * 3
+            ],
+            [
+                'name' => '李蒙',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '房租 [每月 1540 / 4600 * 5300 = 1774]',
+                'amount' => 1774 * 3
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '房租 [每月 1430 / 4600 * 5300 = 1648]',
+                'amount' => 1648 * 3
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
                 'desc' => '2016.11.13 电费',
                 'amount' => 66.71
             ],
@@ -211,24 +399,24 @@ class Inspire extends Command
                 'desc' => '2016.12.10 电费',
                 'amount' => 90.92
             ],
-//             [
-//                 'name' => '',
-//                 'type' => Bill::TYPE_SHOULD_PAY_ALL,
-//                 'desc' => '服务费',
-//                 'amount' => 636
-//             ],
-//             [
-//                 'name' => '李蒙',
-//                 'type' => Bill::TYPE_PAYED,
-//                 'desc' => '电费',
-//                 'amount' => 89.31
-//             ],
-//             [
-//                 'name' => '金燕林',
-//                 'type' => Bill::TYPE_PAYED,
-//                 'desc' => '2016年9月水费',
-//                 'amount' => 64.03
-//             ],
+            // [
+            // 'name' => '',
+            // 'type' => Bill::TYPE_SHOULD_PAY_ALL,
+            // 'desc' => '服务费',
+            // 'amount' => 636
+            // ],
+            // [
+            // 'name' => '李蒙',
+            // 'type' => Bill::TYPE_PAYED,
+            // 'desc' => '电费',
+            // 'amount' => 89.31
+            // ],
+            // [
+            // 'name' => '金燕林',
+            // 'type' => Bill::TYPE_PAYED,
+            // 'desc' => '2016年9月水费',
+            // 'amount' => 64.03
+            // ],
             [
                 'name' => '金燕林',
                 'type' => Bill::TYPE_SHOULD_PAY_ALL,
