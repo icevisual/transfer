@@ -11,3 +11,4 @@ Homestead.json
 storage/sqlLog/
 public/log*
 public/tmp/
+public/gradle-2.14.1-all.zip
