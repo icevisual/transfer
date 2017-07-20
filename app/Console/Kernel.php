@@ -33,6 +33,8 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\DumpStructs::class,
         
         \App\Console\Commands\WordVideo::class,
+        
+        \App\Console\Commands\FlogAnalyse::class,
     ];
 
     /**

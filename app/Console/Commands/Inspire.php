@@ -32,9 +32,7 @@ class Inspire extends Command
      */
     public function handle()
     {
-        
-        
-        $str=<<<EOL
+        $str = <<<EOL
 {
     "0": {
         "topic": "/topic/v1.uuid.",
@@ -125,21 +123,21 @@ class Inspire extends Command
         
 EOL;
         
-        $data = json_decode($str,1);
+        $data = json_decode($str, 1);
         unset($data['0']);
         $array = [];
-        foreach ($data as $k => $v){
+        foreach ($data as $k => $v) {
             $array[] = [
                 'name' => '',
                 'sid' => $v['sn'],
                 'ptime' => $v['time'],
                 'audio' => $v['name'],
-                'listImg' => ($k).'-1.png',
-                'detailImg' =>  ($k).'.png',
+                'listImg' => ($k) . '-1.png',
+                'detailImg' => ($k) . '.png'
             ];
         }
-        dd(json_encode($array));
-        dd($array);
+        // dd(json_encode($array));
+        // dd($array);
         
         // $content = curl_get('https://help.aliyun.com/document_detail/25656.html?spm=5176.doc25506.2.1.1ZxBYf',[],0);
         
@@ -319,6 +317,75 @@ EOL;
                 'type' => Bill::TYPE_PAYED,
                 'desc' => '2017.04.02 缴纳电费',
                 'amount' => 47.88
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_SHOULD_PAY_ALL,
+                'desc' => '计算补正',
+                'amount' => 0.02
+            ]
+        ];
+       // - [2017-07-20 14:26:10]
+        $data = [
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '房租 [每月 1630 / 4600 * 5300 = 1878]',
+                'amount' => 1878 * 3
+            ],
+            [
+                'name' => '李蒙',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '房租 [每月 1540 / 4600 * 5300 = 1774]',
+                'amount' => 1774 * 3
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_SHOULD_PAY_SINGLE,
+                'desc' => '房租 [每月 1430 / 4600 * 5300 = 1648]',
+                'amount' => 1648 * 3
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.05.07 缴纳电费',
+                'amount' => 48.96
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.05.26 缴纳水费',
+                'amount' => 60.9
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.06.09 缴纳网费（46.2*3）',
+                'amount' => 138.6
+            ],
+            [
+                'name' => '李蒙',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.06.16 缴纳电费',
+                'amount' => 61.87
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.06.18 缴纳天然气',
+                'amount' => 298.50
+            ],
+            [
+                'name' => '顾云翔',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.07.05 缴纳电费',
+                'amount' => 100.78
+            ],
+            [
+                'name' => '金燕林',
+                'type' => Bill::TYPE_PAYED,
+                'desc' => '2017.07.20 缴纳水费',
+                'amount' => 63.80
             ],
             [
                 'name' => '金燕林',
